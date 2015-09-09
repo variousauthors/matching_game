@@ -5,6 +5,21 @@ function draw_block (block)
     love.graphics.setColor(game.colors.white)
 end
 
+function update_block (block, board)
+    local x, y = block.x, block.y
+    local block = board[y][x]
+
+    if (board[y + 1]) and (not board[y + 1][x]) then
+        block.y = y + 1
+        board[y][x] = false
+        board[block.y][block.x] = block
+
+        if (block.color ~= game.colors.grey) then
+            table.insert(board.moved, block)
+        end
+    end
+end
+
 function drop_block (block, board)
     local x, y = block.x, block.y + 1
 

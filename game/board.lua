@@ -1,7 +1,9 @@
 
-function init_board ()
+function build_board ()
     local board = {}
     local i, j
+
+    board.moved = {}
 
     for y = 1, game.height, 1 do
         board[y] = {}
@@ -31,28 +33,18 @@ end
 
 function update_board(board)
     -- check each cell from bottom to top
-    local moved = {}
 
+    -- update each block
     for y = game.height, 1, -1 do
         for x = 1, game.width, 1 do
             if (board[y][x]) then
-                local block = board[y][x]
-
-                if (board[y + 1]) and (not board[y + 1][x]) then
-                    block.y = y + 1
-                    board[y][x] = false
-                    board[block.y][block.x] = block
-
-                    if (block.color ~= game.colors.grey) then
-                        table.insert(moved, block)
-                    end
-                end
+                update_block(board[y][x], board)
             end
         end
     end
 
-    for i,block in pairs(moved) do
-        clear_blocks(board, block)
+    while ((#board.moved) > 0) do
+        clear_blocks(board, table.remove(board.moved, 1))
     end
 end
 

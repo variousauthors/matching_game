@@ -9,7 +9,6 @@ function love.load()
 
     require('game/block')
     require('game/board')
-    require('game/player')
 
     game = {}
     game.player = {}
@@ -31,7 +30,7 @@ function love.load()
     game.scale = 30
     game.height = 10
     game.width = 5
-    game.board = init_board()
+    game.board = build_board()
     game.update_timer = 0
     game.match_target = 3
     game.input_timer = 4
