@@ -31,6 +31,8 @@ function love.load()
     game.height = 10
     game.width = 5
     game.board = build_board()
+    game.gravity = 1
+    game.dt = 0
     game.update_timer = 0
     game.match_target = 3
     game.input_timer = 4

@@ -4,6 +4,7 @@ function love.update (dt)
 
     game.update_timer = game.update_timer + dt
     game.input_timer = game.input_timer + dt
+    game.dt = dt
 
     update_board(game.board)
 

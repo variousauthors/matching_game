@@ -3,7 +3,7 @@ function build_board ()
     local board = {}
     local i, j
 
-    board.moved = {}
+    board.dirty = {}
 
     for y = 1, game.height, 1 do
         board[y] = {}
@@ -43,13 +43,13 @@ function update_board(board)
         end
     end
 
-    while ((#board.moved) > 0) do
-        clear_blocks(board, table.remove(board.moved, 1))
+    while ((#board.dirty) > 0) do
+        clear_blocks(board, table.remove(board.dirty, 1))
     end
 end
 
 function clear_blocks (board, block)
-    local y = block.y
+    local cy = block.cy
     local blocks = 0
     local Q = {}
     local marked = {}
@@ -64,8 +64,8 @@ function clear_blocks (board, block)
         local curr = table.remove(Q, 1)
 
         for i, v in ipairs({ 1, -1 }) do
-            if (board[curr.y][curr.x + v]) then
-                local adj = board[curr.y][curr.x + v]
+            if (board[curr.cy][curr.cx + v]) then
+                local adj = board[curr.cy][curr.cx + v]
 
                 if (not adj.marked and adj.color == block.color) then
                     adj.marked = true
@@ -74,8 +74,8 @@ function clear_blocks (board, block)
                 end
             end
 
-            if (board[curr.y + v] and board[curr.y + v][curr.x]) then
-                local adj = board[curr.y + v][curr.x]
+            if (board[curr.cy + v] and board[curr.cy + v][curr.cx]) then
+                local adj = board[curr.cy + v][curr.cx]
 
                 if (not adj.marked and adj.color == block.color) then
                     adj.marked = true
@@ -92,10 +92,10 @@ function clear_blocks (board, block)
         v.marked = false
 
         if (#(marked) == game.match_target) then
-            board[v.y][v.x].color = game.colors.grey
+            board[v.cy][v.cx].color = game.colors.grey
 
         elseif (#(marked) > game.match_target) then
-            board[v.y][v.x] = false
+            board[v.cy][v.cx] = false
 
         end
     end
