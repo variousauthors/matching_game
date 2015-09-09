@@ -1,8 +1,24 @@
 
 function draw_block (block)
     love.graphics.setColor(block.color)
-    love.graphics.rectangle('fill', block.x * game.scale, block.y * game.scale, block.dim, block.dim)
+    love.graphics.rectangle('fill', block.x * game.scale, block.y * game.scale, block.dim * game.scale, block.dim * game.scale)
     love.graphics.setColor(game.colors.white)
+
+    if (block.color == game.colors.grey) then
+        if (block.hp == 2) then
+            -- one cross
+            love.graphics.setColor(game.colors.damage)
+            love.graphics.line(block.cx * game.scale, block.cy * game.scale, (block.cx + block.dim) * game.scale, (block.cy + block.dim) * game.scale)
+            love.graphics.setColor(game.colors.white)
+
+        elseif (block.hp == 1) then
+            -- two cross
+            love.graphics.setColor(game.colors.damage)
+            love.graphics.line(block.cx * game.scale, block.cy * game.scale, (block.cx + block.dim) * game.scale, (block.cy + block.dim) * game.scale)
+            love.graphics.line((block.cx + block.dim) * game.scale, block.cy * game.scale, block.cx * game.scale, (block.cy + block.dim) * game.scale)
+            love.graphics.setColor(game.colors.white)
+        end
+    end
 end
 
 function build_block ()
@@ -25,9 +41,10 @@ function build_block ()
         x = math.ceil(game.width/2),
         y = 1,
 
-        dim = game.scale,
+        dim = 1,
         color = game.colors[index],
-        marked = false
+        marked = false,
+        hp = 3
     }
 end
 

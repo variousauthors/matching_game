@@ -24,7 +24,8 @@ function love.load()
         { 55, 200, 55 }, -- green
         { 55, 55, 200 }, -- blue
         white = { 200, 200, 200 },
-        grey = { 55, 55, 55 }
+        grey = { 55, 55, 55 },
+        damage = { 29, 29, 29 }
     }
 
     game.scale = 30
