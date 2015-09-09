@@ -16,7 +16,6 @@ function init_board ()
 end
 
 function love.load()
-    love.debug.setFlag("input")
 
     require('game/controls')
     require('game/sounds')

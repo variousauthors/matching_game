@@ -61,17 +61,6 @@ function clear_pips (pip)
         elseif (#(marked) > game.match_target) then
             game.board[v.y][v.x] = false
 
---          -- move things down
---          for yy = y, 1, -1 do
---              for xx = 1, game.width, 1 do
---                  if (game.board[yy][xx] ~= false) then
---                      -- move row down
---                      local pip = game.board[yy][xx]
---                      game.board[yy][xx] = false
---                      game.board[yy + 1][xx] = pip
---                  end
---              end
---          end
         end
     end
 
@@ -120,6 +109,33 @@ function next_pip ()
     }
 end
 
+function update_board(board)
+    -- check each cell from bottom to top
+    local moved = {}
+
+    for y = game.height, 1, -1 do
+        for x = 1, game.width, 1 do
+            if (board[y][x]) then
+                local pip = board[y][x]
+
+                if (board[y + 1]) and (not board[y + 1][x]) then
+                    pip.y = y + 1
+                    board[y][x] = false
+                    board[pip.y][pip.x] = pip
+
+                    if (pip.color ~= game.colors.grey) then
+                        table.insert(moved, pip)
+                    end
+                end
+            end
+        end
+    end
+
+    for i,pip in pairs(moved) do
+        clear_pips(pip)
+    end
+end
+
 function love.update (dt)
     local player = game.player
     local direction = 0
@@ -127,10 +143,11 @@ function love.update (dt)
     game.update_timer = game.update_timer + dt
     game.input_timer = game.input_timer + dt
 
+    update_board(game.board)
+
     -- there should be a pip
     if (game.pip == nil) then
         game.pip = next_pip()
-        print(inspect(game.pip))
     end
 
     -- process one set of inputs then cooldown

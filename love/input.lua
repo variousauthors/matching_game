@@ -5,7 +5,6 @@ love.inputman = require('libs/inputman').newSingleton()
 -- custom events instead.
 --
 function love.inputpressed(state)
-    love.debug.printIf('input', 'pressed:', state)
 
     if game.player.input[state] ~= nil then
         game.player.has_input = true
@@ -17,7 +16,6 @@ function love.inputpressed(state)
 end
 
 function love.inputreleased(state)
-    love.debug.printIf('input', 'released:', state)
 
 end
 
