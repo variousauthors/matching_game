@@ -1,25 +1,3 @@
-function Ship (x, y, m, r, max, gold)
-    local ship = {
-        x = x,
-        y = y,
-        vx = 0,
-        vy = 0,
-        m = m,
-        r = r,
-        max_speed = max,
-        square_max_speed = math.pow(max, 2),
-        target_radius = gold,
-        charge = 0,
-        engine_tic = 0,
-        fade_tic = 60,
-        initial_fade_tic = 60,
-        points_value = 100
-    }
-
-    if gold ~= nil then ship.square_target_radius = math.pow(gold, 2) end
-
-    return ship
-end
 
 function init_board ()
     local board = {}
@@ -42,14 +20,8 @@ function love.load()
 
     require('game/controls')
     require('game/sounds')
-    require('libs/gamejolt')
-    require('libs/fsm')
     require('game/update')
     require('game/draw')
-
-    -- load update functions
-    require('game/player')
-    require('game/basic_ai')
 
     game = {}
     game.player = {}
