@@ -47,7 +47,6 @@ function love.update (dt)
         player.up = false
 
         player.input.up = {}
-
     end
 
     -- move the piece down every step

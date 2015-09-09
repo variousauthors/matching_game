@@ -31,6 +31,10 @@ function build_block ()
     }
 end
 
+function block_collide(block, other)
+    return other and other.dy == 0
+end
+
 function update_block (block, board)
     local cx, cy = block.cx, block.cy
     local below
@@ -41,14 +45,14 @@ function update_block (block, board)
         return
     end
 
-    -- check the block below this one
-    below = board[cy + 1][cx]
+    -- apply forces
+    block.dy = block.dy + game.gravity*game.dt
 
-    -- if it is moving than so should this
-    if (not below or below.dy > 0) then
-        block.dy = block.dy + game.gravity*game.dt
-    else
-        -- otherwise this block has landed
+    -- check the block below this one
+    collision = block_collide(block, board[cy + 1][cx])
+
+    if (collision) then
+        -- this block has landed
         block.dy = 0
 
         if (block.color ~= game.colors.grey) then
@@ -71,6 +75,7 @@ function update_block (block, board)
     block.y = math.min(block.cy + 1, block.cy + block.ry)
 end
 
+-- move the block discretely as far down as possible
 function drop_block (block, board)
     local cx, cy = block.cx, block.cy + 1
 
