@@ -1,141 +1,3 @@
-function drop_pip (pip)
-    local x, y = pip.x, pip.y + 1
-
-    -- iterate over the current column from the pip
-    while (y <= game.height and game.board[y][x] == false) do
-        pip.y = y
-        y = y + 1
-    end
-
-    game.pip = nil
-    game.board[pip.y][pip.x] = pip
-    clear_pips(pip)
-end
-
-function clear_pips (pip)
-    local y = pip.y
-    local pips = 0
-    local Q = {}
-    local marked = {}
-    local index = 1
-    local color = pip.color
-
-    pip.marked = true
-    table.insert(marked, pip)
-    table.insert(Q, pip)
-
-    while (#(Q) > 0) do
-        local curr = table.remove(Q, 1)
-
-        for i, v in ipairs({ 1, -1 }) do
-            if (game.board[curr.y][curr.x + v]) then
-                local adj = game.board[curr.y][curr.x + v]
-
-                if (not adj.marked and adj.color == pip.color) then
-                    adj.marked = true
-                    table.insert(Q, adj)
-                    table.insert(marked, adj)
-                end
-            end
-
-            if (game.board[curr.y + v] and game.board[curr.y + v][curr.x]) then
-                local adj = game.board[curr.y + v][curr.x]
-
-                if (not adj.marked and adj.color == pip.color) then
-                    adj.marked = true
-                    table.insert(Q, adj)
-                    table.insert(marked, adj)
-                end
-            end
-        end
-    end
-
-    -- if we have at least 3 pips marked for removal,
-    -- remove all marked pips
-    for i,v in ipairs(marked) do
-        v.marked = false
-
-        if (#(marked) == game.match_target) then
-            game.board[v.y][v.x].color = game.colors.grey
-
-        elseif (#(marked) > game.match_target) then
-            game.board[v.y][v.x] = false
-
-        end
-    end
-
-end
-
--- move the pip side to side
-function move_pip (pip, direction)
-    local x = pip.x + direction
-
-    -- clamp the move
-    x = math.max(math.min(game.width, x), 0)
-
-    -- if the pip would move and the board contains the target space
-    -- TODO this appears to be wrong since game.board[x] should be game.board[y][x]
-    if (x ~= pip.x and game.board[x]) then
-
-        -- check for collision
-        if not (game.board[pip.y][x] ~= false) then
-            pip.x = x
-        end
-    end
-end
-
--- move the pip down one row
-function step_pip (pip)
-    -- check for a pip in the next square
-    if (pip.y + 1 > game.height or game.board[pip.y + 1][pip.x] ~= false) then
-        -- remove the pip and add to the board
-        game.pip = nil
-        game.board[pip.y][pip.x] = pip
-        clear_pips(pip)
-    else
-        pip.y = math.min(game.height, pip.y + 1)
-    end
-end
-
-function next_pip ()
-    local index = math.random(1, 3)
-
-    return {
-        x = math.ceil(game.width/2),
-        y = 1,
-        dim = game.scale,
-        color = game.colors[index],
-        marked = false
-    }
-end
-
-function update_board(board)
-    -- check each cell from bottom to top
-    local moved = {}
-
-    for y = game.height, 1, -1 do
-        for x = 1, game.width, 1 do
-            if (board[y][x]) then
-                local pip = board[y][x]
-
-                if (board[y + 1]) and (not board[y + 1][x]) then
-                    pip.y = y + 1
-                    board[y][x] = false
-                    board[pip.y][pip.x] = pip
-
-                    if (pip.color ~= game.colors.grey) then
-                        table.insert(moved, pip)
-                    end
-                end
-            end
-        end
-    end
-
-    for i,pip in pairs(moved) do
-        clear_pips(pip)
-    end
-end
-
 function love.update (dt)
     local player = game.player
     local direction = 0
@@ -145,9 +7,9 @@ function love.update (dt)
 
     update_board(game.board)
 
-    -- there should be a pip
-    if (game.pip == nil) then
-        game.pip = next_pip()
+    -- there should be a block
+    if (game.block == nil) then
+        game.block = build_block()
     end
 
     -- process one set of inputs then cooldown
@@ -167,7 +29,7 @@ function love.update (dt)
         if (player.left) then direction = -1 end
         if (player.right) then direction = 1 end
 
-        move_pip(game.pip, direction)
+        move_block(game.block, game.board, direction)
 
         player.left = false
         player.right = false
@@ -177,7 +39,7 @@ function love.update (dt)
         if #(player.input.up) > 0 then player.up = table.remove(player.input.up, 1) end
 
         if (player.up) then
-            drop_pip(game.pip)
+            drop_block(game.block, game.board)
             game.update_timer = 0
         end
 
@@ -190,7 +52,7 @@ function love.update (dt)
     -- move the piece down every step
     if (game.update_timer > game.step) then
         game.update_timer = 0
-        step_pip(game.pip)
+        step_block(game.block, game.board)
     end
 
 end

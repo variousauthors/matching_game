@@ -1,26 +1,15 @@
 
-function init_board ()
-    local board = {}
-    local i, j
-
-    for y = 1, game.height, 1 do
-        board[y] = {}
-
-        for x = 1, game.width, 1 do
-            board[y][x] = false
-
-        end
-    end
-
-    return board
-end
-
 function love.load()
 
     require('game/controls')
     require('game/sounds')
+
     require('game/update')
     require('game/draw')
+
+    require('game/block')
+    require('game/board')
+    require('game/player')
 
     game = {}
     game.player = {}
