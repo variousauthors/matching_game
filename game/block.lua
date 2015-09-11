@@ -21,10 +21,11 @@ function draw_block (block)
     end
 end
 
-function build_block ()
-    local index = math.random(1, 3)
-    local x = math.ceil(game.width/2)
-    local y = 1
+function build_block (options)
+    local options = options or {}
+    local x = options.x or math.ceil(game.width/2)
+    local y = options.y or 1
+    local color = game.colors[options.color] or game.colors[math.random(1, 3)]
 
     return {
         -- position in the grid
@@ -38,11 +39,11 @@ function build_block ()
         dy = 0,
 
         -- final position in each timestep fro graphics
-        x = math.ceil(game.width/2),
-        y = 1,
+        x = x,
+        y = y,
 
         dim = 1,
-        color = game.colors[index],
+        color = color,
         marked = false,
         hp = 3
     }

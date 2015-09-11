@@ -32,6 +32,7 @@ function draw_board (board)
 end
 
 function update_board(board)
+    print("in update_board")
     local block
     local check_for_matches = true
 
@@ -65,7 +66,9 @@ function update_board(board)
 end
 
 function clear_blocks (board, block)
+    print("in clear_blocks")
     if (block.color == game.colors.grey) then
+        print("  was grey")
         return
     end
 

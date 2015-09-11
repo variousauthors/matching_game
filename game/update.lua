@@ -1,9 +1,12 @@
 function love.update (dt)
+    print("in love.update")
     local player = game.player
     local direction = 0
 
     game.update_timer = game.update_timer + dt
     game.input_timer = game.input_timer + dt
+    print(game.update_timer, game.step)
+    print(game.input_timer, game.step/game.input_rate)
     game.dt = dt
 
     game.block_count = 0
@@ -11,16 +14,19 @@ function love.update (dt)
 
     -- there should be a block
     if (game.block == nil) then
+        print("  build new block")
         game.block = build_block()
     end
 
     -- process one set of inputs then cooldown
     if (game.input_timer < game.step/game.input_rate) then
+        print("  input cooldown")
         game.player.has_input = false
         player.input.left = {}
         player.input.right = {}
 
     elseif (game.player.has_input) then
+        print("  process input")
         game.player.has_input = false
         game.input_timer = 0
 
@@ -38,6 +44,7 @@ function love.update (dt)
         player.input.left = {}
         player.input.right = {}
     else
+        print("  regular input")
         if #(player.input.up) > 0 then player.up = table.remove(player.input.up, 1) end
 
         if (player.up) then
@@ -51,7 +58,8 @@ function love.update (dt)
     end
 
     -- move the piece down every step
-    if (game.update_timer > game.step) then
+    if (game.update_timer >= game.step) then
+        print("  about to step block")
         game.update_timer = 0
         step_block(game.block, game.board)
     end

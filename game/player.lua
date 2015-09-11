@@ -1,6 +1,7 @@
 
 -- move the block discretely as far down as possible
 function drop_block (block, board)
+    print("in drop_block")
     local cx, cy = block.cx, block.cy + 1
 
     -- iterate over the current column from the block
@@ -17,6 +18,7 @@ end
 
 -- move the block side to side
 function move_block (block, board, direction)
+    print("in move_block")
     local cx = block.cx + direction
 
     -- clamp the move
@@ -37,12 +39,15 @@ end
 
 -- move the block discretely down one row
 function step_block (block, board)
+    print("in step_block")
     -- check for a block in the next square
     if (block.cy + 1 > game.height or board[block.cy + 1][block.cx] ~= false) then
+        print("  add block to the board")
         -- remove the block and add to the board
         game.block = nil
         board[block.cy][block.cx] = block
     else
+        print("  move block")
         block.cy = math.min(game.height, block.cy + 1)
     end
 
