@@ -33,25 +33,42 @@ end
 
 function update_board(board)
     local block
-    -- check each cell from bottom to top
+    local check_for_matches = true
 
-    -- update each block
+    -- check each cell from bottom to top
     for y = game.height, 1, -1 do
         for x = 1, game.width, 1 do
             if (board[y][x]) then
+                -- update each block
                 block = board[y][x]
 
                 update_block(block, board)
 
-                if (block.color ~= game.colors.grey) then
-                    clear_blocks(board, block)
+                if block.dy ~= 0 and block.color ~= game.colors.grey then
+                    check_for_matches = false
                 end
             end
         end
     end
+
+    -- if no blocks are moving, look for matches otherwise
+    -- discard the dirty list
+    if (check_for_matches) then
+        while (#board.dirty > 0) do
+            local block = table.remove(board.dirty, 1)
+
+            clear_blocks(board, block)
+        end
+    else
+        board.dirty = {}
+    end
 end
 
 function clear_blocks (board, block)
+    if (block.color == game.colors.grey) then
+        return
+    end
+
     local cy = block.cy
     local blocks = 0
     local Q = {}

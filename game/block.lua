@@ -57,9 +57,15 @@ function update_block (block, board)
     local cx, cy = block.cx, block.cy
     local below
 
+    -- do not apply forces to grey blocks
+    if (block.color == game.colors.grey) then
+        return
+    end
+
     -- the block is at rest, at the bottom of the board
     if (not board[cy + 1]) then
         block.dy = 0
+        table.insert(board.dirty, block)
         return
     end
 
@@ -72,6 +78,7 @@ function update_block (block, board)
     if (collision) then
         -- this block has landed
         block.dy = 0
+        table.insert(board.dirty, block)
     end
 
     block.ry = block.ry + block.dy
