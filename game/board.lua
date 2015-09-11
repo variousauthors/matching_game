@@ -32,19 +32,22 @@ function draw_board (board)
 end
 
 function update_board(board)
+    local block
     -- check each cell from bottom to top
 
     -- update each block
     for y = game.height, 1, -1 do
         for x = 1, game.width, 1 do
             if (board[y][x]) then
-                update_block(board[y][x], board)
+                block = board[y][x]
+
+                update_block(block, board)
+
+                if (block.color ~= game.colors.grey) then
+                    clear_blocks(board, block)
+                end
             end
         end
-    end
-
-    while ((#board.dirty) > 0) do
-        clear_blocks(board, table.remove(board.dirty, 1))
     end
 end
 

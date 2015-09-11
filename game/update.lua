@@ -6,6 +6,7 @@ function love.update (dt)
     game.input_timer = game.input_timer + dt
     game.dt = dt
 
+    game.block_count = 0
     update_board(game.board)
 
     -- there should be a block

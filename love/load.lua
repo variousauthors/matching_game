@@ -9,6 +9,7 @@ function love.load()
 
     require('game/block')
     require('game/board')
+    require('game/player')
 
     game = {}
     game.player = {}
