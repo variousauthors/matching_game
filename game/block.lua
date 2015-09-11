@@ -59,6 +59,12 @@ function update_block (block, board)
 
     -- do not apply forces to grey blocks
     if (block.color == game.colors.grey) then
+        -- remove it if it is broken
+        if block.hp == 0 then
+            block = nil
+            board[cy][cx] = false
+        end
+
         return
     end
 

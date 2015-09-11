@@ -73,11 +73,13 @@ function clear_blocks (board, block)
     local blocks = 0
     local Q = {}
     local marked = {}
+    local damage = {}
     local index = 1
     local color = block.color
 
     block.marked = true
-    table.insert(marked, block)
+    table.insert(marked, block) -- blocks in the chain
+    table.insert(damage, block) -- grey blocks near the chain
     table.insert(Q, block)
 
     while (#(Q) > 0) do
@@ -91,6 +93,9 @@ function clear_blocks (board, block)
                     adj.marked = true
                     table.insert(Q, adj)
                     table.insert(marked, adj)
+                elseif (not adj.marked and adj.color == game.colors.grey) then
+                    adj.marked = true
+                    table.insert(damage, adj)
                 end
             end
 
@@ -101,8 +106,20 @@ function clear_blocks (board, block)
                     adj.marked = true
                     table.insert(Q, adj)
                     table.insert(marked, adj)
+                elseif (not adj.marked and adj.color == game.colors.grey) then
+                    adj.marked = true
+                    table.insert(damage, adj)
                 end
             end
+        end
+    end
+
+    while (#(damage) > 0) do
+        local block = table.remove(damage, 1)
+        block.marked = false
+
+        if (#(marked) > game.match_target) then
+            block.hp = block.hp - 1
         end
     end
 
