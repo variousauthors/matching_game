@@ -19,7 +19,7 @@ function build_game ()
         damage = { 29, 29, 29 }
     }
 
-    game.scale = 30
+    game.scale = 32
     game.height = 10
     game.width = 5
     game.board = build_board()

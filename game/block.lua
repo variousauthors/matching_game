@@ -1,7 +1,14 @@
 
 function draw_block (block)
+    local offset = 4
+    local halo_dim = 2
+
     love.graphics.setColor(block.color)
-    love.graphics.rectangle('fill', block.x * game.scale, block.y * game.scale, block.dim * game.scale, block.dim * game.scale)
+    love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
+    love.graphics.setColor(game.colors.white)
+
+    love.graphics.setColor({ math.random(55, 200), math.random(55, 200), math.random(55, 200) })
+    love.graphics.rectangle('line', block.x * game.scale, block.y * game.scale, block.dim * game.scale, block.dim * game.scale)
     love.graphics.setColor(game.colors.white)
 
     if (block.color == game.colors.grey) then
