@@ -19,6 +19,11 @@ end
 function draw_board (board)
     local i, j
 
+    love.graphics.rectangle('line', game.scale, game.scale, game.width * game.scale, game.height * game.scale)
+    if (game.white_board) then
+        love.graphics.rectangle('fill', game.scale, game.scale, game.width * game.scale, game.height * game.scale)
+    end
+
     for y = 1, #(board) do
         for x = 1, #(board[y]) do
             if (board[y][x] ~= false) then
@@ -27,8 +32,6 @@ function draw_board (board)
             end
         end
     end
-
-    love.graphics.rectangle('line', game.scale, game.scale, game.width * game.scale, game.height * game.scale)
 end
 
 function update_board(board)

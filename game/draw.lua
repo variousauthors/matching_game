@@ -5,9 +5,9 @@ love.viewport = require('libs/viewport').newSingleton()
 
 function love.draw()
 
+    draw_board(game.board)
+
     if (game.block ~= nil) then
         draw_block(game.block)
     end
-
-    draw_board(game.board)
 end

@@ -1,15 +1,21 @@
 
 function draw_block (block)
     local offset = 4
-    local halo_dim = 2
 
-    love.graphics.setColor(block.color)
+    love.graphics.setColor(game.colors.grey)
     love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
     love.graphics.setColor(game.colors.white)
 
-    love.graphics.setColor({ math.random(55, 200), math.random(55, 200), math.random(55, 200) })
-    love.graphics.rectangle('line', block.x * game.scale, block.y * game.scale, block.dim * game.scale, block.dim * game.scale)
-    love.graphics.setColor(game.colors.white)
+    if (game.grey_has_borders or (not game.grey_has_borders and block.color ~= game.colors.grey)) then
+        love.graphics.setColor(block.color)
+        love.graphics.rectangle('line', block.x * game.scale + 1, block.y * game.scale + 1, block.dim * game.scale - 2, block.dim * game.scale - 2)
+
+        if (game.extra_thick_border) then
+            love.graphics.rectangle('line', block.x * game.scale + 2, block.y * game.scale + 2, block.dim * game.scale - 4, block.dim * game.scale - 4)
+        end
+
+        love.graphics.setColor(game.colors.white)
+    end
 
     if (block.color == game.colors.grey) then
         if (block.hp == 2) then

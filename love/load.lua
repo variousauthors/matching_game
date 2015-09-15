@@ -10,14 +10,6 @@ function build_game ()
         left = {},
         right = {}
     }
-    game.colors = {
-        { 200, 55, 55 }, -- red
-        { 55, 200, 55 }, -- green
-        { 55, 55, 200 }, -- blue
-        white = { 200, 200, 200 },
-        grey = { 55, 55, 55 },
-        damage = { 29, 29, 29 }
-    }
 
     game.scale = 32
     game.height = 10
@@ -31,6 +23,21 @@ function build_game ()
     game.rate = 2
     game.step = 0.1 * game.rate
     game.input_rate = 8
+
+
+    -- visual choices
+    game.grey_has_borders = true
+    game.extra_thick_border = true
+    game.white_board = false
+
+    game.colors = {
+        { 200, 55, 55 }, -- red
+        { 55, 200, 55 }, -- green
+        { 55, 55, 200 }, -- blue
+        white = { 255, 255, 255 },
+        grey = { 155, 155, 155 },
+        damage = { 29, 29, 29 }
+    }
 end
 
 -- pass in something like
