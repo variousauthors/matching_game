@@ -29,14 +29,26 @@ function build_game ()
     game.grey_has_borders = true
     game.extra_thick_border = true
     game.white_board = false
+    game.flicker = false
 
     game.colors = {
         { 200, 55, 55 }, -- red
         { 55, 200, 55 }, -- green
         { 55, 55, 200 }, -- blue
         white = { 255, 255, 255 },
+        black = { 29, 29, 29 },
         grey = { 155, 155, 155 },
         damage = { 29, 29, 29 }
+    }
+
+    game.colors.background = game.colors.white
+    game.colors.board = game.colors.black
+
+    game.dark_colors = {
+        grey = { 77, 77, 77 },
+        { 55, 0, 0 }, -- red
+        { 0, 55, 0 }, -- green
+        { 0, 0, 55 }, -- blue
     }
 end
 

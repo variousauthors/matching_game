@@ -16,13 +16,42 @@ function build_board ()
     return board
 end
 
+function draw_board_background ()
+    love.graphics.push("all")
+
+    love.graphics.setColor(game.colors.board)
+    love.graphics.rectangle('fill', game.scale - 2, game.scale - 2, game.width * game.scale + 4, game.height * game.scale + 4)
+
+    love.graphics.pop()
+end
+
+function draw_board_border ()
+    love.graphics.push("all")
+
+    -- a thin line of board color to pad the blocks in
+    love.graphics.setLineWidth(4)
+
+    love.graphics.setColor(game.colors.background)
+    love.graphics.rectangle('line', game.scale - 4, game.scale - 4, game.width * game.scale + 8, game.height * game.scale + 8)
+
+    love.graphics.setLineWidth(2)
+
+    love.graphics.setColor(game.colors.board)
+    love.graphics.rectangle('line', game.scale - 6, game.scale - 6, game.width * game.scale + 12, game.height * game.scale + 12)
+
+    love.graphics.setLineWidth(1)
+
+    love.graphics.pop()
+end
+
 function draw_board (board)
+    love.graphics.push("all")
+
     local i, j
 
-    love.graphics.rectangle('line', game.scale, game.scale, game.width * game.scale, game.height * game.scale)
-    if (game.white_board) then
-        love.graphics.rectangle('fill', game.scale, game.scale, game.width * game.scale, game.height * game.scale)
-    end
+    draw_board_border()
+
+    draw_board_background(board)
 
     for y = 1, #(board) do
         for x = 1, #(board[y]) do
@@ -32,6 +61,8 @@ function draw_board (board)
             end
         end
     end
+
+    love.graphics.pop()
 end
 
 function update_board(board)

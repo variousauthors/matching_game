@@ -4,6 +4,9 @@
 love.viewport = require('libs/viewport').newSingleton()
 
 function love.draw()
+    game.draw_seed = math.random(0, 2)
+
+    love.graphics.setBackgroundColor(game.colors.background)
 
     draw_board(game.board)
 
