@@ -26,10 +26,7 @@ function build_game ()
 
 
     -- visual choices
-    game.grey_has_borders = true
-    game.extra_thick_border = true
-    game.white_board = false
-    game.flicker = false
+    game.flicker = true
     game.block_border = 2
 
     game.colors = {

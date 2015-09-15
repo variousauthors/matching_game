@@ -5,9 +5,7 @@ function draw_block_damage (block)
 
     love.graphics.setColor(game.colors.damage)
 
-    if (game.extra_thick_border) then
-        love.graphics.setLineWidth(b)
-    end
+    love.graphics.setLineWidth(b)
 
     if (block.hp == 2) then
         -- one cross
@@ -19,10 +17,7 @@ function draw_block_damage (block)
         love.graphics.line((block.cx + block.dim) * game.scale, block.cy * game.scale, block.cx * game.scale, (block.cy + block.dim) * game.scale)
     end
 
-    if (game.extra_thick_border) then
-        love.graphics.setLineWidth(1)
-    end
-
+    love.graphics.setLineWidth(1)
     love.graphics.pop()
 end
 
@@ -31,21 +26,15 @@ function draw_block_border (block)
 
     love.graphics.push("all")
 
-    if (game.flicker and game.draw_seed == 0) then
+    if (game.flicker and game.draw_seed == 0 and block.color ~= game.colors.grey) then
         love.graphics.setColor({ block.color[1] * 2/3, block.color[2] * 2/3, block.color[3] * 2/3 })
     else
         love.graphics.setColor(block.color)
     end
 
-    if (game.extra_thick_border) then
-        love.graphics.setLineWidth(b)
-    end
-
+    love.graphics.setLineWidth(b)
     love.graphics.rectangle('line', block.x * game.scale + b, block.y * game.scale + b, block.dim * game.scale - 2*b, block.dim * game.scale - 2*b)
-
-    if (game.extra_thick_border) then
-        love.graphics.setLineWidth(1)
-    end
+    love.graphics.setLineWidth(1)
 
     love.graphics.pop()
 end
@@ -58,9 +47,7 @@ function draw_block (block)
     love.graphics.setColor(game.colors.grey)
     love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
 
-    if (game.grey_has_borders or (not game.grey_has_borders and block.color ~= game.colors.grey)) then
-        draw_block_border(block)
-    end
+    draw_block_border(block)
 
     if (block.color == game.colors.grey) then
         draw_block_damage(block)
