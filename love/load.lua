@@ -30,6 +30,7 @@ function build_game ()
     game.extra_thick_border = true
     game.white_board = false
     game.flicker = false
+    game.block_border = 2
 
     game.colors = {
         { 200, 55, 55 }, -- red
