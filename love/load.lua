@@ -1,6 +1,7 @@
 
 function build_game ()
     game = {}
+    game.stable = true
     game.infinity = 100
     game.player = {}
     game.player.has_input = false

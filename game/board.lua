@@ -67,7 +67,7 @@ end
 
 function update_board(board)
     local block
-    local check_for_matches = true
+    local all_blocks_are_still = true
 
     -- check each cell from bottom to top
     for y = game.height, 1, -1 do
@@ -80,7 +80,7 @@ function update_board(board)
 
                 -- only check for matches when all blocks have settled
                 if block.dy ~= 0 and block.color ~= game.colors.grey then
-                    check_for_matches = false
+                    all_blocks_are_still = false
                 end
             end
         end
@@ -88,13 +88,17 @@ function update_board(board)
 
     -- if no blocks are moving, look for matches otherwise
     -- discard the dirty list
-    if (check_for_matches) then
+    if (all_blocks_are_still) then
+
         while (#board.dirty > 0) do
+            game.stable = false
             local block = table.remove(board.dirty, 1)
 
             clear_blocks(board, block)
         end
     else
+        -- some blocks are moving, presumably falling
+        game.stable = false
         board.dirty = {}
     end
 end

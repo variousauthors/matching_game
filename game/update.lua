@@ -2,14 +2,16 @@ function love.update (dt)
     local player = game.player
     local direction = 0
 
-    game.update_timer = game.update_timer + dt
-    game.input_timer = game.input_timer + dt
     game.dt = dt
 
     game.block_count = 0
+    game.stable = true -- optimism
     update_board(game.board)
 
-    if (player.enabled) then
+    if (player.enabled and game.stable) then
+        game.update_timer = game.update_timer + dt
+        game.input_timer = game.input_timer + dt
+
         -- there should be a block
         if (game.block == nil and not game.player.disabled) then
             game.block = build_block()
