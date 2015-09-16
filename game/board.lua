@@ -78,6 +78,7 @@ function update_board(board)
 
                 update_block(block, board)
 
+                -- only check for matches when all blocks have settled
                 if block.dy ~= 0 and block.color ~= game.colors.grey then
                     check_for_matches = false
                 end

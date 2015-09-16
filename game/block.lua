@@ -106,9 +106,19 @@ function update_block (block, board)
 
     -- the block is at rest, at the bottom of the board
     if (not board[cy + 1]) then
+        if (block.dy ~= 0) then
+            -- if the block was previously moving insert it
+            table.insert(board.dirty, block)
+        end
+
         block.dy = 0
-        table.insert(board.dirty, block)
+
         return
+    end
+
+    if (block.dy ~= 0) then
+        -- if the block was previously moving it may collide
+        table.insert(board.dirty, block)
     end
 
     -- apply forces
@@ -118,9 +128,9 @@ function update_block (block, board)
     collision = block_collide(block, board[cy + 1][cx])
 
     if (collision) then
+
         -- this block has landed
         block.dy = 0
-        table.insert(board.dirty, block)
     end
 
     block.ry = block.ry + block.dy

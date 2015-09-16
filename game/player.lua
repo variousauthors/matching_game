@@ -10,6 +10,10 @@ function drop_block (block, board)
     end
 
     game.block = nil
+
+    -- set the blocks velocity to infinity
+    -- to represent that it is moving discretely
+    block.dy = game.infinity
     board[block.cy][block.cx] = block
 
     block.y = block.cy
@@ -41,6 +45,10 @@ function step_block (block, board)
     if (block.cy + 1 > game.height or board[block.cy + 1][block.cx] ~= false) then
         -- remove the block and add to the board
         game.block = nil
+
+        -- set the blocks velocity to infinity
+        -- to represent that it is moving discretely
+        block.dy = game.infinity
         board[block.cy][block.cx] = block
     else
         block.cy = math.min(game.height, block.cy + 1)
