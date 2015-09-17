@@ -34,7 +34,7 @@ function draw_block_border (block)
     end
 
     if block.exploding > -1 then
-        e = game.animations.explosion - block.exploding
+        e = game.animations.exploding - block.exploding
     end
 
     love.graphics.setLineWidth(b)
@@ -50,9 +50,13 @@ function draw_block (block)
     local offset = 3*game.block_border
 
     love.graphics.setColor(game.colors.grey)
-    love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
 
-    draw_block_border(block)
+    if (block.crumbling < 0) then
+        love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
+        draw_block_border(block)
+    else
+        love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
+    end
 
     if (block.color == game.colors.grey) then
         draw_block_damage(block)
@@ -88,7 +92,8 @@ function build_block (options)
         hp = 3,
 
         -- animations
-        exploding = -1
+        exploding = -1,
+        crumbling = -1
     }
 end
 
@@ -102,7 +107,14 @@ function update_block (block, board)
     local below
 
     -- do not apply forces to grey blocks
-    if (block.color == game.colors.grey or block.exploding >= 0) then
+    if (block.color == game.colors.grey or block.exploding >= 0 or block.crumbling >= 0) then
+        -- remove it if it is broken
+        if block.hp == 0 then
+            block.hp = 1
+            board[cy][cx].crumbling = game.animations.crumbling
+        end
+
+        -- ANIMATIONS
         -- adjust the explosion
         if block.exploding > 0 then
             block.exploding = block.exploding - 1
@@ -111,9 +123,11 @@ function update_block (block, board)
             board[cy][cx] = false
         end
 
-        -- remove it if it is broken
-        if block.hp == 0 then
-            block = nil
+        -- adjust the crumbling
+        if block.crumbling > 0 then
+            block.crumbling = block.crumbling - 1
+        elseif block.crumbling == 0 then
+            block.crumbling = -1
             board[cy][cx] = false
         end
 

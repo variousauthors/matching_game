@@ -84,7 +84,8 @@ function update_board(board)
                     all_blocks_are_still = false
                 end
 
-                if block.exploding > -1 then
+                if block.exploding > -1 or block.crumbling > -1 then
+                    print(block.crumbling)
                     game.stable = false
                 end
             end
@@ -170,6 +171,12 @@ function clear_blocks (board, block)
     -- if we have at least 3 blocks marked for removal,
     -- remove all marked blocks
     if (#marked) > game.match_target then
+    end
+
+    if (#(marked) == game.match_target) then
+        -- brick damage sound
+
+    elseif (#(marked) > game.match_target) then
         love.soundman.run('shatter')
     end
 
@@ -180,7 +187,7 @@ function clear_blocks (board, block)
             board[v.cy][v.cx].color = game.colors.grey
 
         elseif (#(marked) > game.match_target) then
-            board[v.cy][v.cx].exploding = game.animations.explosion
+            board[v.cy][v.cx].exploding = game.animations.exploding
         end
     end
 end
