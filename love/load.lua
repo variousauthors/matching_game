@@ -28,7 +28,7 @@ function build_game ()
 
 
     -- visual choices
-    game.flicker = true
+    game.flicker = false
     game.block_border = 2
 
     game.colors = {
@@ -66,7 +66,11 @@ function build_rows(rows)
             local x = j
             local color = rows[i][j]
 
-            if color then
+            if color ~= 0 then
+                if (color == 8) then
+                    color = "grey"
+                end
+
                 game.board[y][x] = build_block({ x = x, y = y, color = color })
             end
         end
@@ -78,11 +82,15 @@ function row_matches(row, blocks)
     for i = 1, #blocks, 1 do
         local block = blocks[i]
 
-        if block == false then
+        if block == 0 then
             if (game.board[row][i] ~= false) then
                 error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. "false\n" .. "  was: " .. inspect(game.board[row][i].color))
             end
         else
+            if (block == 8) then
+                block = "grey"
+            end
+
             if (game.board[row][i]) then
                 if (game.board[row][i].color ~= game.colors[block]) then
                     error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(game.board[row][i].color))
@@ -107,7 +115,7 @@ function player_block_is_nil()
     print("--> assert", "player block is nil")
 
     if (game.block ~= nil) then
-        error("FAILED: exists!")
+        error("FAILED: exists!\n  " .. inspect(game.block))
     end
 end
 
@@ -129,25 +137,25 @@ function a_row_of_four_is_cleared ()
 
     -- [x][x][ ][x]
     build_rows({
-        { 1, 1, false, 1 }
+        { 1, 1, 0, 1 }
     })
 
     game.block = build_block({ x = 3, y = game.height - 1, color = 1 })
-    game.step = 0.16
+    game.step = test.step
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_exists()
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_is_nil()
 
-    row_matches(game.height, { 1, 1, 1, 1 })
+    row_matches(game.height - 0, { 1, 1, 1, 1 })
 
-    love.update(0.16)
+    love.update(game.step)
 
-    row_matches(game.height, { false, false, false, false })
+    row_matches(game.height - 0, { 0, 0, 0, 0 })
 end
 
 function a_row_of_four_three_becomes_grey ()
@@ -157,25 +165,25 @@ function a_row_of_four_three_becomes_grey ()
 
     -- [x][x][ ][x]
     build_rows({
-        { 1, 1, false, false }
+        { 1, 1, 0, 0 }
     })
 
     game.block = build_block({ x = 3, y = game.height - 1, color = 1 })
-    game.step = 0.16
+    game.step = test.step
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_exists()
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_is_nil()
 
-    row_matches(game.height, { 1, 1, 1, false })
+    row_matches(game.height - 0, { 1, 1, 1, 0 })
 
-    love.update(0.16)
+    love.update(game.step)
 
-    row_matches(game.height, { "grey", "grey", "grey", false })
+    row_matches(game.height - 0, { 8, 8, 8, 0 })
 end
 
 function a_chain_of_two ()
@@ -185,42 +193,144 @@ function a_chain_of_two ()
 
     -- [x][x][ ][x]
     build_rows({
-        { 2, 2, false, false },
-        { 1, 1, false, false },
-        { 2, 2, 1, false },
-        { 3, 3, 1, false }
+        { 2, 2, 0, 0 },
+        { 1, 1, 0, 0 },
+        { 2, 2, 1, 0 },
+        { 3, 3, 1, 0 }
     })
 
     game.block = build_block({ x = 3, y = game.height - 3, color = 1 })
-    game.step = 0.16
+    game.step = test.step
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_exists()
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_is_nil()
 
-    row_matches(game.height - 2, { 1, 1, 1, false })
+    row_matches(game.height - 2, { 1, 1, 1, 0 })
 
-    love.update(0.16)
-
-    -- the blocks above have not fallen into place
-    row_matches(game.height - 2, { false, false, false, false })
-
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-
-    row_matches(game.height - 2, { 2, 2, false, false })
-
-    love.update(0.16) -- the game makes the second match
+    love.update(game.step)
 
     -- the blocks above have not fallen into place
-    row_matches(game.height - 2, { false, false, false, false })
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
+
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+
+    row_matches(game.height - 2, { 2, 2, 0, 0 })
+
+    love.update(game.step) -- the game makes the second match
+
+    -- the blocks above have not fallen into place
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
 end
+
+function a_chain_of_two_with_grey_three_in_a_row ()
+    print("  three in a row")
+    -- context, when the player drops a piece
+    build_game()
+
+    -- [x][x][ ][x]
+    build_rows({
+        { 0, 0, 0, 0 },
+        { 0, 0, 3, 0 },
+        { 1, 0, 1, 0 },
+        { 3, 3, 1, 0 }
+    })
+
+    game.block = build_block({ x = 2, y = game.height - 2, color = 1 })
+    game.step = test.step
+
+    love.update(game.step)
+
+    player_block_exists()
+
+    love.update(game.step)
+
+    player_block_is_nil()
+
+    row_matches(game.height - 1, { 1, 1, 1, 0 })
+
+    love.update(game.step)
+
+    -- the blocks above have not fallen into place
+    row_matches(game.height - 2, { 0, 0, 3, 0 })
+    row_matches(game.height - 1, { 0, 0, 0, 0 })
+    row_matches(game.height - 0, { 3, 3, 0, 0 })
+
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+
+    row_matches(game.height - 0, { 8, 8, 8, 0 })
+end
+
+function a_chain_of_two_with_grey_three_in_an_L ()
+    print("  three in an L")
+    -- context, when the player drops a piece
+    build_game()
+
+    -- [x][x][ ][x]
+    build_rows({
+        { 0, 3, 0, 0 },
+        { 0, 1, 0, 0 },
+        { 0, 1, 0, 0 },
+        { 3, 3, 1, 0 }
+    })
+
+    game.block = build_block({ x = 3, y = game.height - 2, color = 1 })
+    game.step = test.step
+
+    love.update(game.step)
+
+    player_block_exists()
+
+    love.update(game.step)
+
+    player_block_is_nil()
+
+    row_matches(game.height - 1, { 0, 1, 1, 0 })
+
+    love.update(game.step)
+
+    -- the blocks above have not fallen into place
+    row_matches(game.height - 3, { 0, 3, 0, 0 })
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
+    row_matches(game.height - 1, { 0, 0, 0, 0 })
+    row_matches(game.height - 0, { 3, 3, 0, 0 })
+
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+
+    row_matches(game.height - 1, { 0, 8, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 0, 0 })
+end
+
+function a_chain_of_two_with_grey ()
+    print("a chain of two with grey")
+
+    a_chain_of_two_with_grey_three_in_a_row()
+    a_chain_of_two_with_grey_three_in_an_L()
+end
+
 
 function a_chain_of_three_with_grey ()
     print("a chain of three with grey")
@@ -229,199 +339,206 @@ function a_chain_of_three_with_grey ()
 
     -- [x][x][ ][x]
     build_rows({
-        { 3, false, false, false },
-        { 2, 2, false, false },
-        { 1, 1, false, false },
-        { 2, 2, 1, false },
-        { 3, 3, 1, false }
+        { 3, 0, 0, 0 },
+        { 2, 2, 0, 0 },
+        { 1, 1, 0, 0 },
+        { 2, 2, 1, 0 },
+        { 3, 3, 1, 0 }
     })
 
     game.block = build_block({ x = 3, y = game.height - 3, color = 1 })
-    game.step = 0.16
+    game.step = test.step
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_exists()
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_is_nil()
     game.player.enabled = false
 
-    row_matches(game.height, { 3, 3, 1, false })
-    row_matches(game.height - 2, { 1, 1, 1, false })
+    row_matches(game.height - 2, { 1, 1, 1, 0 })
+    row_matches(game.height - 0, { 3, 3, 1, 0 })
 
-    love.update(0.16)
+    love.update(game.step)
 
     -- the blocks above have not fallen into place
-    row_matches(game.height, { 3, 3, false, false })
-    row_matches(game.height - 2, { false, false, false, false })
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
+    row_matches(game.height - 0, { 3, 3, 0, 0 })
 
     -- give the blocks time to fall
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
 
-    row_matches(game.height, { 3, 3, false, false })
-    row_matches(game.height - 2, { 2, 2, false, false })
+    row_matches(game.height - 2, { 2, 2, 0, 0 })
+    row_matches(game.height - 0, { 3, 3, 0, 0 })
 
-    love.update(0.16) -- the game makes the second match
+    love.update(game.step) -- the game makes the second match
 
-    row_matches(game.height, { 3, 3, false, false })
-    row_matches(game.height - 2, { false, false, false, false })
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
+    row_matches(game.height - 0, { 3, 3, 0, 0 })
 
     -- give the blocks time to fall two rows
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
 
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
 
-    row_matches(game.height - 3, { false, false, false, false })
-    row_matches(game.height - 2, { false, false, false, false })
-    row_matches(game.height - 1, { "grey", false, false, false })
-    row_matches(game.height, { "grey", "grey", false, false })
+    row_matches(game.height - 3, { 0, 0, 0, 0 })
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
+    row_matches(game.height - 1, { 8, 0, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 0, 0 })
 end
 
 function a_grey_block_is_destroyed ()
-    print("a chain of three with grey")
+    print("a grey block is destroyed")
     -- context, when the player drops a piece
     build_game()
 
     -- [x][x][ ][x]
     build_rows({
-        { false, 3, false, false },
-        { false, 3, false, false },
-        { false, 2, false, false },
-        { false, 2, false, false },
-        { 2, 1, false, false },
-        { 2, 1, false, false},
-        { "grey", "grey", 1, 1 }
+        { 0, 3, 0, 0 },
+        { 0, 3, 0, 0 },
+        { 0, 2, 0, 0 },
+        { 0, 2, 0, 0 },
+        { 2, 1, 0, 0 },
+        { 2, 1, 0, 0},
+        { 8, 8, 1, 1 }
     })
 
     game.block = build_block({ x = 3, y = game.height - 2, color = 1 })
-    game.step = 0.16
+    game.step = test.step
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_exists()
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_is_nil()
     game.player.enabled = false
 
     -- before clearing the red blocks
-    row_matches(game.height - 1, { 2, 1, 1, false })
-    row_matches(game.height, { "grey", "grey", 1, 1 })
+    row_matches(game.height - 1, { 2, 1, 1, 0 })
+    row_matches(game.height - 0, { 8, 8, 1, 1 })
 
-    love.update(0.16)
+    love.update(game.step)
 
     -- after clearing the red blocks
-    row_matches(game.height - 4, { false, 2, false, false })
-    row_matches(game.height - 3, { false, 2, false, false })
-    row_matches(game.height - 2, { 2, false, false, false })
-    row_matches(game.height - 1, { 2, false, false, false })
-    row_matches(game.height, { "grey", "grey", false, false })
+    row_matches(game.height - 4, { 0, 2, 0, 0 })
+    row_matches(game.height - 3, { 0, 2, 0, 0 })
+    row_matches(game.height - 2, { 2, 0, 0, 0 })
+    row_matches(game.height - 1, { 2, 0, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 0, 0 })
 
     block_has_hp(game.height, 1, 3)
     block_has_hp(game.height, 2, 2)
 
     -- the green blocks need to fall two cells
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
 
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
 
-    row_matches(game.height - 4, { false, 3, false, false })
-    row_matches(game.height - 3, { false, 3, false, false })
-    row_matches(game.height - 2, { false, false, false, false })
-    row_matches(game.height - 1, { false, false, false, false })
-    row_matches(game.height, { "grey", "grey", false, false })
+    row_matches(game.height - 4, { 0, 3, 0, 0 })
+    row_matches(game.height - 3, { 0, 3, 0, 0 })
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
+    row_matches(game.height - 1, { 0, 0, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 0, 0 })
 
     block_has_hp(game.height, 1, 2)
     block_has_hp(game.height, 2, 1)
 
     -- the blue blocks need to fall two cells
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
 
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
-    love.update(0.16)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
+    love.update(game.step)
 
     -- they are not in position
-    row_matches(game.height - 2, { false, 3, false, false })
-    row_matches(game.height - 1, { false, 3, false, false })
-    row_matches(game.height, { "grey", "grey", false, false })
+    row_matches(game.height - 2, { 0, 3, 0, 0 })
+    row_matches(game.height - 1, { 0, 3, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 0, 0 })
 
     game.block = build_block({ x = 3, y = game.height - 1, color = 3 })
     game.player.enabled = true
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_exists()
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_is_nil()
     game.player.enabled = false
 
-    row_matches(game.height - 2, { false, 3, false, false })
-    row_matches(game.height - 1, { false, 3, false, false })
-    row_matches(game.height, { "grey", "grey", 3, false })
+    row_matches(game.height - 2, { 0, 3, 0, 0 })
+    row_matches(game.height - 1, { 0, 3, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 3, 0 })
 
     game.block = build_block({ x = 3, y = game.height - 2, color = 3 })
-    game.player.enabled = true
+    -- we must update once between disabling and enabling the player
+    -- so that the update timer gets reset
+    love.update(game.step)
 
-    love.update(0.16)
+    game.player.enabled = true
+    love.update(game.step)
 
     player_block_exists()
 
-    love.update(0.16)
+    love.update(game.step)
 
     player_block_is_nil()
     game.player.enabled = false
 
     -- before clearing
-    row_matches(game.height - 2, { false, 3, false, false })
-    row_matches(game.height - 1, { false, 3, 3, false })
-    row_matches(game.height, { "grey", "grey", 3, false })
+    row_matches(game.height - 2, { 0, 3, 0, 0 })
+    row_matches(game.height - 1, { 0, 3, 3, 0 })
+    row_matches(game.height - 0, { 8, 8, 3, 0 })
 
-    love.update(0.16)
+    love.update(game.step)
 
     -- after clearing
-    row_matches(game.height - 2, { false, false, false, false })
-    row_matches(game.height - 1, { false, false, false, false })
-    row_matches(game.height, { "grey", "grey", false, false })
+    row_matches(game.height - 2, { 0, 0, 0, 0 })
+    row_matches(game.height - 1, { 0, 0, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 0, 0 })
 
     block_has_hp(game.height, 2, 0)
 
     -- after breaking the block
-    love.update(0.16)
+    love.update(game.step)
 
-    row_matches(game.height, { "grey", false, false, false })
+    row_matches(game.height - 0, { 8, 0, 0, 0 })
 end
 
 function run_tests ()
     -- build a board with some pieces and run update
 
+    test = {}
+    test.step = 0.16
+
     a_row_of_four_is_cleared()
     a_row_of_four_three_becomes_grey()
     a_chain_of_two()
+    a_chain_of_two_with_grey()
     a_chain_of_three_with_grey()
     a_grey_block_is_destroyed()
 

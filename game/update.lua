@@ -58,5 +58,8 @@ function love.update (dt)
             game.update_timer = 0
             step_block(game.block, game.board)
         end
+    else
+        game.update_timer = 0
+        game.input_timer = 0
     end
 end
