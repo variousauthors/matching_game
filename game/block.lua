@@ -55,12 +55,24 @@ function draw_block (block)
         love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
         draw_block_border(block)
     else
-        love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
+
+        -- four triangles expanding away
     end
 
     if (block.color == game.colors.grey) then
         draw_block_damage(block)
     end
+
+    love.graphics.setColor(block.color)
+        local e = game.animations.exploding - block.exploding
+        local d = block.dim * game.scale - 2*offset
+        local x = block.x * game.scale + offset
+        local y = block.y * game.scale + offset
+
+        love.graphics.polygon('fill', x, y, x + d, y, x + d/2, y + d/2)
+        love.graphics.polygon('fill', x, y, x, y + d, x + d/2, y + d/2)
+        love.graphics.polygon('fill', x + d, y + d, x, y + d, x + d/2, y + d/2)
+        love.graphics.polygon('fill', x + d, y + d, x + d, y, x + d/2, y + d/2)
 
     love.graphics.pop()
 end
