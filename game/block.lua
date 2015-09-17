@@ -57,22 +57,28 @@ function draw_block (block)
     else
 
         -- four triangles expanding away
+        local e = game.animations.crumbling - block.crumbling
+        local d = block.dim * game.scale - 2*offset
+        local x = block.x * game.scale + offset
+        local y = block.y * game.scale + offset
+
+        -- top
+        love.graphics.polygon('fill', x, y - e, x + d, y - e, x + d/2, y + d/2 - e)
+
+        -- left
+        love.graphics.polygon('fill', x - e, y, x - e, y + d, x + d/2 - e, y + d/2)
+
+        -- right
+        love.graphics.polygon('fill', x + d + e, y, x + d + e, y + d, x + d/2 + e, y + d/2)
+
+        -- bottom
+        love.graphics.polygon('fill', x, y + d + e, x + d, y + d + e, x + d/2, y + d/2 + e)
+
     end
 
     if (block.color == game.colors.grey) then
         draw_block_damage(block)
     end
-
-    love.graphics.setColor(block.color)
-        local e = game.animations.exploding - block.exploding
-        local d = block.dim * game.scale - 2*offset
-        local x = block.x * game.scale + offset
-        local y = block.y * game.scale + offset
-
-        love.graphics.polygon('fill', x, y, x + d, y, x + d/2, y + d/2)
-        love.graphics.polygon('fill', x, y, x, y + d, x + d/2, y + d/2)
-        love.graphics.polygon('fill', x + d, y + d, x, y + d, x + d/2, y + d/2)
-        love.graphics.polygon('fill', x + d, y + d, x + d, y, x + d/2, y + d/2)
 
     love.graphics.pop()
 end
