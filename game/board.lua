@@ -169,7 +169,7 @@ function clear_blocks (board, block)
     -- if we have at least 3 blocks marked for removal,
     -- remove all marked blocks
     if (#marked) > game.match_target then
-        love.soundman.sendCommand({ 'playSoundWithRandomPitch', 'assets/shatter.wav' })
+        love.soundman.run('shatter')
     end
 
     for i,v in ipairs(marked) do
