@@ -31,7 +31,8 @@ function draw_board_border ()
     -- a thin line of board color to pad the blocks in
     love.graphics.setLineWidth(4)
 
-    love.graphics.setColor(game.colors.background)
+    local n = game.next_block.color
+    love.graphics.setColor({ n[1], n[2], n[3], game.board_border_alpha })
     love.graphics.rectangle('line', game.scale - 4, game.scale - 4, game.width * game.scale + 8, game.height * game.scale + 8)
 
     love.graphics.setLineWidth(2)

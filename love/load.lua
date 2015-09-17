@@ -44,6 +44,7 @@ function build_game ()
         damage = { 29, 29, 29 }
     }
 
+    game.board_border_alpha = 2 -- for coloured board border
     game.colors.background = game.colors.white
     game.colors.board = game.colors.black
 

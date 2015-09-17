@@ -14,7 +14,7 @@ function love.update (dt)
 
         -- there should be a block
         if (game.block == nil and not game.player.disabled) then
-            game.block = build_block()
+            game.block = next_block()
         end
 
         -- process one set of inputs then cooldown

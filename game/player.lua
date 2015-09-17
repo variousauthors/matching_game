@@ -1,3 +1,9 @@
+function next_block ()
+    local block = game.next_block
+    game.next_block = build_block()
+
+    return block
+end
 
 -- move the block discretely as far down as possible
 function drop_block (block, board)
