@@ -58,6 +58,12 @@ callbacks['playSound'] = function(...)
     snd:play()
 end
 
+callbacks['playSoundWithRandomPitch'] = function(...)
+    local snd = SoundObject.new(...)
+    snd:setPitch(1 + math.random())
+    snd:play()
+end
+
 callbacks['playSoundLoop'] = function(...)
     local snd = SoundObject.new(...)
     snd.source:setLooping(true)

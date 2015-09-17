@@ -27,10 +27,11 @@ function SoundObject.getResource(source, srcType)
     return resource
 end
 
-function SoundObject:initialize(source, tags, volume, srcType, callbacks)
+function SoundObject:initialize(source, tags, volume, pitch, srcType, callbacks)
     local resource = SoundObject.getResource(source, srcType)
     self.source = love.audio.newSource(resource, srcType)
     self.source:setVolume(volume or 1)
+    self.source:setPitch(pitch or 1)
 
     self.tags = {}
     if tags then
