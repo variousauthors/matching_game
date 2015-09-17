@@ -7,11 +7,11 @@ function draw_block_damage (block)
 
     love.graphics.setLineWidth(b)
 
-    if (block.hp == 2) then
+    if (block.hp == game.block_max - 1) then
         -- one cross
         love.graphics.line(block.cx * game.scale, block.cy * game.scale, (block.cx + block.dim) * game.scale, (block.cy + block.dim) * game.scale)
 
-    elseif (block.hp == 1) then
+    elseif (block.hp == game.block_max - 2) then
         -- two cross
         love.graphics.line(block.cx * game.scale, block.cy * game.scale, (block.cx + block.dim) * game.scale, (block.cy + block.dim) * game.scale)
         love.graphics.line((block.cx + block.dim) * game.scale, block.cy * game.scale, block.cx * game.scale, (block.cy + block.dim) * game.scale)
@@ -89,7 +89,7 @@ function build_block (options)
         dim = 1,
         color = color,
         marked = false,
-        hp = 3,
+        hp = game.block_max,
 
         -- animations
         exploding = -1,
@@ -110,7 +110,7 @@ function update_block (block, board)
     if (block.color == game.colors.grey or block.exploding >= 0 or block.crumbling >= 0) then
         -- remove it if it is broken
         if block.hp == 0 then
-            block.hp = 1
+            block.hp = -1
             board[cy][cx].crumbling = game.animations.crumbling
         end
 

@@ -25,6 +25,7 @@ function build_game ()
     game.rate = 2
     game.step = 0.1 * game.rate
     game.input_rate = 8
+    game.block_max = 3
 
     -- animation times
     game.animations = {}
