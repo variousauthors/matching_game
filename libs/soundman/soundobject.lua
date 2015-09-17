@@ -57,6 +57,9 @@ function SoundObject:setVolume(volume)
     self.source:setVolume(volume)
 end
 
+function SoundObject:setPitch(pitch)
+    self.source:setPitch(pitch)
+end
 
 function SoundObject:pause()
     self.source:pause()

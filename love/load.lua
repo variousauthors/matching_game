@@ -26,6 +26,9 @@ function build_game ()
     game.step = 0.1 * game.rate
     game.input_rate = 8
 
+    -- animation times
+    game.animations = {}
+    game.animations.explosion = 8
 
     -- visual choices
     game.flicker = false
@@ -564,7 +567,7 @@ function love.load()
     require('game/board')
     require('game/player')
 
-    run_tests()
+--    run_tests()
 
     build_game()
 end

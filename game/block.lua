@@ -22,7 +22,8 @@ function draw_block_damage (block)
 end
 
 function draw_block_border (block)
-    local b = game.block_border
+    local b = game.block_border -- border size
+    local e = 0 -- explosion size
 
     love.graphics.push("all")
 
@@ -32,8 +33,12 @@ function draw_block_border (block)
         love.graphics.setColor(block.color)
     end
 
+    if block.exploding > -1 then
+        e = game.animations.explosion - block.exploding
+    end
+
     love.graphics.setLineWidth(b)
-    love.graphics.rectangle('line', block.x * game.scale + b, block.y * game.scale + b, block.dim * game.scale - 2*b, block.dim * game.scale - 2*b)
+    love.graphics.rectangle('line', block.x * game.scale + b - e/2, block.y * game.scale + b - e/2, block.dim * game.scale - 2*b + e, block.dim * game.scale - 2*b + e)
     love.graphics.setLineWidth(1)
 
     love.graphics.pop()
@@ -80,7 +85,10 @@ function build_block (options)
         dim = 1,
         color = color,
         marked = false,
-        hp = 3
+        hp = 3,
+
+        -- animations
+        exploding = -1
     }
 end
 
@@ -94,7 +102,15 @@ function update_block (block, board)
     local below
 
     -- do not apply forces to grey blocks
-    if (block.color == game.colors.grey) then
+    if (block.color == game.colors.grey or block.exploding >= 0) then
+        -- adjust the explosion
+        if block.exploding > 0 then
+            block.exploding = block.exploding - 1
+        elseif block.exploding == 0 then
+            block.exploding = -1
+            board[cy][cx] = false
+        end
+
         -- remove it if it is broken
         if block.hp == 0 then
             block = nil

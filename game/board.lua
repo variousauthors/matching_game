@@ -82,6 +82,10 @@ function update_board(board)
                 if block.dy ~= 0 and block.color ~= game.colors.grey then
                     all_blocks_are_still = false
                 end
+
+                if block.exploding > -1 then
+                    game.stable = false
+                end
             end
         end
     end
@@ -171,8 +175,8 @@ function clear_blocks (board, block)
             board[v.cy][v.cx].color = game.colors.grey
 
         elseif (#(marked) > game.match_target) then
-            board[v.cy][v.cx] = false
-
+            board[v.cy][v.cx].exploding = game.animations.explosion
+            love.soundman.run('shatter')
         end
     end
 
