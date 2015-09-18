@@ -109,7 +109,7 @@ function row_matches(row, blocks)
     end
 end
 
-function player_block_exists()
+function player_block_exists ()
     print("--> assert", "player block exists")
     game.player.enabled = true
 
@@ -118,7 +118,7 @@ function player_block_exists()
     end
 end
 
-function player_block_is_nil()
+function player_block_is_nil ()
     print("--> assert", "player block is nil")
     game.player.enabled = false
 
@@ -127,8 +127,21 @@ function player_block_is_nil()
     end
 end
 
-function block_has_hp(y, x, hp)
-    print("--> assert", "block has " .. hp .. " hp")
+function block_is_crumbling (y, x)
+    print("--> assert", "block " .. tostring(game.board[y][x]) .. " is crumbling")
+
+    if (not game.board[y][x]) then
+        error("  there was no block at y: " .. y .. " x: " .. x)
+    end
+
+    if (game.board[y][x].crumbling == -1) then
+        error("  block was not crumbling!")
+    end
+
+end
+
+function block_has_hp (y, x, hp)
+    print("--> assert", "block " .. tostring(game.board[y][x]) .. " has " .. hp .. " hp")
     if (not game.board[y][x]) then
         error("  there was no block at y: " .. y .. " x: " .. x)
     end
@@ -462,9 +475,17 @@ function a_grey_block_is_destroyed ()
 
     run_update(4)
 
-    -- TODO this is a real bug
     block_has_hp(game.height, 1, game.block_max - 1)
     block_has_hp(game.height, 2, game.block_max - 2)
+
+    row_matches(game.height - 4, { 0, 3, 0, 0 })
+    row_matches(game.height - 3, { 0, 3, 0, 0 })
+    row_matches(game.height - 2, { 2, 2, 0, 0 })
+    row_matches(game.height - 1, { 2, 2, 0, 0 })
+    row_matches(game.height - 0, { 8, 8, 0, 0 })
+
+    -- the blue blocks need to fall two cells
+    run_update(game.animations.exploding)
 
     row_matches(game.height - 4, { 0, 3, 0, 0 })
     row_matches(game.height - 3, { 0, 3, 0, 0 })
@@ -472,16 +493,9 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 1, { 0, 0, 0, 0 })
     row_matches(game.height - 0, { 8, 8, 0, 0 })
 
-    -- the blue blocks need to fall two cells
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    love.update(4)
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    love.update(4)
 
     -- they are not in position
     row_matches(game.height - 2, { 0, 3, 0, 0 })
@@ -489,6 +503,8 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 0, { 8, 8, 0, 0 })
 
     game.block = build_block({ x = 3, y = game.height - 1, color = 3 })
+    love.update(game.step)
+
     player_block_exists()
 
     love.update(game.step)
@@ -522,18 +538,19 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 1, { 0, 3, 3, 0 })
     row_matches(game.height - 0, { 8, 8, 3, 0 })
 
-    love.update(game.step)
+    run_update(1)
+
+    block_has_hp(game.height, 2, 0)
+
+    run_update(1)
+
+    block_is_crumbling(game.height, 2)
+
+    run_update(game.animations.exploding)
 
     -- after clearing
     row_matches(game.height - 2, { 0, 0, 0, 0 })
     row_matches(game.height - 1, { 0, 0, 0, 0 })
-    row_matches(game.height - 0, { 8, 8, 0, 0 })
-
-    block_has_hp(game.height, 2, 0)
-
-    -- after breaking the block
-    love.update(game.step)
-
     row_matches(game.height - 0, { 8, 0, 0, 0 })
 end
 
@@ -572,7 +589,7 @@ function love.load()
     require('game/board')
     require('game/player')
 
---    run_tests()
+    run_tests()
 
     build_game()
 end

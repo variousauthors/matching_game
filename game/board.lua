@@ -99,7 +99,9 @@ function update_board(board)
             game.stable = false
             local block = table.remove(board.dirty, 1)
 
-            clear_blocks(board, block)
+            if (not (block.exploding > -1)) then
+                clear_blocks(board, block)
+            end
         end
     else
         -- some blocks are moving, presumably falling
@@ -123,7 +125,6 @@ function clear_blocks (board, block)
 
     block.marked = true
     table.insert(marked, block) -- blocks in the chain
-    table.insert(damage, block) -- grey blocks near the chain
     table.insert(Q, block)
 
     while (#(Q) > 0) do
@@ -169,8 +170,6 @@ function clear_blocks (board, block)
 
     -- if we have at least 3 blocks marked for removal,
     -- remove all marked blocks
-    if (#marked) > game.match_target then
-    end
 
     if (#(marked) == game.match_target) then
         -- brick damage sound
