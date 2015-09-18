@@ -110,6 +110,7 @@ function build_block (options)
         hp = game.block_max,
 
         -- animations
+        animating = false,
         exploding = -1,
         crumbling = -1
     }
@@ -129,7 +130,7 @@ function update_block (block, board)
         -- remove it if it is broken
         if block.hp == 0 then
             block.hp = -1
-            board[cy][cx].crumbling = game.animations.crumbling
+            start_tween(board[cy][cx], "crumbling")
         end
 
         -- ANIMATIONS

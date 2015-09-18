@@ -84,7 +84,7 @@ function update_board(board)
                     all_blocks_are_still = false
                 end
 
-                if block.exploding > -1 or block.crumbling > -1 then
+                if block.animating then
                     game.stable = false
                 end
             end
@@ -99,9 +99,7 @@ function update_board(board)
             game.stable = false
             local block = table.remove(board.dirty, 1)
 
-            if (not (block.exploding > -1)) then
-                clear_blocks(board, block)
-            end
+            clear_blocks(board, block)
         end
     else
         -- some blocks are moving, presumably falling
@@ -112,6 +110,10 @@ end
 
 function clear_blocks (board, block)
     if (block.color == game.colors.grey) then
+        return
+    end
+
+    if (block.exploding > -1) then
         return
     end
 
@@ -185,7 +187,7 @@ function clear_blocks (board, block)
             board[v.cy][v.cx].color = game.colors.grey
 
         elseif (#(marked) > game.match_target) then
-            board[v.cy][v.cx].exploding = game.animations.exploding
+            start_tween(board[v.cy][v.cx], "exploding")
         end
     end
 end

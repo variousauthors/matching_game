@@ -584,6 +584,7 @@ function love.load()
 
     require('game/update')
     require('game/draw')
+    require('game/animation')
 
     require('game/block')
     require('game/board')
