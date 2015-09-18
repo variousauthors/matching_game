@@ -125,6 +125,12 @@ function clear_blocks (board, block)
     local index = 1
     local color = block.color
 
+    -- sound controls
+    local play_shatter = false
+    local play_chip = false
+    local play_crumble = false
+    local play_explode = false
+
     block.marked = true
     table.insert(marked, block) -- blocks in the chain
     table.insert(Q, block)
@@ -167,28 +173,41 @@ function clear_blocks (board, block)
 
         if (#(marked) > game.match_target) then
             block.hp = block.hp - 1
+
+            play_chip = true
+
+            if block.hp == 0 then
+                play_shatter = true
+            end
         end
     end
 
     -- if we have at least 3 blocks marked for removal,
     -- remove all marked blocks
-
-    if (#(marked) == game.match_target) then
-        -- brick damage sound
-
-    elseif (#(marked) > game.match_target) then
-        love.soundman.run('shatter')
-    end
-
     for i,v in ipairs(marked) do
         v.marked = false
 
         if (#(marked) == game.match_target) then
             start_tween(board[v.cy][v.cx], "hardening")
+            play_harden = true
 
         elseif (#(marked) > game.match_target) then
             start_tween(board[v.cy][v.cx], "exploding")
+            play_explode = true
         end
+    end
+
+    if (play_chip) then
+    end
+
+    if (play_shatter) then
+        love.soundman.run('shatter')
+    end
+
+    if (play_explode) then
+    end
+
+    if (play_harden) then
     end
 end
 
