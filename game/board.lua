@@ -184,7 +184,7 @@ function clear_blocks (board, block)
         v.marked = false
 
         if (#(marked) == game.match_target) then
-            board[v.cy][v.cx].color = game.colors.grey
+            start_tween(board[v.cy][v.cx], "hardening")
 
         elseif (#(marked) > game.match_target) then
             start_tween(board[v.cy][v.cx], "exploding")

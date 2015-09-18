@@ -31,6 +31,7 @@ function build_game ()
     game.animations = {}
     game.animations.exploding = 8
     game.animations.crumbling = 8
+    game.animations.hardening = 8
 
     -- visual choices
     game.flicker = false
@@ -185,7 +186,7 @@ function a_row_of_four_is_cleared ()
     row_matches(game.height - 0, { 0, 0, 0, 0 })
 end
 
-function a_row_of_four_three_becomes_grey ()
+function a_row_of_three_becomes_grey ()
     print("a row of three becomes grey")
     -- context, when the player drops a piece
     build_game()
@@ -208,7 +209,7 @@ function a_row_of_four_three_becomes_grey ()
 
     row_matches(game.height - 0, { 1, 1, 1, 0 })
 
-    love.update(game.step)
+    run_update(game.animations.hardening + 2)
 
     row_matches(game.height - 0, { 8, 8, 8, 0 })
 end
@@ -289,15 +290,13 @@ function a_chain_of_two_with_grey_three_in_a_row ()
     row_matches(game.height - 1, { 0, 0, 0, 0 })
     row_matches(game.height - 0, { 3, 3, 0, 0 })
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    -- drop the block twice
+    run_update(4)
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    run_update(4)
+
+    -- run the hardening animation
+    run_update(game.animations.hardening + 2)
 
     row_matches(game.height - 0, { 8, 8, 8, 0 })
 end
@@ -338,15 +337,13 @@ function a_chain_of_two_with_grey_three_in_an_L ()
     row_matches(game.height - 1, { 0, 0, 0, 0 })
     row_matches(game.height - 0, { 3, 3, 0, 0 })
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    -- drop the block twice
+    run_update(4)
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    run_update(4)
+
+    -- run the hardening animation
+    run_update(game.animations.hardening + 2)
 
     row_matches(game.height - 1, { 0, 8, 0, 0 })
     row_matches(game.height - 0, { 8, 8, 0, 0 })
@@ -410,15 +407,11 @@ function a_chain_of_three_with_grey ()
     row_matches(game.height - 0, { 3, 3, 0, 0 })
 
     -- give the blocks time to fall two rows
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    run_update(4)
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    run_update(4)
+
+    run_update(game.animations.hardening + 2)
 
     row_matches(game.height - 3, { 0, 0, 0, 0 })
     row_matches(game.height - 2, { 0, 0, 0, 0 })
@@ -561,7 +554,7 @@ function run_tests ()
     test.step = 0.16
 
     a_row_of_four_is_cleared()
-    a_row_of_four_three_becomes_grey()
+    a_row_of_three_becomes_grey()
     a_chain_of_two()
     a_chain_of_two_with_grey()
     a_chain_of_three_with_grey()

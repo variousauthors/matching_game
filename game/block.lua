@@ -35,11 +35,15 @@ function draw_block_border (block)
 
     if block.exploding > -1 then
         e = game.animations.exploding - block.exploding
+    elseif block.hardening > -1 then
+        e = - (game.animations.hardening - block.hardening)
     end
 
-    love.graphics.setLineWidth(b)
-    love.graphics.rectangle('line', block.x * game.scale + b - e/2, block.y * game.scale + b - e/2, block.dim * game.scale - 2*b + e, block.dim * game.scale - 2*b + e)
-    love.graphics.setLineWidth(1)
+    if (block.color ~= game.colors.grey) then
+        love.graphics.setLineWidth(b)
+        love.graphics.rectangle('line', block.x * game.scale + b - e/2, block.y * game.scale + b - e/2, block.dim * game.scale - 2*b + e, block.dim * game.scale - 2*b + e)
+        love.graphics.setLineWidth(1)
+    end
 
     love.graphics.pop()
 end
@@ -73,7 +77,6 @@ function draw_block (block)
 
         -- bottom
         love.graphics.polygon('fill', x, y + d + e, x + d, y + d + e, x + d/2, y + d/2 + e)
-
     end
 
     if (block.color == game.colors.grey) then
@@ -112,7 +115,8 @@ function build_block (options)
         -- animations
         animating = false,
         exploding = -1,
-        crumbling = -1
+        crumbling = -1,
+        hardening = -1
     }
 end
 
@@ -126,7 +130,7 @@ function update_block (block, board)
     local below
 
     -- do not apply forces to grey blocks
-    if (block.color == game.colors.grey or block.exploding >= 0 or block.crumbling >= 0) then
+    if (block.color == game.colors.grey or block.animating) then
         -- remove it if it is broken
         if block.hp == 0 then
             block.hp = -1
@@ -148,6 +152,19 @@ function update_block (block, board)
         elseif block.crumbling == 0 then
             block.crumbling = -1
             board[cy][cx] = false
+        end
+
+        -- adjust the hardening
+        if block.hardening > 0 then
+            block.hardening = block.hardening - 1
+        elseif block.hardening == 0 then
+            block.hardening = -1
+            board[cy][cx].color = game.colors.grey
+        end
+
+        -- TODO move this into the animation controller
+        if block.crumbling == -1 and block.exploding == -1 and block.hardening == -1 then
+            block.animating = false
         end
 
         return
