@@ -111,6 +111,7 @@ end
 
 function player_block_exists()
     print("--> assert", "player block exists")
+    game.player.enabled = true
 
     if (game.block == nil) then
         error("FAILED: is nil!")
@@ -119,6 +120,7 @@ end
 
 function player_block_is_nil()
     print("--> assert", "player block is nil")
+    game.player.enabled = false
 
     if (game.block ~= nil) then
         error("FAILED: exists!\n  " .. inspect(game.block))
@@ -133,6 +135,12 @@ function block_has_hp(y, x, hp)
 
     if (game.board[y][x].hp ~= hp) then
         error("  expected: " .. hp .. "\n  was: " .. game.board[y][x].hp)
+    end
+end
+
+function run_update (steps)
+    for i = 1, steps, 1 do
+        love.update(game.step)
     end
 end
 
@@ -159,7 +167,7 @@ function a_row_of_four_is_cleared ()
 
     row_matches(game.height - 0, { 1, 1, 1, 1 })
 
-    love.update(game.step)
+    run_update(game.animations.exploding + 2)
 
     row_matches(game.height - 0, { 0, 0, 0, 0 })
 end
@@ -218,19 +226,17 @@ function a_chain_of_two ()
 
     row_matches(game.height - 2, { 1, 1, 1, 0 })
 
-    love.update(game.step)
+    -- TODO WHY PLUS TWO???
+    run_update(game.animations.exploding + 2)
 
     -- the blocks above have not fallen into place
     row_matches(game.height - 2, { 0, 0, 0, 0 })
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    run_update(4) -- TODO it takes 4 frames for a block to fall one square
 
     row_matches(game.height - 2, { 2, 2, 0, 0 })
 
-    love.update(game.step) -- the game makes the second match
+    run_update(game.animations.exploding + 2)
 
     -- the blocks above have not fallen into place
     row_matches(game.height - 2, { 0, 0, 0, 0 })
@@ -261,8 +267,9 @@ function a_chain_of_two_with_grey_three_in_a_row ()
     player_block_is_nil()
 
     row_matches(game.height - 1, { 1, 1, 1, 0 })
+    row_matches(game.height - 0, { 3, 3, 1, 0 })
 
-    love.update(game.step)
+    run_update(game.animations.exploding + 2)
 
     -- the blocks above have not fallen into place
     row_matches(game.height - 2, { 0, 0, 3, 0 })
@@ -306,9 +313,11 @@ function a_chain_of_two_with_grey_three_in_an_L ()
 
     player_block_is_nil()
 
+    row_matches(game.height - 2, { 0, 1, 0, 0 })
     row_matches(game.height - 1, { 0, 1, 1, 0 })
+    row_matches(game.height - 0, { 3, 3, 1, 0 })
 
-    love.update(game.step)
+    run_update(game.animations.exploding + 2)
 
     -- the blocks above have not fallen into place
     row_matches(game.height - 3, { 0, 3, 0, 0 })
@@ -362,12 +371,11 @@ function a_chain_of_three_with_grey ()
     love.update(game.step)
 
     player_block_is_nil()
-    game.player.enabled = false
 
     row_matches(game.height - 2, { 1, 1, 1, 0 })
     row_matches(game.height - 0, { 3, 3, 1, 0 })
 
-    love.update(game.step)
+    run_update(game.animations.exploding + 2)
 
     -- the blocks above have not fallen into place
     row_matches(game.height - 2, { 0, 0, 0, 0 })
@@ -379,10 +387,11 @@ function a_chain_of_three_with_grey ()
     love.update(game.step)
     love.update(game.step)
 
+    row_matches(game.height - 1, { 2, 2, 0, 0 })
     row_matches(game.height - 2, { 2, 2, 0, 0 })
     row_matches(game.height - 0, { 3, 3, 0, 0 })
 
-    love.update(game.step) -- the game makes the second match
+    run_update(game.animations.exploding + 2)
 
     row_matches(game.height - 2, { 0, 0, 0, 0 })
     row_matches(game.height - 0, { 3, 3, 0, 0 })
@@ -430,13 +439,13 @@ function a_grey_block_is_destroyed ()
     love.update(game.step)
 
     player_block_is_nil()
-    game.player.enabled = false
 
     -- before clearing the red blocks
+    row_matches(game.height - 2, { 2, 1, 0, 0 })
     row_matches(game.height - 1, { 2, 1, 1, 0 })
     row_matches(game.height - 0, { 8, 8, 1, 1 })
 
-    love.update(game.step)
+    run_update(game.animations.exploding + 2)
 
     -- after clearing the red blocks
     row_matches(game.height - 4, { 0, 2, 0, 0 })
@@ -445,28 +454,23 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 1, { 2, 0, 0, 0 })
     row_matches(game.height - 0, { 8, 8, 0, 0 })
 
-    block_has_hp(game.height, 1, 3)
-    block_has_hp(game.height, 2, 2)
+    block_has_hp(game.height, 1, game.block_max)
+    block_has_hp(game.height, 2, game.block_max - 1)
 
     -- the green blocks need to fall two cells
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    run_update(4)
 
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
-    love.update(game.step)
+    run_update(4)
+
+    -- TODO this is a real bug
+    block_has_hp(game.height, 1, game.block_max - 1)
+    block_has_hp(game.height, 2, game.block_max - 2)
 
     row_matches(game.height - 4, { 0, 3, 0, 0 })
     row_matches(game.height - 3, { 0, 3, 0, 0 })
     row_matches(game.height - 2, { 0, 0, 0, 0 })
     row_matches(game.height - 1, { 0, 0, 0, 0 })
     row_matches(game.height - 0, { 8, 8, 0, 0 })
-
-    block_has_hp(game.height, 1, 2)
-    block_has_hp(game.height, 2, 1)
 
     -- the blue blocks need to fall two cells
     love.update(game.step)
@@ -485,7 +489,7 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 0, { 8, 8, 0, 0 })
 
     game.block = build_block({ x = 3, y = game.height - 1, color = 3 })
-    game.player.enabled = true
+    player_block_exists()
 
     love.update(game.step)
 
@@ -494,7 +498,6 @@ function a_grey_block_is_destroyed ()
     love.update(game.step)
 
     player_block_is_nil()
-    game.player.enabled = false
 
     row_matches(game.height - 2, { 0, 3, 0, 0 })
     row_matches(game.height - 1, { 0, 3, 0, 0 })
@@ -505,7 +508,7 @@ function a_grey_block_is_destroyed ()
     -- so that the update timer gets reset
     love.update(game.step)
 
-    game.player.enabled = true
+    player_block_exists()
     love.update(game.step)
 
     player_block_exists()
@@ -513,7 +516,6 @@ function a_grey_block_is_destroyed ()
     love.update(game.step)
 
     player_block_is_nil()
-    game.player.enabled = false
 
     -- before clearing
     row_matches(game.height - 2, { 0, 3, 0, 0 })

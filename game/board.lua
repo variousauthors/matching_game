@@ -85,7 +85,6 @@ function update_board(board)
                 end
 
                 if block.exploding > -1 or block.crumbling > -1 then
-                    print(block.crumbling)
                     game.stable = false
                 end
             end
