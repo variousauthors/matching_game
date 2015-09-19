@@ -1,4 +1,10 @@
 function love.update (dt)
+    for i = 1, game.width, 1 do
+        if game.board[1][i] then
+            build_game()
+        end
+    end
+
     local player = game.player
     local direction = 0
 

@@ -128,7 +128,7 @@ function clear_blocks (board, block)
     -- sound controls
     local play_shatter = false
     local play_chip = false
-    local play_crumble = false
+    local play_harden = false
     local play_explode = false
 
     block.marked = true
@@ -205,9 +205,11 @@ function clear_blocks (board, block)
     end
 
     if (play_explode) then
+        love.soundman.run('pop')
     end
 
     if (play_harden) then
+        love.soundman.run('power_down')
     end
 end
 
