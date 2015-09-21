@@ -48,6 +48,18 @@ function draw_block_border (block)
     love.graphics.pop()
 end
 
+function tiny_triangle (x, y, dim, dir)
+    if dir == "down" then
+        love.graphics.polygon('fill', x, y, x + dim, y, x + dim/2, y + dim/2)
+    elseif dir == "right" then
+        love.graphics.polygon('fill', x, y, x, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "left" then
+        love.graphics.polygon('fill', x + dim, y, x + dim, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "up" then
+        love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
+    end
+end
+
 function draw_block (block)
     love.graphics.push("all")
 
@@ -66,17 +78,11 @@ function draw_block (block)
         local x = block.x * game.scale + offset
         local y = block.y * game.scale + offset
 
-        -- top
-        love.graphics.polygon('fill', x, y - e, x + d, y - e, x + d/2, y + d/2 - e)
+        tiny_triangle(x, y - e, d, "up")
+        tiny_triangle(x - e, y, d, "left")
+        tiny_triangle(x + e, y, d, "right")
+        tiny_triangle(x, y + e, d, "down")
 
-        -- left
-        love.graphics.polygon('fill', x - e, y, x - e, y + d, x + d/2 - e, y + d/2)
-
-        -- right
-        love.graphics.polygon('fill', x + d + e, y, x + d + e, y + d, x + d/2 + e, y + d/2)
-
-        -- bottom
-        love.graphics.polygon('fill', x, y + d + e, x + d, y + d + e, x + d/2, y + d/2 + e)
     end
 
     if (block.color == game.colors.grey) then

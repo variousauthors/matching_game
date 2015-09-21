@@ -1,6 +1,7 @@
 function next_block ()
     local block = game.next_block
-    game.next_block = build_block()
+    game.next_block = build_block({ x = math.ceil(math.random() * game.width) })
+    game.preview = game.next_block.x
 
     return block
 end
