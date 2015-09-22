@@ -1,7 +1,12 @@
 function next_block ()
     local block = game.next_block
-    game.next_block = build_block({ x = math.ceil(math.random() * game.width) })
-    game.preview = game.next_block.x
+
+    if (game.random_x_starting_position) then
+        local x = math.ceil(math.random() * game.width)
+        game.next_block = build_block({ x = x})
+    else
+        game.next_block = build_block()
+    end
 
     return block
 end

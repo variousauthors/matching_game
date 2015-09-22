@@ -78,10 +78,10 @@ function draw_block (block)
         local x = block.x * game.scale + offset
         local y = block.y * game.scale + offset
 
-        tiny_triangle(x, y - e, d, "up")
-        tiny_triangle(x - e, y, d, "left")
-        tiny_triangle(x + e, y, d, "right")
-        tiny_triangle(x, y + e, d, "down")
+        tiny_triangle(x, y + e, d, "up")
+        tiny_triangle(x + e, y, d, "left")
+        tiny_triangle(x - e, y, d, "right")
+        tiny_triangle(x, y - e, d, "down")
 
     end
 

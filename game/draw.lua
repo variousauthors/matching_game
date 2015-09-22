@@ -6,10 +6,11 @@ love.viewport = require('libs/viewport').newSingleton()
 function draw_preview_arrow ()
     love.graphics.push("all")
     local offset = 3*game.block_border
+    local x = game.next_block.x * game.scale + offset
     local d = game.next_block.dim * game.scale - 2*offset
 
     love.graphics.setColor(game.next_block.color)
-    tiny_triangle(game.preview * game.scale, game.scale/4, d, "down")
+    tiny_triangle(x, game.scale/4, d, "down")
 
     love.graphics.pop()
 end

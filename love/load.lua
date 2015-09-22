@@ -36,6 +36,7 @@ function build_game ()
     -- visual choices
     game.flicker = false
     game.block_border = 2
+    game.random_x_starting_position = false
 
     game.colors = {
         { 200, 55, 55 }, -- red
