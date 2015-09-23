@@ -1,23 +1,34 @@
 
 function build_mote (block)
     local mote = {}
-    mote.color = block.color
-    mote.primary = block.primary
 
-    -- center the mote in the block
-    mote.x = block.x + block.dim/2
-    mote.y = block.y + block.dim/2
-    mote.dim = block.dim/game.mote_ratio
 
-    mote.halo_dim = block.dim/game.mote_ratio + (0.5 - math.random()) / game.scale
+    return {
+        -- position in the grid
+        cx = block.cx,
+        cy = block.cy,
+        -- real position relative to the grid (0..1)
+        rx = 0,
+        ry = 0,
 
-    mote.released = false
+        dx = 0,
+        dy = 0,
 
-    mote.pulse_timer = 0
-    mote.pulse_intensity = 0
-    mote.pulse_period = math.pi
+        -- final position in each timestep fro graphics
+        x = block.x + block.dim/2,
+        y = block.y + block.dim/2,
 
-    return mote
+        dim = block.dim/game.mote_ratio,
+        color = block.color,
+        primary = block.primary,
+
+        halo_dim = block.dim/game.mote_ratio + (0.5 - math.random()) / game.scale,
+
+        released = false,
+        pulse_timer = 0,
+        pulse_intensity = 0,
+        pulse_period = math.pi
+    }
 end
 
 function update_mote (mote)
