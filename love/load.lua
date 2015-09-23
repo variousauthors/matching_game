@@ -55,6 +55,7 @@ function build_game ()
     game.animations.hardening = 8
 
     -- visual choices
+    game.mote_ratio = 4
     game.tiny_triangle_ratio = 3
     game.tiny_triangle = false
     game.flicker = false
@@ -591,9 +592,10 @@ function love.load()
     require('game/draw')
     require('game/animation')
 
-    require('game/block')
-    require('game/board')
     require('game/player')
+    require('game/board')
+    require('game/block')
+    require('game/mote')
 
     run_tests()
 

@@ -60,21 +60,15 @@ function tiny_triangle (x, y, dim, dir)
     end
 end
 
-function draw_block_heart(block)
-    love.graphics.push("all")
-
-    love.graphics.setColor(block.heart_color)
-    love.graphics.circle("fill", (block.x + block.dim/2) * game.scale, (block.y + block.dim/2) * game.scale, block.dim/4 * game.scale)
-
-    love.graphics.pop()
-end
-
 function draw_block (block)
     love.graphics.push("all")
 
     local offset = 3*game.block_border
 
-    draw_block_heart(block)
+    if (block.mote) then
+        draw_mote(block.mote)
+    end
+
     love.graphics.setColor(game.colors.grey)
 
     if (block.crumbling < 0) then
@@ -126,7 +120,6 @@ function build_block (options)
 
         dim = 1,
         color = color,
-        heart_color = color,
         marked = false,
         hp = game.block_max,
 
@@ -177,6 +170,7 @@ function update_block (block, board)
             block.hardening = block.hardening - 1
         elseif block.hardening == 0 then
             block.hardening = -1
+            block.mote = build_mote(block)
             board[cy][cx].color = game.colors.grey
         end
 
