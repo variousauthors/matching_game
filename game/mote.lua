@@ -8,20 +8,21 @@ function build_mote (block)
     mote.x = block.x + block.dim/2
     mote.y = block.y + block.dim/2
     mote.dim = block.dim/game.mote_ratio
-    mote.halo_dim = block.dim/game.mote_ratio
+
+    mote.halo_dim = block.dim/game.mote_ratio + (0.5 - math.random()) / game.scale
 
     mote.released = false
 
     mote.pulse_timer = 0
     mote.pulse_intensity = 0
+    mote.pulse_period = math.pi
 
     return mote
 end
 
 function update_mote (mote)
-    mote.pulse_timer = (mote.pulse_timer + game.dt) % (math.pi)
+    mote.pulse_timer = (mote.pulse_timer + game.dt + (0.05 - math.random() * 0.1)) % (mote.pulse_period)
     mote.pulse_intensity = 0.5 * math.sin(2 * mote.pulse_timer) + 0.5
-
 end
 
 function draw_mote (mote)
