@@ -9,12 +9,12 @@ function draw_block_damage (block)
 
     if (block.hp == game.block_max - 1) then
         -- one cross
-        love.graphics.line(block.cx * game.scale, block.cy * game.scale, (block.cx + block.dim) * game.scale, (block.cy + block.dim) * game.scale)
+        love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
 
     elseif (block.hp == game.block_max - 2) then
         -- two cross
-        love.graphics.line(block.cx * game.scale, block.cy * game.scale, (block.cx + block.dim) * game.scale, (block.cy + block.dim) * game.scale)
-        love.graphics.line((block.cx + block.dim) * game.scale, block.cy * game.scale, block.cx * game.scale, (block.cy + block.dim) * game.scale)
+        love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
+        love.graphics.line((block.x + block.dim) * game.scale, block.y * game.scale, block.x * game.scale, (block.y + block.dim) * game.scale)
     end
 
     love.graphics.setLineWidth(1)
@@ -110,8 +110,8 @@ function build_block (options)
         dy = 0,
 
         -- final position in each timestep fro graphics
-        x = x,
-        y = y,
+        x = x - 1 + game.board.x,
+        y = y - 1 + game.board.y,
 
         dim = 1,
         color = color,
@@ -217,6 +217,16 @@ function update_block (block, board)
         board[cy + 1][cx] = block
     end
 
-    block.y = math.min(block.cy + 1, block.cy + block.ry)
+    -- set the screen y position for the block
+    block_set_y(block, board, math.min(block.cy + 1, block.cy + block.ry))
+end
+
+-- set the drawing coord relative to the board
+function block_set_y (block, board, y)
+    block.y = y - 1 + board.y
+end
+
+function block_set_x (block, board, x)
+    block.x = x - 1 + board.x
 end
 

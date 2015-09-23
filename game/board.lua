@@ -27,7 +27,7 @@ function draw_board_background (board)
     love.graphics.push("all")
 
     love.graphics.setColor(board.color)
-    love.graphics.rectangle('fill', board.x - 2, board.y - 2, board.width * game.scale + 4, board.height * game.scale + 4)
+    love.graphics.rectangle('fill', board.x * game.scale - 2, board.y * game.scale - 2, board.width * game.scale + 4, board.height * game.scale + 4)
 
     love.graphics.pop()
 end
@@ -40,12 +40,12 @@ function draw_board_border (board)
 
     local n = game.next_block.color
     love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
-    love.graphics.rectangle('line', board.x - 4, board.y - 4, board.width * game.scale + 8, board.height * game.scale + 8)
+    love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, board.height * game.scale + 8)
 
     love.graphics.setLineWidth(2)
 
     love.graphics.setColor(board.color)
-    love.graphics.rectangle('line', board.x - 6, board.y - 6, board.width * game.scale + 12, board.height * game.scale + 12)
+    love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, board.height * game.scale + 12)
 
     love.graphics.setLineWidth(1)
 
@@ -79,13 +79,15 @@ function draw_board (board)
     for y = 1, #(board) do
         for x = 1, #(board[y]) do
             if (board[y][x] ~= false) then
-                -- set the color to the block's color
+
                 draw_block(board[y][x])
             end
         end
     end
 
-    draw_board_preview_arrow(board)
+    if (game.tiny_triangle == true) then
+        draw_board_preview_arrow(board)
+    end
 
     love.graphics.pop()
 end

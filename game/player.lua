@@ -28,7 +28,7 @@ function drop_block (block, board)
     block.dy = game.infinity
     board[block.cy][block.cx] = block
 
-    block.y = block.cy
+    block_set_y(block, board, block.cy)
 end
 
 -- move the block side to side
@@ -48,7 +48,7 @@ function move_block (block, board, direction)
         end
     end
 
-    block.x = block.cx
+    block_set_x(block, board, block.cx)
 end
 
 -- move the block discretely down one row
@@ -66,6 +66,6 @@ function step_block (block, board)
         block.cy = math.min(game.height, block.cy + 1)
     end
 
-    block.y = block.cy
+    block_set_y(block, board, block.cy)
 end
 

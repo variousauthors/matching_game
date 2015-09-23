@@ -38,8 +38,8 @@ function build_game ()
 
     -- defaults for the board
     game.board_defaults = {
-        x = game.scale,
-        y = game.scale,
+        x = 2,
+        y = 0,
         width = game.width,
         height = game.height,
         color = game.colors.black,
@@ -56,6 +56,7 @@ function build_game ()
 
     -- visual choices
     game.tiny_triangle_ratio = 3
+    game.tiny_triangle = false
     game.flicker = false
     game.block_border = 2
     game.random_x_starting_position = false
