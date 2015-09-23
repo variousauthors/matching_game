@@ -162,6 +162,11 @@ function update_block (block, board)
             block.crumbling = block.crumbling - 1
         elseif block.crumbling == 0 then
             block.crumbling = -1
+            -- when we run the tests, we create grey blocks
+            -- directly, and then don't have motes so...
+            if (block.mote) then
+                block.mote.released = true
+            end
             board[cy][cx] = false
         end
 
@@ -170,7 +175,8 @@ function update_block (block, board)
             block.hardening = block.hardening - 1
         elseif block.hardening == 0 then
             block.hardening = -1
-            table.insert(game.motes, build_mote(block))
+            block.mote = build_mote(block)
+            table.insert(game.motes, block.mote)
             board[cy][cx].color = game.colors.grey
         end
 

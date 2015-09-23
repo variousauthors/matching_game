@@ -100,6 +100,10 @@ function update_board(board)
     local block
     local all_blocks_are_still = true
 
+    for i, mote in pairs(game.motes) do
+        update_mote(mote, dt)
+    end
+
     -- check each cell from bottom to top
     for y = game.height, 1, -1 do
         for x = 1, game.width, 1 do

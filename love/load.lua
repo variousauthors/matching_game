@@ -72,6 +72,8 @@ function build_game ()
         { 0, 55, 0 }, -- green
         { 0, 0, 55 }, -- blue
     }
+
+    table.insert(game.motes, build_mote({ x = 1, y = 1, color = game.colors[1], dim = 1 }))
 end
 
 -- pass in something like
