@@ -13,6 +13,8 @@ function build_game ()
         right = {}
     }
 
+    game.motes = {}
+
     game.colors = {
         { 200, 55, 55 }, -- red
         { 55, 200, 55 }, -- green

@@ -76,6 +76,10 @@ function draw_board (board)
     draw_board_border(board)
     draw_board_background(board)
 
+    for i, mote in pairs(game.motes) do
+        draw_mote(mote)
+    end
+
     for y = 1, #(board) do
         for x = 1, #(board[y]) do
             if (board[y][x] ~= false) then

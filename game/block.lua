@@ -170,7 +170,7 @@ function update_block (block, board)
             block.hardening = block.hardening - 1
         elseif block.hardening == 0 then
             block.hardening = -1
-            block.mote = build_mote(block)
+            table.insert(game.motes, build_mote(block))
             board[cy][cx].color = game.colors.grey
         end
 
