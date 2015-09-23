@@ -20,6 +20,7 @@ function build_game ()
         { 55, 200, 55 }, -- green
         { 55, 55, 200 }, -- blue
         white = { 255, 255, 255 },
+        pale = { 200, 200, 200 },
         black = { 29, 29, 29 },
         grey = { 155, 155, 155 },
         damage = { 29, 29, 29 }
@@ -36,7 +37,7 @@ function build_game ()
     game.rate = 2
     game.step = 0.1 * game.rate
     game.input_rate = 8
-    game.block_max = 3
+    game.block_max_hp = 3
 
     -- defaults for the board
     game.board_defaults = {
@@ -57,7 +58,7 @@ function build_game ()
     game.animations.hardening = 8
 
     -- visual choices
-    game.mote_ratio = 4
+    game.mote_ratio = 9
     game.tiny_triangle_ratio = 3
     game.tiny_triangle = false
     game.flicker = false
@@ -477,16 +478,16 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 1, { 2, 0, 0, 0 })
     row_matches(game.height - 0, { 8, 8, 0, 0 })
 
-    block_has_hp(game.height, 1, game.block_max)
-    block_has_hp(game.height, 2, game.block_max - 1)
+    block_has_hp(game.height, 1, game.block_max_hp)
+    block_has_hp(game.height, 2, game.block_max_hp - 1)
 
     -- the green blocks need to fall two cells
     run_update(4)
 
     run_update(4)
 
-    block_has_hp(game.height, 1, game.block_max - 1)
-    block_has_hp(game.height, 2, game.block_max - 2)
+    block_has_hp(game.height, 1, game.block_max_hp - 1)
+    block_has_hp(game.height, 2, game.block_max_hp - 2)
 
     row_matches(game.height - 4, { 0, 3, 0, 0 })
     row_matches(game.height - 3, { 0, 3, 0, 0 })

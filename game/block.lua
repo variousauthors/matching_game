@@ -7,11 +7,11 @@ function draw_block_damage (block)
 
     love.graphics.setLineWidth(b)
 
-    if (block.hp == game.block_max - 1) then
+    if (block.hp == game.block_max_hp - 1) then
         -- one cross
         love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
 
-    elseif (block.hp == game.block_max - 2) then
+    elseif (block.hp == game.block_max_hp - 2) then
         -- two cross
         love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
         love.graphics.line((block.x + block.dim) * game.scale, block.y * game.scale, block.x * game.scale, (block.y + block.dim) * game.scale)
@@ -101,7 +101,8 @@ function build_block (options)
     local options = options or {}
     local x = options.x or math.ceil(game.width/2)
     local y = options.y or 1
-    local color = game.colors[options.color] or game.colors[math.random(1, 3)]
+    local primary = math.random(1, 3)
+    local color = game.colors[options.color] or game.colors[primary]
 
     return {
         -- position in the grid
@@ -120,8 +121,9 @@ function build_block (options)
 
         dim = 1,
         color = color,
+        primary = primary,
         marked = false,
-        hp = game.block_max,
+        hp = game.block_max_hp,
 
         -- animations
         animating = false,
