@@ -3,6 +3,13 @@ function build_board ()
     local board = {}
     local i, j
 
+    board.x = game.board_defaults.x
+    board.y = game.board_defaults.y
+    board.width = game.board_defaults.width
+    board.height = game.board_defaults.height
+    board.color = game.board_defaults.color
+    board.border_alpha = game.board_defaults.border_alpha
+
     board.dirty = {}
 
     for y = 1, game.height, 1 do
@@ -16,42 +23,57 @@ function build_board ()
     return board
 end
 
-function draw_board_background ()
+function draw_board_background (board)
     love.graphics.push("all")
 
-    love.graphics.setColor(game.colors.board)
-    love.graphics.rectangle('fill', game.scale - 2, game.scale - 2, game.width * game.scale + 4, game.height * game.scale + 4)
+    love.graphics.setColor(board.color)
+    love.graphics.rectangle('fill', board.x - 2, board.y - 2, board.width * game.scale + 4, board.height * game.scale + 4)
 
     love.graphics.pop()
 end
 
-function draw_board_border ()
+function draw_board_border (board)
     love.graphics.push("all")
 
     -- a thin line of board color to pad the blocks in
     love.graphics.setLineWidth(4)
 
     local n = game.next_block.color
-    love.graphics.setColor({ n[1], n[2], n[3], game.board_border_alpha })
-    love.graphics.rectangle('line', game.scale - 4, game.scale - 4, game.width * game.scale + 8, game.height * game.scale + 8)
+    love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
+    love.graphics.rectangle('line', board.x - 4, board.y - 4, board.width * game.scale + 8, board.height * game.scale + 8)
 
     love.graphics.setLineWidth(2)
 
-    love.graphics.setColor(game.colors.board)
-    love.graphics.rectangle('line', game.scale - 6, game.scale - 6, game.width * game.scale + 12, game.height * game.scale + 12)
+    love.graphics.setColor(board.color)
+    love.graphics.rectangle('line', board.x - 6, board.y - 6, board.width * game.scale + 12, board.height * game.scale + 12)
 
     love.graphics.setLineWidth(1)
 
     love.graphics.pop()
 end
 
+function draw_board_preview_arrow (board)
+    love.graphics.push("all")
+    local next_block = game.next_block
+    local offset = 3 * game.block_border
+
+    local x = next_block.x * game.scale + offset
+    local d = next_block.dim * game.scale - 2*offset
+
+    local n = next_block.color
+    love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
+    tiny_triangle(x, game.scale/game.tiny_triangle_ratio, d, "down")
+
+    love.graphics.pop()
+end
+
+
 function draw_board (board)
     love.graphics.push("all")
 
     local i, j
 
-    draw_board_border()
-
+    draw_board_border(board)
     draw_board_background(board)
 
     for y = 1, #(board) do
@@ -62,6 +84,8 @@ function draw_board (board)
             end
         end
     end
+
+    draw_board_preview_arrow(board)
 
     love.graphics.pop()
 end
