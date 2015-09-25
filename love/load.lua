@@ -50,6 +50,7 @@ function build_game ()
     }
 
     game.board = build_board()
+    game.shadows = build_board()
 
     -- animation times
     game.animations = {}

@@ -157,6 +157,10 @@ function update_block (block, board)
         elseif block.exploding == 0 then
             block.exploding = -1
             board[cy][cx] = false
+
+            -- TODO shadows need to be an entity so that we can draw them
+            -- using x and y, rather than cx and cy
+            game.shadows[cy][cx] = true
         end
 
         -- adjust the crumbling

@@ -78,6 +78,20 @@ function draw_board (board)
 
     for y = 1, #(board) do
         for x = 1, #(board[y]) do
+
+            if (game.shadows[y][x]) then
+                local offset = 3 * game.block_border
+
+                love.graphics.setColor({ 44, 44, 44})
+                love.graphics.rectangle('fill', (x + 1) * game.scale + offset, (y - 1) * game.scale + offset, 1 * game.scale - 2 * offset, 1 * game.scale - 2 * offset)
+                love.graphics.setColor(game.colors.white)
+            end
+        end
+    end
+
+    for y = 1, #(board) do
+        for x = 1, #(board[y]) do
+
             if (board[y][x] ~= false) then
 
                 draw_block(board[y][x])
