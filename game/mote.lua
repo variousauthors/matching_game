@@ -5,11 +5,15 @@ function build_mote (block)
 
     return {
         -- position in the grid
-        cx = block.cx,
-        cy = block.cy,
+        cx = block.x + block.dim/2,
+        cy = block.y + block.dim/2,
+
         -- real position relative to the grid (0..1)
         rx = 0,
         ry = 0,
+
+        vx = 0,
+        vy = 0,
 
         dx = 0,
         dy = 0,
@@ -32,8 +36,30 @@ function build_mote (block)
 end
 
 function update_mote (mote)
+    if (not mote.released) then
+        return
+    end
+
     mote.pulse_timer = (mote.pulse_timer + game.dt + (0.05 - math.random() * 0.1)) % (mote.pulse_period)
     mote.pulse_intensity = 0.5 * math.sin(2 * mote.pulse_timer) + 0.5
+
+    -- apply forces
+    mote.vy = mote.vy + game.gravity
+
+    -- mote tries to stabilize
+    if (mote.cx ~= mote.x) then
+        mote.vx = mote.cx - mote.x
+    end
+
+    if (mote.cy ~= mote.y) then
+        mote.vy = mote.cy - mote.y
+    end
+
+    mote.dy = mote.dy + mote.vy * game.dt
+    mote.dx = mote.dx + mote.vx * game.dt
+
+    mote.x = mote.x + mote.dx
+    mote.y = mote.y + mote.dy
 end
 
 function draw_mote (mote)
@@ -69,3 +95,15 @@ function draw_mote (mote)
 
     love.graphics.pop()
 end
+
+-- set the drawing coord relative to the board
+function mote_set_y (mote, board, y)
+    -- -1 because cx is a table index
+    mote.y = y
+end
+
+function mote_set_x (mote, board, x)
+    -- -1 because cx is a table index
+    mote.x = x
+end
+
