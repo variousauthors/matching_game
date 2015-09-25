@@ -12,6 +12,9 @@ function build_mote (block)
         rx = 0,
         ry = 0,
 
+        ax = 0,
+        ay = -1,
+
         vx = 0,
         vy = 0,
 
@@ -43,22 +46,9 @@ function update_mote (mote)
     mote.pulse_timer = (mote.pulse_timer + game.dt + (0.05 - math.random() * 0.1)) % (mote.pulse_period)
     mote.pulse_intensity = 0.5 * math.sin(2 * mote.pulse_timer) + 0.5
 
-    -- apply forces
-    mote.vy = mote.vy + game.gravity
+    mote.vy = mote.vy + mote.ay * game.dt
+    mote.dy = mote.vy
 
-    -- mote tries to stabilize
-    if (mote.cx ~= mote.x) then
-        mote.vx = mote.cx - mote.x
-    end
-
-    if (mote.cy ~= mote.y) then
-        mote.vy = mote.cy - mote.y
-    end
-
-    mote.dy = mote.dy + mote.vy * game.dt
-    mote.dx = mote.dx + mote.vx * game.dt
-
-    mote.x = mote.x + mote.dx
     mote.y = mote.y + mote.dy
 end
 
