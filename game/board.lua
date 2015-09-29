@@ -1,5 +1,7 @@
 
-function build_board ()
+function build_board (options)
+    local options = options or {}
+    local default = options.default or false
     local board = {}
     local i, j
 
@@ -16,7 +18,7 @@ function build_board ()
         board[y] = {}
 
         for x = 1, game.width, 1 do
-            board[y][x] = false
+            board[y][x] = default
         end
     end
 
@@ -79,10 +81,16 @@ function draw_board (board)
     for y = 1, #(board) do
         for x = 1, #(board[y]) do
 
-            if (game.shadows[y][x]) then
+            if (game.shadows[y][x] > 0) then
                 local offset = 3 * game.block_border
 
-                love.graphics.setColor({ 44, 44, 44})
+                local n = {
+                    game.colors.white[1],
+                    game.colors.white[2],
+                    game.colors.white[3]
+                }
+
+                love.graphics.setColor(n[1], n[2], n[3], 255 * game.shadows[y][x])
                 love.graphics.rectangle('fill', (x + 1) * game.scale + offset, (y - 1) * game.scale + offset, 1 * game.scale - 2 * offset, 1 * game.scale - 2 * offset)
                 love.graphics.setColor(game.colors.white)
             end
@@ -153,6 +161,15 @@ function update_board(board)
         -- some blocks are moving, presumably falling
         game.stable = false
         board.dirty = {}
+    end
+
+    for y = 1, #(board) do
+        for x = 1, #(board[y]) do
+
+            if (game.shadows[y][x] > 0.1) then
+                game.shadows[y][x] = game.shadows[y][x] - game.dt / 1
+            end
+        end
     end
 end
 
