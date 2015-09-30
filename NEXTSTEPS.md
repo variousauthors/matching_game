@@ -1,4 +1,66 @@
 
-[ ] a thought blake had: the board border's color
-    should be a gradiant composed of the next 3 blocks
-    for monster pro players
+
+- Perhaps there are many different kinds of goals... Described
+  by game states and phenomena rather than scores
+  - could also use all that empty space on the side to write little
+    poems that are triggered environmentally
+
+- When you play for long enough, you start to build a little
+  cave.
+  - the terrain on the map really starts to obstruct your movement,
+    and you have to be constantly digging to stay alive
+    - have dynamic light pour in from the top of the screen
+      - maybe rather than the dark grey blocks that are left
+        over, the background tiles are produced by light, and they
+        flood into the cave through its openings...
+      - or the dynamic lighting is a triangle of light augments the
+        brightness of energy fields and the background
+      - perhaps there are some things that grow best in shade...
+
+- As you play, the screen fills up with the darkest grey squares,
+  left over from disappeared blocks.
+  - one thought I had was that a function of this height could be
+    the score: maybe the average height of the topmost background tile
+    - could be the score multiplier
+    - I wanted to blocks to fade over time, so maybe the multiplier
+      fades too...
+
+- something needs to trigger the transition
+  - It would be very hard to clear the screen on a grey block break,
+    but also it could be done too early so that probably isn't a
+    good trigger
+  - the trigger should be something a player is more likely to do
+    the longer they play a single session
+
+- Maybe make the grey blocks easier to destroy, but they only
+  send motes when they are ripe.
+  - when they are ripe, they rattle a little
+  - The sending is our most ancient ritual.
+  - maybe the title of the game is "A Ritual of Sending"
+
+- The game should record the breaking of simple coloured blocks somehow.
+  This feels like the most intuitive device: the grey blocks obstruct
+  your ability to create nice chains.
+  - the score might not necessarily be linear or natural,
+    it is meant to imply that breaking coloured blocks is the
+    primary activity, but on closer inspection this score
+    does not seem to make sense... so there must be something else.
+    - use alien symbols, group action etc. of the three colours
+    - maybe the symbols determine what happens when the grey blocks
+      are shattered? They can be programmed
+
+[ ] when coloured blocks break, the explosion should chain out
+    from the block that tripped it
+
+[ ] when the coloured block hardens, have the ring shrink and the
+    block heart expand at once, so that the final grey block is
+    slightly larger... closer to the original size + half boarder size
+    - then it will look more like the block is absorbing the ring
+
+[ ] sometimes the block borders are rendered round, for no apparent reason
+    and randomly...
+
+[ ] Make the boarder pulse: it should grow and shrink the coloured region to
+    the games rhythm, and maybe the game should have a pace like a human
+    pulse or like human breathing rather than its current arbitrary values
+    - give it that organic feel
