@@ -38,16 +38,17 @@ function draw_board_border (board)
     love.graphics.push("all")
 
     -- a thin line of board color to pad the blocks in
+    -- TODO clean this up magic numbers
     love.graphics.setLineWidth(4)
 
     local n = game.next_block.color
     love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
-    love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, board.height * game.scale + 8)
+    love.graphics.rectangle('line', board.x * game.scale - 3, board.y * game.scale - 3, board.width * game.scale + 6, board.height * game.scale + 6)
 
     love.graphics.setLineWidth(2)
 
     love.graphics.setColor(board.color)
-    love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, board.height * game.scale + 12)
+    love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, board.height * game.scale + 8)
 
     love.graphics.setLineWidth(1)
 
