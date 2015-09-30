@@ -1,6 +1,6 @@
 
 function draw_block_damage (block)
-    local b = game.block_border
+    local b = game.block_border/game.block_damage_ratio
     love.graphics.push("all")
 
     love.graphics.setColor(game.colors.damage)
@@ -63,7 +63,7 @@ end
 function draw_block (block)
     love.graphics.push("all")
 
-    local offset = 3*game.block_border
+    local offset = game.block_gap_width*game.block_border
 
     if (block.mote) then
         draw_mote(block.mote)
@@ -119,7 +119,7 @@ function build_block (options)
         x = x - 1 + game.board.x,
         y = y - 1 + game.board.y,
 
-        dim = 1,
+        dim = game.block_dim,
         color = color,
         primary = primary,
         marked = false,

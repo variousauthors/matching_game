@@ -64,6 +64,9 @@ function build_game ()
     game.tiny_triangle = false
     game.flicker = false
     game.block_border = 2
+    game.block_gap_width = 3
+    game.block_damage_ratio = 1
+    game.block_dim = 1
     game.random_x_starting_position = false
 
     game.colors.background = game.colors.white

@@ -57,7 +57,7 @@ end
 function draw_board_preview_arrow (board)
     love.graphics.push("all")
     local next_block = game.next_block
-    local offset = 3 * game.block_border
+    local offset = game.block_gap_width*game.block_border
 
     local x = next_block.x * game.scale + offset
     local d = next_block.dim * game.scale - 2*offset
@@ -82,7 +82,7 @@ function draw_board (board)
         for x = 1, #(board[y]) do
 
             if (game.shadows[y][x] > 0) then
-                local offset = 3 * game.block_border
+                local offset = game.block_gap_width*game.block_border
 
                 local n = {
                     game.colors.white[1],
