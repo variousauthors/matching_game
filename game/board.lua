@@ -36,8 +36,9 @@ end
 function draw_board_background (board)
     love.graphics.push("all")
 
+    -- TODO again, what is up with that 4
     love.graphics.setColor(board.color)
-    love.graphics.rectangle('fill', board.x * game.scale - 2, board.y * game.scale - 2, board.width * game.scale + 4, board.height * game.scale + 4)
+    love.graphics.rectangle('fill', board.x * game.scale - 2, board.y * game.scale - 2, board.width * game.scale + 4, (board.height + 3) * game.scale + 4)
 
     love.graphics.pop()
 end
@@ -45,17 +46,19 @@ end
 function draw_board_border (board)
     love.graphics.push("all")
 
+    -- TODO clean up these magic numbers already!
     -- a thin line of board color to pad the blocks in
     love.graphics.setLineWidth(4)
 
     local n = game.next_block.color
     love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
-    love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, board.height * game.scale + 8)
+    love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, (board.height + 3) * game.scale + 8)
 
     love.graphics.setLineWidth(2)
 
+    -- TODO I've just added a flat 3 to the board height to make it run off the bottom
     love.graphics.setColor(board.color)
-    love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, board.height * game.scale + 12)
+    love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, (board.height + 3) * game.scale + 12)
 
     love.graphics.setLineWidth(1)
 
