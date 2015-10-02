@@ -1,3 +1,10 @@
+function build_board_row (board, y)
+    board[y] = {}
+
+    for x = 1, game.width, 1 do
+        board[y][x] = build_block({ board = board, x = x, y = y, color = "grey" })
+    end
+end
 
 function build_board (options)
     local options = options or {}
@@ -89,24 +96,25 @@ function draw_board (board)
     draw_board_border(board)
     draw_board_background(board)
 
-    for y = 1, #(board) do
-        for x = 1, #(board[y]) do
+    -- TODO shadows are out while I develop the digging
+--  for y = 1, #(game.shadows) do
+--      for x = 1, #(game.shadows[y]) do
 
-            if (game.shadows[y][x] > 0) then
-                local offset = game.block_gap_width*game.block_border
+--          if (game.shadows[y][x] > 0) then
+--              local offset = game.block_gap_width*game.block_border
 
-                local n = {
-                    game.colors.white[1],
-                    game.colors.white[2],
-                    game.colors.white[3]
-                }
+--              local n = {
+--                  game.colors.white[1],
+--                  game.colors.white[2],
+--                  game.colors.white[3]
+--              }
 
-                love.graphics.setColor(n[1], n[2], n[3], 255 * game.shadows[y][x])
-                love.graphics.rectangle('fill', (x + 1) * game.scale + offset, (y - 1) * game.scale + offset, 1 * game.scale - 2 * offset, 1 * game.scale - 2 * offset)
-                love.graphics.setColor(game.colors.white)
-            end
-        end
-    end
+--              love.graphics.setColor(n[1], n[2], n[3], 255 * game.shadows[y][x])
+--              love.graphics.rectangle('fill', (x + 1) * game.scale + offset, (y - 1) * game.scale + offset, 1 * game.scale - 2 * offset, 1 * game.scale - 2 * offset)
+--              love.graphics.setColor(game.colors.white)
+--          end
+--      end
+--  end
 
     for y = 1, #(board) do
         for x = 1, #(board[y]) do
@@ -138,8 +146,8 @@ function update_board(board)
     end
 
     -- check each cell from bottom to top
-    for y = #(game.board), 1, -1 do
-        for x = 1, #(game.board[y]), 1 do
+    for y = #(board), 1, -1 do
+        for x = 1, board.width, 1 do
             if (board[y][x]) then
                 -- update each block
                 block = board[y][x]
@@ -158,6 +166,23 @@ function update_board(board)
         end
     end
 
+    -- check the bottom row, if it is clear
+    -- boost the board
+    local shift_down = true
+    for x = 1, board.width, 1 do
+        local cell = board[#board - 2][x]
+
+        if (cell and cell.color == game.colors.grey) then
+            shift_down = false
+        end
+    end
+
+    if shift_down then
+        board.y = board.y - 1
+
+        build_board_row(board, #board + 1)
+    end
+
     -- if no blocks are moving, look for matches otherwise
     -- discard the dirty list
     if (all_blocks_are_still) then
@@ -174,14 +199,17 @@ function update_board(board)
         board.dirty = {}
     end
 
-    for y = 1, #(board) do
-        for x = 1, #(board[y]) do
+    -- TODO taking shadows out temporarily
+    -- they need to be tied more tightly to the
+    -- changing of the board
+--  for y = 1, #(board) do
+--      for x = 1, #(board[y]) do
 
-            if (game.shadows[y][x] > 0.1) then
-                game.shadows[y][x] = game.shadows[y][x] - game.dt / 1
-            end
-        end
-    end
+--          if (game.shadows[y][x] > 0.1) then
+--              game.shadows[y][x] = game.shadows[y][x] - game.dt / 1
+--          end
+--      end
+--  end
 end
 
 function clear_blocks (board, block)
