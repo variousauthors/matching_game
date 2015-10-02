@@ -1,4 +1,5 @@
-
+NEXTSTEPS
+---------
 
 - Perhaps there are many different kinds of goals... Described
   by game states and phenomena rather than scores
@@ -57,6 +58,12 @@
     little while?
   - maybe the mote hangs out on the screen for a while, before taking off?
 
+- I'm playing and I feel like I want to clear blocks. Creating grey blocks
+  feels like a mistake, because it obstructs chains. It is also the habitual
+  or easy thing to do.
+
+## FEATURES
+
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
 
@@ -73,6 +80,8 @@
     pulse or like human breathing rather than its current arbitrary values
     - give it that organic feel
 
-- I'm playing and I feel like I want to clear blocks. Creating grey blocks
-  feels like a mistake, because it obstructs chains. It is also the habitual
-  or easy thing to do.
+## BUGS
+
+[ ] the damage marker is a black line, but the black line extends past the
+    grey block. This is noticeable when blocks explode nearby. Make the line
+    only as ling as the grey block diagonal

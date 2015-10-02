@@ -49,9 +49,6 @@ function build_game ()
         border_alpha = 200
     }
 
-    game.board = build_board()
-    game.shadows = build_board({ default = 0.0 })
-
     -- animation times
     game.animations = {}
     game.animations.exploding = 8
@@ -77,6 +74,9 @@ function build_game ()
         { 0, 55, 0 }, -- green
         { 0, 0, 55 }, -- blue
     }
+
+    game.board = build_board()
+    game.shadows = build_board({ default = 0.0 })
 end
 
 -- pass in something like

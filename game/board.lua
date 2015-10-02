@@ -22,6 +22,14 @@ function build_board (options)
         end
     end
 
+    for y = game.height + 1, game.height + 3, 1 do
+        board[y] = {}
+
+        for x = 1, game.width, 1 do
+            board[y][x] = default or build_block({ board = board, x = x, y = y, color = "grey" })
+        end
+    end
+
     return board
 end
 
@@ -127,8 +135,8 @@ function update_board(board)
     end
 
     -- check each cell from bottom to top
-    for y = game.height, 1, -1 do
-        for x = 1, game.width, 1 do
+    for y = #(game.board), 1, -1 do
+        for x = 1, #(game.board[y]), 1 do
             if (board[y][x]) then
                 -- update each block
                 block = board[y][x]

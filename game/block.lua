@@ -99,6 +99,7 @@ end
 
 function build_block (options)
     local options = options or {}
+    local board = options.board or game.board
     local x = options.x or math.ceil(game.width/2)
     local y = options.y or 1
     local primary = math.random(1, 3)
@@ -115,9 +116,9 @@ function build_block (options)
         dx = 0,
         dy = 0,
 
-        -- final position in each timestep fro graphics
-        x = x - 1 + game.board.x,
-        y = y - 1 + game.board.y,
+--      -- final position in each timestep fro graphics
+        x = x - 1 + board.x,
+        y = y - 1 + board.y,
 
         dim = game.block_dim,
         color = color,
