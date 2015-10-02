@@ -49,6 +49,14 @@
     - maybe the symbols determine what happens when the grey blocks
       are shattered? They can be programmed
 
+- maybe life gets better after we send a block, but in ways that
+  might be seen as a coincidence?
+  - I was thinking, after sending a particular kind of block,
+    the next few blocks would come in a pattern? Maybe use
+    AI to either choose the squares folks need most for the next
+    little while?
+  - maybe the mote hangs out on the screen for a while, before taking off?
+
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
 
@@ -64,3 +72,7 @@
     the games rhythm, and maybe the game should have a pace like a human
     pulse or like human breathing rather than its current arbitrary values
     - give it that organic feel
+
+- I'm playing and I feel like I want to clear blocks. Creating grey blocks
+  feels like a mistake, because it obstructs chains. It is also the habitual
+  or easy thing to do.

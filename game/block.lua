@@ -184,6 +184,7 @@ function update_block (block, board)
             block.mote = build_mote(block)
             table.insert(game.motes, block.mote)
             board[cy][cx].color = game.colors.grey
+            game.shadows[cy][cx] = 0.0
         end
 
         -- TODO move this into the animation controller
