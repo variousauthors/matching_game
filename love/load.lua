@@ -34,7 +34,7 @@ function build_game ()
     game.update_timer = 0
     game.match_target = 3
     game.input_timer = 0
-    game.rate = 2
+    game.rate = 4
     game.step = 0.1 * game.rate
     game.input_rate = 8
     game.block_max_hp = 3

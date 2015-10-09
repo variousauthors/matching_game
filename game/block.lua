@@ -116,7 +116,7 @@ function build_block (options)
         dx = 0,
         dy = 0,
 
---      -- final position in each timestep fro graphics
+--      -- final position in each timestep from graphics
         x = x - 1 + board.x,
         y = y - 1 + board.y,
 
@@ -193,6 +193,8 @@ function update_block (block, board)
             block.animating = false
         end
 
+        block_set_y(block, board, block.cy)
+
         return
     end
 
@@ -242,6 +244,8 @@ function update_block (block, board)
 end
 
 -- set the drawing coord relative to the board
+-- these set the logical x and y and needn't be
+-- adjusted as the board moves
 function block_set_y (block, board, y)
     block.y = y - 1 + board.y
 end

@@ -3,9 +3,11 @@ function next_block ()
 
     if (game.random_x_starting_position) then
         local x = math.ceil(math.random() * game.width)
-        game.next_block = build_block({ x = x})
+        game.next_block = build_block({ x = x })
     else
-        game.next_block = build_block()
+        -- 1 - game.board.y puts the block at the top of the visible
+        -- board
+        game.next_block = build_block({ y = 1 - game.board.y })
     end
 
     return block
@@ -16,7 +18,7 @@ function drop_block (block, board)
     local cx, cy = block.cx, block.cy + 1
 
     -- iterate over the current column from the block
-    while (cy <= game.height and board[cy][cx] == false) do
+    while (cy <= #board and board[cy][cx] == false) do
         block.cy = cy
         cy = cy + 1
     end
@@ -54,7 +56,8 @@ end
 -- move the block discretely down one row
 function step_block (block, board)
     -- check for a block in the next square
-    if (block.cy + 1 > game.height or board[block.cy + 1][block.cx] ~= false) then
+    if (block.cy + 1 > #board or board[block.cy + 1][block.cx] ~= false) then
+        print(block.cy, block.cx, inspect(block), inspect(board[block.cy + 1][block.cx]))
         -- remove the block and add to the board
         game.block = nil
 
@@ -63,7 +66,7 @@ function step_block (block, board)
         block.dy = game.infinity
         board[block.cy][block.cx] = block
     else
-        block.cy = math.min(game.height, block.cy + 1)
+        block.cy = math.min(#board, block.cy + 1)
     end
 
     block_set_y(block, board, block.cy)

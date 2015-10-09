@@ -45,7 +45,7 @@ function draw_board_background (board)
 
     -- TODO again, what is up with that 4
     love.graphics.setColor(board.color)
-    love.graphics.rectangle('fill', board.x * game.scale - 2, board.y * game.scale - 2, board.width * game.scale + 4, (board.height + 3) * game.scale + 4)
+    love.graphics.rectangle('fill', board.x * game.scale - 2, board.y * game.scale - 2, board.width * game.scale + 4, (#board) * game.scale + 4)
 
     love.graphics.pop()
 end
@@ -59,13 +59,13 @@ function draw_board_border (board)
 
     local n = game.next_block.color
     love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
-    love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, (board.height + 3) * game.scale + 8)
+    love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, (#board) * game.scale + 8)
 
     love.graphics.setLineWidth(2)
 
     -- TODO I've just added a flat 3 to the board height to make it run off the bottom
     love.graphics.setColor(board.color)
-    love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, (board.height + 3) * game.scale + 12)
+    love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, (#board) * game.scale + 12)
 
     love.graphics.setLineWidth(1)
 
@@ -168,12 +168,17 @@ function update_board(board)
 
     -- check the bottom row, if it is clear
     -- boost the board
-    local shift_down = true
+    -- TODO this is already simplistic: what if the "bottom row"
+    -- is partially cleared, but the next row down is fully cleared...
+    -- it should just be the middle block maybe? Or the middle three?
+    -- or the first time the player lands a block on the next
+    -- row down... yes that's more like it
+    local shift_down = false
     for x = 1, board.width, 1 do
         local cell = board[#board - 2][x]
 
-        if (cell and cell.color == game.colors.grey) then
-            shift_down = false
+        if (cell and cell.color ~= game.colors.grey) then
+            shift_down = true
         end
     end
 

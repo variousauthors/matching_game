@@ -80,8 +80,13 @@ NEXTSTEPS
     pulse or like human breathing rather than its current arbitrary values
     - give it that organic feel
 
+[ ] the board should shift when the first block lands on a new row
+
 ## BUGS
 
 [ ] the damage marker is a black line, but the black line extends past the
     grey block. This is noticeable when blocks explode nearby. Make the line
     only as ling as the grey block diagonal
+
+[ ]     game/block.lua:164: in function 'update_block' attempt to index a nil value
+
