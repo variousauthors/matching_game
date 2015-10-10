@@ -1,6 +1,8 @@
 function love.update (dt)
     for i = 1, game.width, 1 do
-        if game.board[1][i] then
+        -- board height - game height - 2 means the game ends
+        -- whenever anything is blocking the spawn
+        if game.board[#(game.board) - game.height - 2][math.ceil(game.width/2)] then
             build_game()
         end
     end
