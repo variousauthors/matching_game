@@ -64,23 +64,19 @@ NEXTSTEPS
 
 ## FEATURES
 
+[ ] Make the camera appear to be going down smoothly
+[ ] Add some kind of variation to mark the passage downward
+    - not necessarily a depth marker
+    - no need for a high score (it will be up on itch/gamejolt)
+[ ] Make a title screen and game over (just like in GSS)
+[ ] Adjust speed/game feel
+[ ] Maybe have blocks of different hardness?
+[ ] Sound effects and music
+[ ] something with the motes...
+    - not necessarily, it may be OK to just leave them
+
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
-
-[ ] when the coloured block hardens, have the ring shrink and the
-    block heart expand at once, so that the final grey block is
-    slightly larger... closer to the original size + half boarder size
-    - then it will look more like the block is absorbing the ring
-
-[ ] sometimes the block borders are rendered round, for no apparent reason
-    and randomly...
-
-[ ] Make the boarder pulse: it should grow and shrink the coloured region to
-    the games rhythm, and maybe the game should have a pace like a human
-    pulse or like human breathing rather than its current arbitrary values
-    - give it that organic feel
-
-[ ] the board should shift when the first block lands on a new row
 
 ## BUGS
 
@@ -88,5 +84,6 @@ NEXTSTEPS
     grey block. This is noticeable when blocks explode nearby. Make the line
     only as ling as the grey block diagonal
 
-[ ]     game/block.lua:164: in function 'update_block' attempt to index a nil value
+[ ] sometimes the block borders are rendered round, for no apparent reason
+    and randomly...
 
