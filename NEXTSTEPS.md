@@ -65,13 +65,23 @@ NEXTSTEPS
 ## FEATURES
 
 [ ] Make the camera appear to be going down smoothly
+    - implement a camera
+[ ] Make a title screen and game over (just like in GSS)
+[ ] when the game ends, the camera should roll back up across
+    the board
+    - so, fade in title screen while the camera rolls back up
+      to a blank screen?
 [ ] Add some kind of variation to mark the passage downward
     - not necessarily a depth marker
     - no need for a high score (it will be up on itch/gamejolt)
-[ ] Make a title screen and game over (just like in GSS)
+[ ] Reimplement shadows
+
 [ ] Adjust speed/game feel
 [ ] Maybe have blocks of different hardness?
 [ ] Sound effects and music
+    - music should become more panic the more
+    full rows there are above "ground level"
+    stack higher?
 [ ] something with the motes...
     - not necessarily, it may be OK to just leave them
 
