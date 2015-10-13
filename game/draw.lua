@@ -16,6 +16,8 @@ function love.draw()
     game.draw_seed = math.random(0, 2)
 
     draw_background()
+
+    love.graphics.translate(-game.camera.x * game.scale, -game.camera.y * game.scale)
     draw_board(game.board)
 
     if (game.block ~= nil) then

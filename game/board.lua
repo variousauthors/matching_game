@@ -183,7 +183,7 @@ function update_board(board)
     end
 
     if shift_down then
-        board.y = board.y - 1
+        game.camera.y = game.camera.y + 1
 
         build_board_row(board, #board + 1)
     end

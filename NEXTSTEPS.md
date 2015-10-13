@@ -64,6 +64,8 @@ NEXTSTEPS
 
 ## FEATURES
 
+#### CAMERA & TITLE
+[ ] ESC to quit to menu, and to quit game
 [ ] Make the camera appear to be going down smoothly
     - implement a camera
 [ ] Make a title screen and game over (just like in GSS)
@@ -71,17 +73,22 @@ NEXTSTEPS
     the board
     - so, fade in title screen while the camera rolls back up
       to a blank screen?
+
+#### LOVELY
+[ ] Reimplement shadows
+[ ] grey blocks should be made out of tiny triangles, so that the mote
+    can shine through. Only some blocks contain motes.
 [ ] Add some kind of variation to mark the passage downward
     - not necessarily a depth marker
     - no need for a high score (it will be up on itch/gamejolt)
-[ ] Reimplement shadows
-
-[ ] Adjust speed/game feel
-[ ] Maybe have blocks of different hardness?
 [ ] Sound effects and music
     - music should become more panic the more
     full rows there are above "ground level"
     stack higher?
+
+#### NICE TO HAVE
+[ ] Adjust speed/game feel
+[ ] Maybe have blocks of different hardness?
 [ ] something with the motes...
     - not necessarily, it may be OK to just leave them
 
@@ -90,10 +97,8 @@ NEXTSTEPS
 
 ## BUGS
 
-[ ] the damage marker is a black line, but the black line extends past the
-    grey block. This is noticeable when blocks explode nearby. Make the line
-    only as ling as the grey block diagonal
-
 [ ] sometimes the block borders are rendered round, for no apparent reason
     and randomly...
+
+[ ] sometimes blocks don't break after a chain
 

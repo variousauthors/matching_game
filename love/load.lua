@@ -13,6 +13,8 @@ function build_game ()
         right = {}
     }
 
+    game.camera = build_camera();
+
     game.motes = {}
 
     game.colors = {
@@ -600,6 +602,7 @@ function love.load()
     require('game/animation')
 
     require('game/player')
+    require('game/camera')
     require('game/board')
     require('game/block')
     require('game/mote')
