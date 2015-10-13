@@ -15,6 +15,7 @@ function love.update (dt)
     game.block_count = 0
     game.stable = true -- optimism
     update_board(game.board)
+    update_camera(game.camera)
 
     if (player.enabled and game.stable) then
         game.update_timer = game.update_timer + dt
@@ -70,4 +71,5 @@ function love.update (dt)
         game.update_timer = 0
         game.input_timer = 0
     end
+
 end

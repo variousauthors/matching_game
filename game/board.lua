@@ -166,24 +166,25 @@ function update_board(board)
         end
     end
 
-    -- check the bottom row, if it is clear
-    -- boost the board
-    -- TODO this is already simplistic: what if the "bottom row"
-    -- is partially cleared, but the next row down is fully cleared...
-    -- it should just be the middle block maybe? Or the middle three?
-    -- or the first time the player lands a block on the next
-    -- row down... yes that's more like it
+    -- if a colour block is on any of the bottom rows, create a new
+    -- row and shift the board
     local shift_down = false
     for x = 1, board.width, 1 do
-        local cell = board[#board - 2][x]
+        -- TODO do we actually need a loop here? If blocks are being
+        -- cleared it is because there are blocks above them...
+        -- couldn't we just use "2"
+        for y = 0, 2 do
+            local cell = board[#board - y][x]
 
-        if (cell and cell.color ~= game.colors.grey) then
-            shift_down = true
+            if (cell and cell.color ~= game.colors.grey) then
+                shift_down = true
+            end
         end
     end
 
     if shift_down then
-        game.camera.y = game.camera.y + 1
+        --game.camera.y = game.camera.y + 1
+        scroll_down_camera(game.camera)
 
         build_board_row(board, #board + 1)
     end

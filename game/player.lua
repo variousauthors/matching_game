@@ -7,7 +7,7 @@ function next_block ()
     else
         -- 1 - game.board.y puts the block at the top of the visible
         -- board
-        game.next_block = build_block({ y = 1 + game.camera.y })
+        game.next_block = build_block({ y = 1 + game.camera.cy })
     end
 
     return block

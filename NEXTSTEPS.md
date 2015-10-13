@@ -65,10 +65,10 @@ NEXTSTEPS
 ## FEATURES
 
 #### CAMERA & TITLE
-[ ] ESC to quit to menu, and to quit game
+[X] implement a camera
 [ ] Make the camera appear to be going down smoothly
-    - implement a camera
 [ ] Make a title screen and game over (just like in GSS)
+[ ] ESC to quit to menu, and to quit game
 [ ] when the game ends, the camera should roll back up across
     the board
     - so, fade in title screen while the camera rolls back up
