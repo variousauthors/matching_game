@@ -1,6 +1,113 @@
+function build_statemachine()
+    Menu = require('game/menu')
+    menu          = Menu()
+    state_machine = FSM()
+
+    state_machine.addState({
+        name       = "run",
+        init       = function ()
+            build_game()
+            game.player.enabled = true
+        end,
+        draw       = function ()
+            draw_game()
+            -- score_band.draw()
+        end,
+        update     = update_game,
+        keypressed = game.keypressed,
+        keyreleased = game.keyreleased,
+        mousepressed = game.mousepressed,
+        mousereleased = game.mousereleased
+    })
+
+    state_machine.addState({
+        name       = "lose",
+        draw = function ()
+            draw_game()
+        end
+    })
+
+    state_machine.addState({
+        name       = "start",
+        init       = function ()
+            build_game()
+            game.player.enabled = false
+            menu.show(function (options)
+
+                menu.reset()
+            end)
+        end,
+        draw = function ()
+            draw_game()
+            menu.draw()
+        end,
+        keypressed = function (key)
+            if (key == "escape") then
+                love.event.quit()
+            end
+
+            menu.keypressed(key)
+        end,
+        mousepressed = menu.mousepressed,
+        update     = function (dt)
+            menu.update(dt)
+        end
+    })
+
+    -- start the game when the player chooses a menu option
+    state_machine.addTransition({
+        from      = "start",
+        to        = "run",
+        condition = function ()
+            return not menu.isShowing()
+        end
+    })
+
+    state_machine.addTransition({
+        from      = "run",
+        to        = "lose",
+        condition = function ()
+            return game.over == true
+        end
+    })
+
+    state_machine.addTransition({
+        from      = "lose",
+        to        = "start",
+        condition = function ()
+            return true
+        end
+    })
+
+    -- return to the menu screen if any player presses escape
+    state_machine.addTransition({
+        from      = "run",
+        to        = "start",
+        condition = function ()
+            if state_machine.isSet("escape") then
+                build_game()
+
+                return true
+            end
+        end
+    })
+
+    love.update     = state_machine.update
+    love.keypressed = state_machine.keypressed
+    love.keyreleased = state_machine.keyreleased
+    love.mousepressed = state_machine.mousepressed
+    love.mousereleased = state_machine.mousereleased
+    love.textinput  = state_machine.textinput
+    love.draw       = state_machine.draw
+
+    state_machine.start()
+end
 
 function build_game ()
     game = {}
+    game.title = "DEEPER"
+    game.subtitle = "A PUZZLE GAME I MADE"
+    game.over = false
     game.stable = true
     game.infinity = 100
     game.player = {}
@@ -39,7 +146,7 @@ function build_game ()
     game.rate = 4
     game.step = 0.1 * game.rate
     game.input_rate = 8
-    game.block_max_hp = 3
+    game.block_max_hp = 1
 
     -- defaults for the board
     game.board_defaults = {
@@ -594,6 +701,7 @@ end
 
 function love.load()
 
+    require('libs/fsm')
     require('game/controls')
     require('game/sounds')
 
@@ -607,7 +715,12 @@ function love.load()
     require('game/block')
     require('game/mote')
 
-    run_tests()
+    --run_tests()
 
-    build_game()
+    -- global variables for integration with dp menus
+    W_HEIGHT = love.viewport.getHeight()
+    SCORE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 14)
+    SPACE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 64)
+
+    build_statemachine()
 end

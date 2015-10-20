@@ -66,7 +66,7 @@ NEXTSTEPS
 
 #### CAMERA & TITLE
 [X] implement a camera
-[ ] Make the camera appear to be going down smoothly
+[X] Make the camera appear to be going down smoothly
 [ ] Make a title screen and game over (just like in GSS)
 [ ] ESC to quit to menu, and to quit game
 [ ] when the game ends, the camera should roll back up across

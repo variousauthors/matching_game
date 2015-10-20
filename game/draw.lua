@@ -12,7 +12,7 @@ function draw_background ()
     love.graphics.pop()
 end
 
-function love.draw()
+function draw_game ()
     game.draw_seed = math.random(0, 2)
 
     draw_background()
@@ -24,3 +24,4 @@ function love.draw()
         draw_block(game.block)
     end
 end
+
