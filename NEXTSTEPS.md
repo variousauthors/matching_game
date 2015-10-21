@@ -69,8 +69,9 @@ NEXTSTEPS
 [x] Make the camera appear to be going down smoothly
 [x] Make a title screen and game over (just like in GSS)
 [x] ESC to quit to menu, and to quit game
-[ ] when the game ends, the camera should roll back up across
+[x] when the game ends, the camera should roll back up across
     the board
+[ ] fade in an alpha layer so that the title is emphasized
     - so, fade in title screen while the camera rolls back up
       to a blank screen?
 
