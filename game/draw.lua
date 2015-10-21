@@ -1,7 +1,12 @@
 -- FOR THE TIME BEING, THIS FILE IS DEFUNCT
 -- DEFER TO GAME/DRAW
+-- HA HA I AM CODING HERE
 
 love.viewport = require('libs/viewport').newSingleton()
+
+function love.draw ()
+    draw_game()
+end
 
 function draw_background ()
     love.graphics.push("all")
@@ -13,6 +18,7 @@ function draw_background ()
 end
 
 function draw_game ()
+    love.graphics.push("all")
     game.draw_seed = math.random(0, 2)
 
     draw_background()
@@ -23,5 +29,7 @@ function draw_game ()
     if (game.block ~= nil) then
         draw_block(game.block)
     end
+
+    love.graphics.pop()
 end
 

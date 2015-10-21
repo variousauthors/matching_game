@@ -23,7 +23,7 @@ end
 --
 function love.keypressed(key)
     if(key == 'f10' or key == 'escape') then
-        love.event.quit()
+        -- love.event.quit()
     elseif(key == 'f11') then
         love.viewport.setFullscreen()
         love.viewport.setupScreen()

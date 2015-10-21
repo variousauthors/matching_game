@@ -53,12 +53,24 @@ return function ()
         love.graphics.setColor(game.colors.white)
     end
 
+    local drawPrompt = function (x, y)
+        if (flash < 0) then
+            return
+        end
+
+        love.graphics.setFont(SCORE_FONT)
+        love.graphics.setColor({ 55, 55, 55, 100 })
+        love.graphics.print(game.prompt, x, y)
+        love.graphics.setColor({ 200, 200, 200, 100 })
+        love.graphics.print(game.prompt, x, y)
+        love.graphics.setColor(game.colors.white)
+    end
+
     local title_part    = Component(0, 0, drawTitle)
     local subtitle_part = Component(0, 80, drawSubtitle)
-    local choice_part   = Component(0, 200, Component(0, 0, ""), Component(200, 0, drawCursor), Component(230, 0, "LAUNCH"))
-    local settings      = Component(0, 200, Component(0, 0, ""), Component(200, 0, drawCursor), Component(230, 90, "SETTINGS"))
+    local prompt_part = Component(200, 300, drawPrompt)
 
-    local component = Component(100, W_HEIGHT/2 - 200, title_part, subtitle_part, choice_part, settings)
+    local component = Component(100, W_HEIGHT/2 - 200, title_part, subtitle_part, prompt_part)
 
     local draw = function ()
         local r, g, b = love.graphics.getColor()
@@ -70,8 +82,8 @@ return function ()
     end
 
     local update = function (dt)
-        time  = time + 2*dt
-        flash = math.floor(time)%2
+        time  = (time + 4*dt) % (2*math.pi)
+        flash = math.sin(time)
     end
 
     local show = function (callback)

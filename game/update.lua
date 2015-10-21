@@ -1,3 +1,7 @@
+function love.update (dt)
+    update_game(dt)
+end
+
 function update_game (dt)
     for i = 1, game.width, 1 do
         -- board height - game height - 2 means the game ends

@@ -3,8 +3,46 @@ function build_statemachine()
     menu          = Menu()
     state_machine = FSM()
 
+    build_game()
+    -- the menu/title screen state
     state_machine.addState({
-        name       = "run",
+        name       = "start",
+        init       = function ()
+            game.player.enabled = false
+            menu.show(function (options)
+
+                menu.reset()
+            end)
+
+            -- rewind the camera
+            if (game.camera.y > 0) then
+                move_camera(game.camera, 0, -game.camera.y)
+            end
+        end,
+        draw = function ()
+            draw_game()
+            -- draw an alpha layer
+            menu.draw()
+        end,
+        keypressed = function (key)
+            if (key == "escape") then
+                love.event.quit()
+            elseif(key == 'f11') then
+                love.viewport.setFullscreen()
+                love.viewport.setupScreen()
+            end
+
+            menu.keypressed(key)
+        end,
+        mousepressed = menu.mousepressed,
+        update     = function (dt)
+            update_camera(game.camera)
+            menu.update(dt)
+        end
+    })
+
+    state_machine.addState({
+        name       = "play",
         init       = function ()
             build_game()
             game.player.enabled = true
@@ -14,10 +52,8 @@ function build_statemachine()
             -- score_band.draw()
         end,
         update     = update_game,
-        keypressed = game.keypressed,
-        keyreleased = game.keyreleased,
-        mousepressed = game.mousepressed,
-        mousereleased = game.mousereleased
+        keypressed = love.keypressed,
+        inputpressed = game.inputpressed
     })
 
     state_machine.addState({
@@ -27,44 +63,17 @@ function build_statemachine()
         end
     })
 
-    state_machine.addState({
-        name       = "start",
-        init       = function ()
-            build_game()
-            game.player.enabled = false
-            menu.show(function (options)
-
-                menu.reset()
-            end)
-        end,
-        draw = function ()
-            draw_game()
-            menu.draw()
-        end,
-        keypressed = function (key)
-            if (key == "escape") then
-                love.event.quit()
-            end
-
-            menu.keypressed(key)
-        end,
-        mousepressed = menu.mousepressed,
-        update     = function (dt)
-            menu.update(dt)
-        end
-    })
-
     -- start the game when the player chooses a menu option
     state_machine.addTransition({
         from      = "start",
-        to        = "run",
+        to        = "play",
         condition = function ()
             return not menu.isShowing()
         end
     })
 
     state_machine.addTransition({
-        from      = "run",
+        from      = "play",
         to        = "lose",
         condition = function ()
             return game.over == true
@@ -81,11 +90,11 @@ function build_statemachine()
 
     -- return to the menu screen if any player presses escape
     state_machine.addTransition({
-        from      = "run",
+        from      = "play",
         to        = "start",
         condition = function ()
             if state_machine.isSet("escape") then
-                build_game()
+                --build_game()
 
                 return true
             end
@@ -107,6 +116,7 @@ function build_game ()
     game = {}
     game.title = "DEEPER"
     game.subtitle = "A PUZZLE GAME I MADE"
+    game.prompt = "PRESS SPACE"
     game.over = false
     game.stable = true
     game.infinity = 100
@@ -722,5 +732,6 @@ function love.load()
     SCORE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 14)
     SPACE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 64)
 
-    build_statemachine()
+    build_game()
+    --build_statemachine()
 end

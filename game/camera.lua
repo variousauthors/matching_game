@@ -10,29 +10,27 @@ function build_camera ()
     return camera;
 end
 
-function scroll_down_camera (camera)
-    camera.ty = camera.cy + 1
+-- adjust the camera by the given amount, over time
+function move_camera (camera, x, y)
+    camera.tx = camera.cx + x
+    camera.ty = camera.cy + y
 end
 
 function update_camera (camera)
-    if camera.tx ~= camera.cx then
-        local d = camera.tx - camera.cx
-        camera.rx = camera.rx + d*game.dt
-    end
+    local vx = camera.tx - camera.cx
+    local vy = camera.ty - camera.cy
 
-    if camera.ty ~= camera.cy then
-        local d = camera.ty - camera.cy
-        camera.ry = camera.ry + d*game.dt
-    end
+    camera.rx = camera.rx + vx*game.dt
+    camera.ry = camera.ry + vy*game.dt
 
-    if camera.rx >= 1 then
+    if math.abs(camera.rx) >= 1 then
+        camera.cx = camera.cx + camera.rx
         camera.rx = 0
-        camera.cx = camera.tx
     end
 
-    if camera.ry >= 1 then
+    if math.abs(camera.ry) >= 1 then
+        camera.cy = camera.cy + camera.ry
         camera.ry = 0
-        camera.cy = camera.ty
     end
 
     camera.x = camera.cx + camera.rx

@@ -186,7 +186,7 @@ function update_board(board)
 
     if shift_down then
         --game.camera.y = game.camera.y + 1
-        scroll_down_camera(game.camera)
+        move_camera(game.camera, 0, 1)
 
         build_board_row(board, #board + 1)
     end
