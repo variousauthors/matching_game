@@ -90,8 +90,12 @@ function draw_block (block)
 
     end
 
-    if (block.color == game.colors.grey) then
+    if (game.all_block_get_damage) then
         draw_block_damage(block)
+    else
+        if (block.color == game.colors.grey) then
+            draw_block_damage(block)
+        end
     end
 
     love.graphics.pop()

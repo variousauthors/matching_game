@@ -258,9 +258,11 @@ function clear_blocks (board, block)
                     adj.marked = true
                     table.insert(Q, adj)
                     table.insert(marked, adj)
-                elseif (not adj.marked and adj.color == game.colors.grey) then
-                    adj.marked = true
-                    table.insert(damage, adj)
+                elseif (not adj.marked) then
+                    if (game.all_block_get_damage == true or adj.color == game.colors.grey) then
+                        adj.marked = true
+                        table.insert(damage, adj)
+                    end
                 end
             end
 
@@ -271,25 +273,12 @@ function clear_blocks (board, block)
                     adj.marked = true
                     table.insert(Q, adj)
                     table.insert(marked, adj)
-                elseif (not adj.marked and adj.color == game.colors.grey) then
-                    adj.marked = true
-                    table.insert(damage, adj)
+                elseif (not adj.marked) then
+                    if (game.all_block_get_damage == true or adj.color == game.colors.grey) then
+                        adj.marked = true
+                        table.insert(damage, adj)
+                    end
                 end
-            end
-        end
-    end
-
-    while (#(damage) > 0) do
-        local block = table.remove(damage, 1)
-        block.marked = false
-
-        if (#(marked) > game.match_target) then
-            block.hp = block.hp - 1
-
-            play_chip = true
-
-            if block.hp == 0 then
-                play_shatter = true
             end
         end
     end
@@ -306,6 +295,21 @@ function clear_blocks (board, block)
         elseif (#(marked) > game.match_target) then
             start_tween(board[v.cy][v.cx], "exploding")
             play_explode = true
+        end
+    end
+
+    while (#(damage) > 0) do
+        local block = table.remove(damage, 1)
+        block.marked = false
+
+        if (#(marked) > game.match_target) then
+            block.hp = block.hp - 1
+
+            play_chip = true
+
+            if block.hp == 0 then
+                play_shatter = true
+            end
         end
     end
 
