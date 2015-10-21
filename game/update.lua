@@ -56,15 +56,18 @@ function update_game (dt)
             player.input.right = {}
         else
             if #(player.input.up) > 0 then player.up = table.remove(player.input.up, 1) end
+            if #(player.input.down) > 0 then player.down = table.remove(player.input.down, 1) end
 
-            if (player.up) then
+            if (player.up or player.down) then
                 drop_block(game.block, game.board)
                 game.update_timer = 0
             end
 
             player.up = false
+            player.down = false
 
             player.input.up = {}
+            player.input.down = {}
         end
 
         -- move the piece down every step

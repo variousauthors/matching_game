@@ -71,14 +71,13 @@ NEXTSTEPS
 [x] ESC to quit to menu, and to quit game
 [x] when the game ends, the camera should roll back up across
     the board
-[ ] fade in an alpha layer so that the title is emphasized
-    - so, fade in title screen while the camera rolls back up
-      to a blank screen?
 
 #### LOVELY
-[ ] Reimplement shadows
+[ ] make it so that colored blocks can get "pre-damaged" by blocks
+    exploding nearby
 [ ] grey blocks should be made out of tiny triangles, so that the mote
     can shine through. Only some blocks contain motes.
+[ ] Reimplement shadows
 [ ] Add some kind of variation to mark the passage downward
     - not necessarily a depth marker
     - no need for a high score (it will be up on itch/gamejolt)
@@ -86,6 +85,11 @@ NEXTSTEPS
     - music should become more panic the more
     full rows there are above "ground level"
     stack higher?
+[ ] fade in an alpha layer so that the title is emphasized
+    - I want to do "something" with the title screen, but
+      need to think about it
+    - so, fade in title screen while the camera rolls back up
+      to a blank screen?
 
 #### NICE TO HAVE
 [ ] Adjust speed/game feel
