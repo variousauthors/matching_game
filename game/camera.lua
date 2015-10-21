@@ -24,13 +24,25 @@ function update_camera (camera)
     camera.ry = camera.ry + vy*game.dt
 
     if math.abs(camera.rx) >= 1 then
-        camera.cx = camera.cx + camera.rx
-        camera.rx = 0
+        if (camera.rx > 0) then
+            sign = 1
+        else
+            sign = -1
+        end
+
+        camera.cx = camera.cx + sign
+        camera.rx = camera.rx - sign
     end
 
     if math.abs(camera.ry) >= 1 then
-        camera.cy = camera.cy + camera.ry
-        camera.ry = 0
+        if (camera.ry > 0) then
+            sign = 1
+        else
+            sign = -1
+        end
+
+        camera.cy = camera.cy + sign
+        camera.ry = camera.ry - sign
     end
 
     camera.x = camera.cx + camera.rx

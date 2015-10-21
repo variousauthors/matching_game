@@ -761,7 +761,7 @@ function run_tests ()
     a_chain_of_two_with_grey()
     a_chain_of_three_with_grey()
     a_grey_block_is_destroyed()
-    block_y_is_always_an_interger()
+    camera_cy_is_always_an_interger()
 
     print("PASSED")
 
