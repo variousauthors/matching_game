@@ -732,6 +732,5 @@ function love.load()
     SCORE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 14)
     SPACE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 64)
 
-    build_game()
-    --build_statemachine()
+    build_statemachine()
 end
