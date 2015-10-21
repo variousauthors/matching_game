@@ -94,7 +94,6 @@ function build_statemachine()
         to        = "start",
         condition = function ()
             if state_machine.isSet("escape") then
-                --build_game()
 
                 return true
             end
@@ -112,7 +111,7 @@ function build_statemachine()
     state_machine.start()
 end
 
-function build_game ()
+function build_state ()
     game = {}
     game.title = "DEEPER"
     game.subtitle = "A PUZZLE GAME I MADE"
@@ -129,10 +128,6 @@ function build_game ()
         left = {},
         right = {}
     }
-
-    game.camera = build_camera();
-
-    game.motes = {}
 
     game.colors = {
         { 200, 55, 55 }, -- red
@@ -156,7 +151,7 @@ function build_game ()
     game.rate = 4
     game.step = 0.1 * game.rate
     game.input_rate = 8
-    game.block_max_hp = 1
+    game.block_max_hp = 3
 
     -- defaults for the board
     game.board_defaults = {
@@ -173,6 +168,9 @@ function build_game ()
     game.animations.exploding = 8
     game.animations.crumbling = 8
     game.animations.hardening = 8
+    -- while not really an animation, this
+    -- is useful for testing
+    game.animations.block_fall = 3
 
     -- visual choices
     game.mote_ratio = 9
@@ -193,9 +191,20 @@ function build_game ()
         { 0, 55, 0 }, -- green
         { 0, 0, 55 }, -- blue
     }
+end
+
+function build_world ()
+    game.camera = build_camera();
+
+    game.motes = {}
 
     game.board = build_board()
     game.shadows = build_board({ default = 0.0 })
+end
+
+function build_game ()
+    build_state()
+    build_world()
 end
 
 -- pass in something like
@@ -264,6 +273,14 @@ function player_block_is_nil ()
 
     if (game.block ~= nil) then
         error("FAILED: exists!\n  " .. inspect(game.block))
+    end
+end
+
+function is_an_integer (x, subject)
+    print("--> assert", subject .. " is an integer")
+
+    if (math.abs(x)~= math.floor(math.abs(x))) then
+        error("FAILED: " .. subject .. " = " .. x .. " is no integer!\n")
     end
 end
 
@@ -686,6 +703,52 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 0, { 8, 0, 0, 0 })
 end
 
+function camera_cy_is_always_an_interger ()
+    print("camera.cy is always an integer")
+    -- context, when the player drops a piece
+    build_state()
+    game.block_max_hp = 1
+    build_world()
+
+    -- [x][x][ ][x]
+    build_rows({
+        { 1, 1, 0, 1 }
+    })
+
+    game.block = build_block({ x = 3, y = game.height - 3, color = 1 })
+    game.step = test.step
+
+    run_update(3)
+
+    player_block_exists()
+
+    love.update(game.step)
+
+    player_block_is_nil()
+
+    row_matches(game.height - 0, { 1, 1, 1, 1 })
+
+    run_update(game.animations.exploding + 2)
+
+    row_matches(game.height - 0, { 0, 0, 0, 0 })
+    row_matches(game.height + 1, { 0, 0, 0, 0 })
+
+    game.block = build_block({ x = 3, y = game.height - 0, color = 1 })
+
+    player_block_exists()
+
+    run_update(2)
+
+    player_block_is_nil()
+
+    row_matches(game.height + 1, { 0, 0, 1, 0 })
+
+    -- now let the camera scroll down
+    run_update(7)
+
+    is_an_integer(game.camera.cy, "camera.cy")
+end
+
 function run_tests ()
     -- build a board with some pieces and run update
 
@@ -698,6 +761,7 @@ function run_tests ()
     a_chain_of_two_with_grey()
     a_chain_of_three_with_grey()
     a_grey_block_is_destroyed()
+    block_y_is_always_an_interger()
 
     print("PASSED")
 
@@ -725,7 +789,7 @@ function love.load()
     require('game/block')
     require('game/mote')
 
-    --run_tests()
+    run_tests()
 
     -- global variables for integration with dp menus
     W_HEIGHT = love.viewport.getHeight()

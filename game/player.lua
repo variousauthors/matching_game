@@ -57,7 +57,6 @@ end
 function step_block (block, board)
     -- check for a block in the next square
     if (block.cy + 1 > #board or board[block.cy + 1][block.cx] ~= false) then
-        print(block.cy, block.cx, inspect(block), inspect(board[block.cy + 1][block.cx]))
         -- remove the block and add to the board
         game.block = nil
 
