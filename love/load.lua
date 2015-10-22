@@ -173,7 +173,7 @@ function build_state ()
     game.animations.block_fall = 3
 
     -- visual choices
-    game.all_block_get_damage = true
+    game.all_block_get_damage = false
     game.mote_ratio = 9
     game.tiny_triangle_ratio = 3
     game.tiny_triangle = false

@@ -1,23 +1,38 @@
 
-function draw_block_damage (block)
-    local b = game.block_border/game.block_damage_ratio
+function draw_block_heart (block)
     love.graphics.push("all")
 
-    love.graphics.setColor(game.colors.damage)
+    local offset = game.block_gap_width*game.block_border
 
-    love.graphics.setLineWidth(b)
+    if (game.all_block_get_damage or block.color == game.colors.grey) then
 
-    if (block.hp == game.block_max_hp - 1) then
-        -- one cross
-        love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
+        if (block.hp == game.block_max_hp) then
+            -- full square
+            love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
+        elseif (block.hp == game.block_max_hp - 1) then
+            -- two triangles
+            love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
 
-    elseif (block.hp == game.block_max_hp - 2) then
-        -- two cross
-        love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
-        love.graphics.line((block.x + block.dim) * game.scale, block.y * game.scale, block.x * game.scale, (block.y + block.dim) * game.scale)
+        elseif (block.hp == game.block_max_hp - 2) then
+            -- four triangles
+            --  love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
+            --  love.graphics.line((block.x + block.dim) * game.scale, block.y * game.scale, block.x * game.scale, (block.y + block.dim) * game.scale)
+
+            local e = game.block_gap_width
+            local d = block.dim * game.scale - 2*offset
+            local x = block.x * game.scale + offset
+            local y = block.y * game.scale + offset
+
+            tiny_triangle(x, y + e, d, "up")
+            tiny_triangle(x + e, y, d, "left")
+            tiny_triangle(x - e, y, d, "right")
+            tiny_triangle(x, y - e, d, "down")
+        end
+    else
+        local offset = game.block_gap_width*game.block_border
+        love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
     end
 
-    love.graphics.setLineWidth(1)
     love.graphics.pop()
 end
 
@@ -57,6 +72,14 @@ function tiny_triangle (x, y, dim, dir)
         love.graphics.polygon('fill', x + dim, y, x + dim, y + dim, x + dim/2, y + dim/2)
     elseif dir == "up" then
         love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "up-left" then
+        love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "up-right" then
+        love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "down-left" then
+        love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "down-right" then
+        love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
     end
 end
 
@@ -72,13 +95,14 @@ function draw_block (block)
     love.graphics.setColor(game.colors.grey)
 
     if (block.crumbling < 0) then
-        love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
+        --love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
 
+        draw_block_heart(block)
         draw_block_border(block)
     else
 
         -- four triangles expanding away
-        local e = game.animations.crumbling - block.crumbling
+        local e = game.block_gap_width + game.animations.crumbling - block.crumbling
         local d = block.dim * game.scale - 2*offset
         local x = block.x * game.scale + offset
         local y = block.y * game.scale + offset
@@ -87,15 +111,6 @@ function draw_block (block)
         tiny_triangle(x + e, y, d, "left")
         tiny_triangle(x - e, y, d, "right")
         tiny_triangle(x, y - e, d, "down")
-
-    end
-
-    if (game.all_block_get_damage) then
-        draw_block_damage(block)
-    else
-        if (block.color == game.colors.grey) then
-            draw_block_damage(block)
-        end
     end
 
     love.graphics.pop()
