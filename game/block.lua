@@ -11,26 +11,27 @@ function draw_block_heart (block)
             love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
         elseif (block.hp == game.block_max_hp - 1) then
             -- two triangles
-            local e = game.block_gap_width / 2 -- since we are dividing it between two triangles
-            local d = block.dim * game.scale - 2*offset
+            local e = game.block_gap_width/2 -- since we are dividing it between two triangles
+            local d = block.dim * game.scale - 2*offset - e
             local x = block.x * game.scale + offset
             local y = block.y * game.scale + offset
 
-            tiny_triangle(x - e, y - e, d, "top-left")
-            tiny_triangle(x + e, y + e, d, "bottom-right")
+            tiny_triangle(x + e, y, d, "top-right")
+            tiny_triangle(x, y + e, d, "bottom-left")
 
         elseif (block.hp == game.block_max_hp - 2) then
             -- four triangles
 
-            local e = game.block_gap_width
-            local d = block.dim * game.scale - 2*offset
+            local e = game.block_gap_width/2 -- since we are dividing it between two triangles
+            local d = block.dim * game.scale - 2*offset - 2*e
             local x = block.x * game.scale + offset
             local y = block.y * game.scale + offset
 
-            tiny_triangle(x, y + e, d, "bottom")
-            tiny_triangle(x + e, y, d, "right")
-            tiny_triangle(x - e, y, d, "left")
-            tiny_triangle(x, y - e, d, "top")
+            tiny_triangle(x + e, y + 2*e, d, "bottom")
+            tiny_triangle(x + 2*e, y + e, d, "right")
+            tiny_triangle(x, y + e, d, "left")
+            tiny_triangle(x + e, y, d, "top")
+
         end
     else
         local offset = game.block_gap_width*game.block_border

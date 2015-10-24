@@ -75,8 +75,7 @@ NEXTSTEPS
 #### LOVELY
 [ ] make it so that colored blocks can get "pre-damaged" by blocks
     exploding nearby
-[ ] grey blocks should be made out of tiny triangles, so that the mote
-    can shine through. Only some blocks contain motes.
+[x] grey blocks should be made out of tiny triangles
 [ ] Reimplement shadows
 [ ] Add some kind of variation to mark the passage downward
     - not necessarily a depth marker
@@ -99,6 +98,7 @@ NEXTSTEPS
 
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
+[ ] the motes should shine through damages block hearts
 
 ## BUGS
 
