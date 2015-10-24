@@ -11,22 +11,26 @@ function draw_block_heart (block)
             love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
         elseif (block.hp == game.block_max_hp - 1) then
             -- two triangles
-            love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
+            local e = game.block_gap_width / 2 -- since we are dividing it between two triangles
+            local d = block.dim * game.scale - 2*offset
+            local x = block.x * game.scale + offset
+            local y = block.y * game.scale + offset
+
+            tiny_triangle(x - e, y - e, d, "top-left")
+            tiny_triangle(x + e, y + e, d, "bottom-right")
 
         elseif (block.hp == game.block_max_hp - 2) then
             -- four triangles
-            --  love.graphics.line(block.x * game.scale, block.y * game.scale, (block.x + block.dim) * game.scale, (block.y + block.dim) * game.scale)
-            --  love.graphics.line((block.x + block.dim) * game.scale, block.y * game.scale, block.x * game.scale, (block.y + block.dim) * game.scale)
 
             local e = game.block_gap_width
             local d = block.dim * game.scale - 2*offset
             local x = block.x * game.scale + offset
             local y = block.y * game.scale + offset
 
-            tiny_triangle(x, y + e, d, "up")
-            tiny_triangle(x + e, y, d, "left")
-            tiny_triangle(x - e, y, d, "right")
-            tiny_triangle(x, y - e, d, "down")
+            tiny_triangle(x, y + e, d, "bottom")
+            tiny_triangle(x + e, y, d, "right")
+            tiny_triangle(x - e, y, d, "left")
+            tiny_triangle(x, y - e, d, "top")
         end
     else
         local offset = game.block_gap_width*game.block_border
@@ -64,22 +68,26 @@ function draw_block_border (block)
 end
 
 function tiny_triangle (x, y, dim, dir)
-    if dir == "down" then
+    if dir == "top" then
         love.graphics.polygon('fill', x, y, x + dim, y, x + dim/2, y + dim/2)
-    elseif dir == "right" then
-        love.graphics.polygon('fill', x, y, x, y + dim, x + dim/2, y + dim/2)
     elseif dir == "left" then
+        love.graphics.polygon('fill', x, y, x, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "right" then
         love.graphics.polygon('fill', x + dim, y, x + dim, y + dim, x + dim/2, y + dim/2)
-    elseif dir == "up" then
+    elseif dir == "bottom" then
         love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
-    elseif dir == "up-left" then
+    elseif dir == "bottom-right" then
         love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
-    elseif dir == "up-right" then
+        love.graphics.polygon('fill', x + dim, y, x + dim, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "bottom-left" then
         love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
-    elseif dir == "down-left" then
-        love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
-    elseif dir == "down-right" then
-        love.graphics.polygon('fill', x, y + dim, x + dim, y + dim, x + dim/2, y + dim/2)
+        love.graphics.polygon('fill', x, y, x, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "top-right" then
+        love.graphics.polygon('fill', x, y, x + dim, y, x + dim/2, y + dim/2)
+        love.graphics.polygon('fill', x + dim, y, x + dim, y + dim, x + dim/2, y + dim/2)
+    elseif dir == "top-left" then
+        love.graphics.polygon('fill', x, y, x + dim, y, x + dim/2, y + dim/2)
+        love.graphics.polygon('fill', x, y, x, y + dim, x + dim/2, y + dim/2)
     end
 end
 
@@ -107,10 +115,10 @@ function draw_block (block)
         local x = block.x * game.scale + offset
         local y = block.y * game.scale + offset
 
-        tiny_triangle(x, y + e, d, "up")
-        tiny_triangle(x + e, y, d, "left")
-        tiny_triangle(x - e, y, d, "right")
-        tiny_triangle(x, y - e, d, "down")
+        tiny_triangle(x, y + e, d, "bottom")
+        tiny_triangle(x + e, y, d, "right")
+        tiny_triangle(x - e, y, d, "left")
+        tiny_triangle(x, y - e, d, "top")
     end
 
     love.graphics.pop()
