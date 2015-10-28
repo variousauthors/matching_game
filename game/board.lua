@@ -303,12 +303,14 @@ function clear_blocks (board, block)
         block.marked = false
 
         if (#(marked) > game.match_target) then
-            block.hp = block.hp - 1
+            if (block.color == game.colors.grey or block.hp > game.block_max_hp - 2) then
+                block.hp = block.hp - 1
 
-            play_chip = true
+                play_chip = true
 
-            if block.hp == 0 then
-                play_shatter = true
+                if block.hp == 0 then
+                    play_shatter = true
+                end
             end
         end
     end
