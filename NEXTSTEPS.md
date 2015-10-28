@@ -73,7 +73,7 @@ NEXTSTEPS
     the board
 
 #### LOVELY
-[ ] make it so that colored blocks can get "pre-damaged" by blocks
+[x] make it so that colored blocks can get "pre-damaged" by blocks
     exploding nearby
 [x] grey blocks should be made out of tiny triangles
 [ ] Reimplement shadows
@@ -102,6 +102,8 @@ NEXTSTEPS
 
 ## BUGS
 
+[ ] when a fully split live block is damaged, the block heart disappears
+    and then weird behaviour ensues...
 [ ] sometimes the block borders are rendered round, for no apparent reason
     and randomly...
 
