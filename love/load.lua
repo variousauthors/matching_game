@@ -790,7 +790,7 @@ function love.load()
     require('game/block')
     require('game/mote')
 
-    run_tests()
+--    run_tests()
 
     -- global variables for integration with dp menus
     W_HEIGHT = love.viewport.getHeight()
