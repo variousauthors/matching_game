@@ -76,29 +76,35 @@ NEXTSTEPS
 [x] make it so that colored blocks can get "pre-damaged" by blocks
     exploding nearby
 [x] grey blocks should be made out of tiny triangles
-[ ] Reimplement shadows
+[x] Reimplement shadows
+[ ] remove the title, leaving just "press space"
+[ ] implement "resume" so that the ESC does not
+    clear the game.
+    - as part of this, the camera must roll back down to the current position
+[ ] make the camera movement sigmoidal
+    - should it be constant time to complete?
 [ ] Add some kind of variation to mark the passage downward
-    - not necessarily a depth marker
-    - no need for a high score (it will be up on itch/gamejolt)
+    - make a quick affirmation generator, and show affirmations
+      as the player descends
+    - should they "fade in", triggered by some different action?
+    - maybe add an angelic choir sound effect?
 [ ] Sound effects and music
     - music should become more panic the more
     full rows there are above "ground level"
     stack higher?
-[ ] fade in an alpha layer so that the title is emphasized
-    - I want to do "something" with the title screen, but
-      need to think about it
-    - so, fade in title screen while the camera rolls back up
-      to a blank screen?
 
 #### NICE TO HAVE
-[ ] Adjust speed/game feel
-[ ] Maybe have blocks of different hardness?
-[ ] something with the motes...
-    - not necessarily, it may be OK to just leave them
 
+[ ] the motes should shine through damages block hearts
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
-[ ] the motes should shine through damages block hearts
+[ ] Adjust speed/game feel
+[ ] maybe the background gets darker the deeper we go?
+[ ] some parallaxing background to make it more clear that
+    we are moving down
+[ ] instead of having the camera move when a new layer is reached,
+    have it move after 'n' new layers are reached or after some delay
+    to give it a more organic feel?
 
 ## BUGS
 
