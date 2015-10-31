@@ -15,9 +15,8 @@ function build_statemachine()
             end)
 
             -- rewind the camera
-            print(#(game.board), game.height, game.camera.y)
             if (game.camera.y > 0) then
-                move_camera(game.camera, 0, -game.camera.y)
+                move_camera(game.camera, 0, 0)
             end
         end,
         draw = function ()
@@ -807,7 +806,7 @@ function love.load()
     require('game/block')
     require('game/mote')
 
---    run_tests()
+    run_tests()
 
     -- global variables for integration with dp menus
     W_HEIGHT = love.viewport.getHeight()

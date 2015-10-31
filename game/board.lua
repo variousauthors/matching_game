@@ -191,9 +191,8 @@ function update_board(board)
     end
 
     if shift_down then
-        --game.camera.y = game.camera.y + 1
-        move_camera(game.camera, 0, 1)
         game.shift = game.shift + 1
+        move_camera(game.camera, 0, game.shift)
 
         build_board_row(board, #board + 1)
         build_board_row(game.shadows, #(game.shadows) + 1, { default = 0.0 })

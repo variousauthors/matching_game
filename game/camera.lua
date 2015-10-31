@@ -12,8 +12,8 @@ end
 
 -- adjust the camera by the given amount, over time
 function move_camera (camera, x, y)
-    camera.tx = camera.cx + x
-    camera.ty = camera.cy + y
+    camera.tx = x
+    camera.ty = y
 end
 
 function update_camera (camera)

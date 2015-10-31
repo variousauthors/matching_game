@@ -109,8 +109,12 @@ NEXTSTEPS
 
 ## BUGS
 
-[ ] if we cancel the game during the camera roll, the camera gets all ill-behaved
+[ ] the camera seems to rewind into a tiny negative value, which results in weirdness
 [ ] the camera never actually settles back to zero, it just approaches zero
+    - add a snap-to-zero for some sub pixel EPSILON?
+[ ] the game collects input for arrow keys on the title screen
+    these need to be flushed before the next state
+[ ] the game seemed to get stuck on the title screen
 [x] when a fully split live block is damaged, the block heart disappears
     and then weird behaviour ensues...
 [ ] sometimes the block borders are rendered round, for no apparent reason
