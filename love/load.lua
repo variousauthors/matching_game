@@ -15,6 +15,7 @@ function build_statemachine()
             end)
 
             -- rewind the camera
+            print(#(game.board), game.height, game.camera.y)
             if (game.camera.y > 0) then
                 move_camera(game.camera, 0, -game.camera.y)
             end
@@ -42,10 +43,25 @@ function build_statemachine()
     })
 
     state_machine.addState({
+        name       = "ready",
+        init       = function ()
+        end,
+        draw       = function ()
+            draw_game()
+        end,
+        keypressed = love.keypressed,
+        inputpressed = game.inputpressed
+    })
+
+    state_machine.addState({
         name       = "play",
         init       = function ()
-            build_game()
             game.player.enabled = true
+            -- wind the camera
+            print(#(game.board), game.height, game.camera.y)
+            if (game.camera.y < game.shift) then
+                move_camera(game.camera, 0, game.shift)
+            end
         end,
         draw       = function ()
             draw_game()
@@ -142,6 +158,7 @@ function build_state ()
 
     game.scale = 32
     game.height = 10
+    game.shift = 0 -- the game starts with three extra rows
     game.width = 5
     game.gravity = 1
     game.dt = 0

@@ -77,12 +77,13 @@ NEXTSTEPS
     exploding nearby
 [x] grey blocks should be made out of tiny triangles
 [x] Reimplement shadows
-[ ] remove the title, leaving just "press space"
-[ ] implement "resume" so that the ESC does not
+[x] implement "resume" so that the ESC does not
     clear the game.
     - as part of this, the camera must roll back down to the current position
+[ ] implement save/load so that progress is not lost on restart
 [ ] make the camera movement sigmoidal
     - should it be constant time to complete?
+[ ] remove the title, leaving just "press space"
 [ ] Add some kind of variation to mark the passage downward
     - make a quick affirmation generator, and show affirmations
       as the player descends
@@ -108,7 +109,9 @@ NEXTSTEPS
 
 ## BUGS
 
-[ ] when a fully split live block is damaged, the block heart disappears
+[ ] if we cancel the game during the camera roll, the camera gets all ill-behaved
+[ ] the camera never actually settles back to zero, it just approaches zero
+[x] when a fully split live block is damaged, the block heart disappears
     and then weird behaviour ensues...
 [ ] sometimes the block borders are rendered round, for no apparent reason
     and randomly...
