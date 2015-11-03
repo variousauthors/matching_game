@@ -3,10 +3,12 @@ function love.update (dt)
 end
 
 function update_game (dt)
+    local cells = game.board.cells
+
     for i = 1, game.width, 1 do
         -- board height - game height - 2 means the game ends
         -- whenever anything is blocking the spawn
-        if game.board[#(game.board) - game.height - 2][math.ceil(game.width/2)] then
+        if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] then
             game.over = true
             return
         end

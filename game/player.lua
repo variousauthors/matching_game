@@ -16,9 +16,10 @@ end
 -- move the block discretely as far down as possible
 function drop_block (block, board)
     local cx, cy = block.cx, block.cy + 1
+    local cells = board.cells
 
     -- iterate over the current column from the block
-    while (cy <= #board and board[cy][cx] == false) do
+    while (cy <= #cells and cells[cy][cx] == false) do
         block.cy = cy
         cy = cy + 1
     end
@@ -28,7 +29,7 @@ function drop_block (block, board)
     -- set the blocks velocity to infinity
     -- to represent that it is moving discretely
     block.dy = game.infinity
-    board[block.cy][block.cx] = block
+    cells[block.cy][block.cx] = block
 
     block_set_y(block, board, block.cy)
 end
@@ -36,6 +37,7 @@ end
 -- move the block side to side
 function move_block (block, board, direction)
     local cx = block.cx + direction
+    local cells = board.cells
 
     -- clamp the move
     cx = math.max(math.min(game.width, cx), 0)
@@ -45,7 +47,7 @@ function move_block (block, board, direction)
     if (cx ~= block.cx) then
 
         -- check for collision
-        if not (board[block.cy][cx] ~= false) then
+        if not (cells[block.cy][cx] ~= false) then
             block.cx = cx
         end
     end
@@ -55,17 +57,18 @@ end
 
 -- move the block discretely down one row
 function step_block (block, board)
+    local cells = board.cells
     -- check for a block in the next square
-    if (block.cy + 1 > #board or board[block.cy + 1][block.cx] ~= false) then
-        -- remove the block and add to the board
+    if (block.cy + 1 > #cells or cells[block.cy + 1][block.cx] ~= false) then
+        -- remove the block and add to the cells
         game.block = nil
 
         -- set the blocks velocity to infinity
         -- to represent that it is moving discretely
         block.dy = game.infinity
-        board[block.cy][block.cx] = block
+        cells[block.cy][block.cx] = block
     else
-        block.cy = math.min(#board, block.cy + 1)
+        block.cy = math.min(#cells, block.cy + 1)
     end
 
     block_set_y(block, board, block.cy)

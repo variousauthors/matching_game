@@ -170,13 +170,15 @@ function update_block (block, board)
     game.block_count = game.block_count + 1
     local cx, cy = block.cx, block.cy
     local below
+    local cells = board.cells
+    local shadows = game.shadows.cells
 
     -- do not apply forces to grey blocks
     if (block.color == game.colors.grey or block.animating) then
         -- remove it if it is broken
         if block.hp == 0 then
             block.hp = -1
-            start_tween(board[cy][cx], "crumbling")
+            start_tween(cells[cy][cx], "crumbling")
         end
 
         -- ANIMATIONS
@@ -185,11 +187,11 @@ function update_block (block, board)
             block.exploding = block.exploding - 1
         elseif block.exploding == 0 then
             block.exploding = -1
-            board[cy][cx] = false
+            cells[cy][cx] = false
 
             -- TODO shadows need to be an entity so that we can draw them
             -- using x and y, rather than cx and cy
-            game.shadows[cy][cx] = game.shadows[cy][cx] + 0.33
+            shadows[cy][cx] = shadows[cy][cx] + 0.33
         end
 
         -- adjust the crumbling
@@ -202,7 +204,7 @@ function update_block (block, board)
             if (block.mote) then
                 block.mote.released = true
             end
-            board[cy][cx] = false
+            cells[cy][cx] = false
         end
 
         -- adjust the hardening
@@ -212,8 +214,8 @@ function update_block (block, board)
             block.hardening = -1
             block.mote = build_mote(block)
             table.insert(game.motes, block.mote)
-            board[cy][cx].color = game.colors.grey
-            game.shadows[cy][cx] = 0.0
+            cells[cy][cx].color = game.colors.grey
+            shadows[cy][cx] = 0.0
         end
 
         -- TODO move this into the animation controller
@@ -227,7 +229,7 @@ function update_block (block, board)
     end
 
     -- the block is at rest, at the bottom of the board
-    if (not board[cy + 1]) then
+    if (not cells[cy + 1]) then
         if (block.dy ~= 0) then
             -- if the block was previously moving insert it
             table.insert(board.dirty, block)
@@ -247,7 +249,7 @@ function update_block (block, board)
     block.dy = block.dy + game.gravity*game.dt
 
     -- check the block below this one
-    collision = block_collide(block, board[cy + 1][cx])
+    collision = block_collide(block, cells[cy + 1][cx])
 
     if (collision) then
 
@@ -263,8 +265,8 @@ function update_block (block, board)
         block.cy = block.cy + 1
         block.ry = 0
 
-        board[cy][cx] = false
-        board[cy + 1][cx] = block
+        cells[cy][cx] = false
+        cells[cy + 1][cx] = block
     end
 
     -- set the screen y position for the block

@@ -4,6 +4,7 @@ function build_statemachine()
     state_machine = FSM()
 
     build_game()
+
     -- the menu/title screen state
     state_machine.addState({
         name       = "start",
@@ -57,7 +58,7 @@ function build_statemachine()
         init       = function ()
             game.player.enabled = true
             -- wind the camera
-            print(#(game.board), game.height, game.camera.y)
+            print(#(game.board.cells), game.height, game.camera.y)
             if (game.camera.y < game.shift) then
                 move_camera(game.camera, 0, game.shift)
             end
@@ -231,6 +232,7 @@ end
 -- to create rows: start with the bottom row
 -- 1 = red, 2 = green, 3 = blue, 4 = grey, 0 = nothing
 function build_rows(rows)
+    local cells = game.board.cells
     for i = 1, #rows, 1 do
         local y = game.height - #rows + i
 
@@ -243,7 +245,7 @@ function build_rows(rows)
                     color = "grey"
                 end
 
-                game.board[y][x] = build_block({ x = x, y = y, color = color })
+                cells[y][x] = build_block({ x = x, y = y, color = color })
             end
         end
     end
@@ -251,25 +253,26 @@ end
 
 function row_matches(row, blocks)
     print("--> assert", "row " .. row .. " matches " .. inspect(blocks))
+    local cells = game.board.cells
     for i = 1, #blocks, 1 do
         local block = blocks[i]
 
         if block == 0 then
-            if (game.board[row][i] ~= false) then
-                error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. "false\n" .. "  was: " .. inspect(game.board[row][i].color))
+            if (cells[row][i] ~= false) then
+                error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. "false\n" .. "  was: " .. inspect(cells[row][i].color))
             end
         else
             if (block == 8) then
                 block = "grey"
             end
 
-            if (game.board[row][i]) then
-                if (game.board[row][i].color ~= game.colors[block]) then
-                    error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(game.board[row][i].color))
+            if (cells[row][i]) then
+                if (cells[row][i].color ~= game.colors[block]) then
+                    error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(cells[row][i].color))
                 end
             else
-                print("row: ", inspect(game.board[row]))
-                error("expected a block but it was empty:\n  x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(game.board[row][i]))
+                print("row: ", inspect(cells[row]))
+                error("expected a block but it was empty:\n  x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(cells[row][i]))
             end
         end
     end
@@ -302,26 +305,28 @@ function is_an_integer (x, subject)
 end
 
 function block_is_crumbling (y, x)
-    print("--> assert", "block " .. tostring(game.board[y][x]) .. " is crumbling")
+    local cells = game.board.cells
+    print("--> assert", "block " .. tostring(cells[y][x]) .. " is crumbling")
 
-    if (not game.board[y][x]) then
+    if (not cells[y][x]) then
         error("  there was no block at y: " .. y .. " x: " .. x)
     end
 
-    if (game.board[y][x].crumbling == -1) then
+    if (cells[y][x].crumbling == -1) then
         error("  block was not crumbling!")
     end
 
 end
 
 function block_has_hp (y, x, hp)
-    print("--> assert", "block " .. tostring(game.board[y][x]) .. " has " .. hp .. " hp")
-    if (not game.board[y][x]) then
+    local cells = game.board.cells
+    print("--> assert", "block " .. tostring(cells[y][x]) .. " has " .. hp .. " hp")
+    if (not cells[y][x]) then
         error("  there was no block at y: " .. y .. " x: " .. x)
     end
 
-    if (game.board[y][x].hp ~= hp) then
-        error("  expected: " .. hp .. "\n  was: " .. game.board[y][x].hp)
+    if (cells[y][x].hp ~= hp) then
+        error("  expected: " .. hp .. "\n  was: " .. cells[y][x].hp)
     end
 end
 
@@ -780,6 +785,10 @@ function run_tests ()
     a_grey_block_is_destroyed()
     camera_cy_is_always_an_interger()
 
+    player_can_move_a_block()
+    an_obstructed_block_cannot_move()
+    player_can_drop_a_block()
+
     print("PASSED")
 
     -- context, when the piece lands by stepping
@@ -806,7 +815,10 @@ function love.load()
     require('game/block')
     require('game/mote')
 
-    run_tests()
+    --run_tests()
+    -- TODO move_block in player is untested
+    -- should have a test that moves a block
+    -- and one that moves a block against obstructions
 
     -- global variables for integration with dp menus
     W_HEIGHT = love.viewport.getHeight()
