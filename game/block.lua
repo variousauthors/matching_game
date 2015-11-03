@@ -4,7 +4,7 @@ function draw_block_heart (block)
 
     local offset = game.block_gap_width*game.block_border
 
-    if (game.all_block_get_damage or block.color == game.colors.grey) then
+    if (game.all_block_get_damage or block.grey == true) then
 
         if (block.hp == game.block_max_hp) then
             -- full square
@@ -47,7 +47,7 @@ function draw_block_border (block)
 
     love.graphics.push("all")
 
-    if (game.flicker and game.draw_seed == 0 and block.color ~= game.colors.grey) then
+    if (game.flicker and game.draw_seed == 0 and block.grey == false) then
         love.graphics.setColor({ block.color[1] * 2/3, block.color[2] * 2/3, block.color[3] * 2/3 })
     else
         love.graphics.setColor(block.color)
@@ -59,7 +59,7 @@ function draw_block_border (block)
         e = - (game.animations.hardening - block.hardening)
     end
 
-    if (block.color ~= game.colors.grey) then
+    if (block.grey == false) then
         love.graphics.setLineWidth(b)
         love.graphics.rectangle('line', block.x * game.scale + b - e/2, block.y * game.scale + b - e/2, block.dim * game.scale - 2*b + e, block.dim * game.scale - 2*b + e)
         love.graphics.setLineWidth(1)
@@ -132,6 +132,7 @@ function build_block (options)
     local y = options.y or 1
     local primary = math.random(1, 3)
     local color = game.colors[options.color] or game.colors[primary]
+    local grey = (color == game.colors.grey)
 
     return {
         -- position in the grid
@@ -150,6 +151,7 @@ function build_block (options)
 
         dim = game.block_dim,
         color = color,
+        grey = grey,
         primary = primary,
         marked = false,
         hp = game.block_max_hp,
@@ -174,7 +176,7 @@ function update_block (block, board)
     local shadows = game.shadows.cells
 
     -- do not apply forces to grey blocks
-    if (block.color == game.colors.grey or block.animating) then
+    if (block.grey == true or block.animating) then
         -- remove it if it is broken
         if block.hp == 0 then
             block.hp = -1
@@ -215,6 +217,7 @@ function update_block (block, board)
             block.mote = build_mote(block)
             table.insert(game.motes, block.mote)
             cells[cy][cx].color = game.colors.grey
+            cells[cy][cx].grey = true
             shadows[cy][cx] = 0.0
         end
 

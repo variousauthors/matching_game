@@ -171,7 +171,7 @@ function update_board(board)
                 update_block(block, board)
 
                 -- only check for matches when all blocks have settled
-                if block.dy ~= 0 and block.color ~= game.colors.grey then
+                if block.dy ~= 0 and block.grey == false then
                     all_blocks_are_still = false
                 end
 
@@ -192,7 +192,7 @@ function update_board(board)
         for y = 0, 2 do
             local cell = cells[#cells - y][x]
 
-            if (cell and cell.color ~= game.colors.grey) then
+            if (cell and cell.grey == false) then
                 shift_down = true
             end
         end
@@ -233,7 +233,7 @@ function update_board(board)
 end
 
 function clear_blocks (board, block)
-    if (block.color == game.colors.grey) then
+    if (block.grey == true) then
         return
     end
 
@@ -272,7 +272,7 @@ function clear_blocks (board, block)
                     table.insert(Q, adj)
                     table.insert(marked, adj)
                 elseif (not adj.marked) then
-                    if (game.all_block_get_damage == true or adj.color == game.colors.grey) then
+                    if (game.all_block_get_damage == true or adj.grey == true) then
                         adj.marked = true
                         table.insert(damage, adj)
                     end
@@ -287,7 +287,7 @@ function clear_blocks (board, block)
                     table.insert(Q, adj)
                     table.insert(marked, adj)
                 elseif (not adj.marked) then
-                    if (game.all_block_get_damage == true or adj.color == game.colors.grey) then
+                    if (game.all_block_get_damage == true or adj.grey == true) then
                         adj.marked = true
                         table.insert(damage, adj)
                     end
@@ -316,7 +316,7 @@ function clear_blocks (board, block)
         block.marked = false
 
         if (#(marked) > game.match_target) then
-            if (block.color == game.colors.grey or block.hp > game.block_max_hp - 2) then
+            if (block.grey == true or block.hp > game.block_max_hp - 2) then
                 block.hp = block.hp - 1
 
                 play_chip = true

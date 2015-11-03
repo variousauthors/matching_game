@@ -4,6 +4,13 @@ function build_statemachine()
     state_machine = FSM()
 
     build_game()
+    r = game.board
+    local b = JSON.encode(game.board)
+    local c = JSON.decode(b)
+
+    print(inspect(c.cells[1][1]))
+    print(inspect(r.cells[1][1]))
+    game.board = c
 
     -- the menu/title screen state
     state_machine.addState({
@@ -58,7 +65,6 @@ function build_statemachine()
         init       = function ()
             game.player.enabled = true
             -- wind the camera
-            print(#(game.board.cells), game.height, game.camera.y)
             if (game.camera.y < game.shift) then
                 move_camera(game.camera, 0, game.shift)
             end
@@ -815,7 +821,7 @@ function love.load()
     require('game/block')
     require('game/mote')
 
-    --run_tests()
+--    run_tests()
     -- TODO move_block in player is untested
     -- should have a test that moves a block
     -- and one that moves a block against obstructions

@@ -109,6 +109,9 @@ NEXTSTEPS
 
 ## BUGS
 
+[ ] finally using "block.color == block.color.grey" has bit me
+    I need to change any object identity comparisons to boolean comparisons
+[ ] when we decode game.board the rows of "false" become rows of "nil"
 [ ] the camera seems to rewind into a tiny negative value, which results in weirdness
 [ ] the camera never actually settles back to zero, it just approaches zero
     - add a snap-to-zero for some sub pixel EPSILON?
