@@ -29,7 +29,9 @@ function update_game (dt)
         game.input_timer = game.input_timer + dt
 
         -- there should be a block
+        print("here")
         if (game.block == nil and not game.player.disabled) then
+        print("  here")
             game.block = next_block()
         end
 

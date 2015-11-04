@@ -4,13 +4,7 @@ function build_statemachine()
     state_machine = FSM()
 
     build_game()
-    r = game.board
-    local b = JSON.encode(game.board)
-    local c = JSON.decode(b)
-
-    print(inspect(c.cells[1][1]))
-    print(inspect(r.cells[1][1]))
-    game.board = c
+    game.board = JSON.decode(JSON.encode(game.board))
 
     -- the menu/title screen state
     state_machine.addState({
@@ -264,7 +258,7 @@ function row_matches(row, blocks)
         local block = blocks[i]
 
         if block == 0 then
-            if (cells[row][i] ~= false) then
+            if (cells[row][i]) then
                 error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. "false\n" .. "  was: " .. inspect(cells[row][i].color))
             end
         else
@@ -353,9 +347,12 @@ function a_row_of_four_is_cleared ()
     })
 
     game.block = build_block({ x = 3, y = game.height - 1, color = 1 })
+    print(game.block)
     game.step = test.step
+    print(game.block)
 
     love.update(game.step)
+    print(game.block)
 
     player_block_exists()
 

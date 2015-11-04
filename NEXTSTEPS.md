@@ -109,7 +109,7 @@ NEXTSTEPS
 
 ## BUGS
 
-[ ] finally using "block.color == block.color.grey" has bit me
+[x] finally using "block.color == block.color.grey" has bit me
     I need to change any object identity comparisons to boolean comparisons
 [ ] when we decode game.board the rows of "false" become rows of "nil"
 [ ] the camera seems to rewind into a tiny negative value, which results in weirdness

@@ -133,7 +133,7 @@ function draw_board (board)
     for y = 1, #(cells) do
         for x = 1, #(cells[y]) do
 
-            if (cells[y][x] ~= false) then
+            if (cells[y][x]) then
 
                 draw_block(cells[y][x])
             end
