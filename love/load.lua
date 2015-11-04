@@ -217,7 +217,13 @@ function build_world ()
     game.motes = {}
 
     game.board = build_board()
+    build_board_row(game.board, game.height + 1)
+    build_board_row(game.board, game.height + 2)
+    build_board_row(game.board, game.height + 3)
     game.shadows = build_board({ default = 0.0 })
+    build_board_row(game.shadows, game.height + 1, { default = 0.0 })
+    build_board_row(game.shadows, game.height + 2, { default = 0.0 })
+    build_board_row(game.shadows, game.height + 3, { default = 0.0 })
 end
 
 function build_game ()
@@ -231,7 +237,7 @@ end
 --
 -- to create rows: start with the bottom row
 -- 1 = red, 2 = green, 3 = blue, 4 = grey, 0 = nothing
-function build_rows(rows)
+function build_rows (rows)
     local cells = game.board.cells
     for i = 1, #rows, 1 do
         local y = game.height - #rows + i
@@ -258,7 +264,7 @@ function row_matches(row, blocks)
         local block = blocks[i]
 
         if block == 0 then
-            if (cells[row][i]) then
+            if (cells[row][i] ~= EMPTY) then
                 error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. "false\n" .. "  was: " .. inspect(cells[row][i].color))
             end
         else
@@ -266,7 +272,7 @@ function row_matches(row, blocks)
                 block = "grey"
             end
 
-            if (cells[row][i]) then
+            if (cells[row][i] ~= EMPTY) then
                 if (cells[row][i].color ~= game.colors[block]) then
                     error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(cells[row][i].color))
                 end
@@ -347,12 +353,9 @@ function a_row_of_four_is_cleared ()
     })
 
     game.block = build_block({ x = 3, y = game.height - 1, color = 1 })
-    print(game.block)
     game.step = test.step
-    print(game.block)
 
     love.update(game.step)
-    print(game.block)
 
     player_block_exists()
 
@@ -803,6 +806,7 @@ function run_tests ()
 end
 
 function love.load()
+    EMPTY = 'x'
 
     require('libs/fsm')
     require('game/controls')

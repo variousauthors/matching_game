@@ -1,12 +1,13 @@
 function build_board_row (board, y, options)
     local options = options or {}
-    local default = options.default or false
+    options.default = options.default or nil
+    local default = options.default or EMPTY
     local cells = board.cells
 
     cells[y] = {}
 
     for x = 1, game.width, 1 do
-        if (default) then
+        if (options.default) then
             cells[y][x] = default
         else
             cells[y][x] = build_block({ board = board, x = x, y = y, color = "grey" })
@@ -16,7 +17,8 @@ end
 
 function build_board (options)
     local options = options or {}
-    local default = options.default or false
+    options.default = options.default or nil
+    local default = options.default or EMPTY
     local board = {}
     local i, j
 
@@ -35,14 +37,6 @@ function build_board (options)
 
         for x = 1, game.width, 1 do
             board.cells[y][x] = default
-        end
-    end
-
-    for y = game.height + 1, game.height + 3, 1 do
-        board.cells[y] = {}
-
-        for x = 1, game.width, 1 do
-            board.cells[y][x] = default or build_block({ board = board, x = x, y = y, color = "grey" })
         end
     end
 
@@ -133,7 +127,7 @@ function draw_board (board)
     for y = 1, #(cells) do
         for x = 1, #(cells[y]) do
 
-            if (cells[y][x]) then
+            if (cells[y][x] ~= EMPTY) then
 
                 draw_block(cells[y][x])
             end
@@ -164,7 +158,7 @@ function update_board(board)
     -- check each cell from bottom to top
     for y = #(cells), 1, -1 do
         for x = 1, board.width, 1 do
-            if (cells[y][x]) then
+            if (cells[y][x] ~= EMPTY) then
                 -- update each block
                 block = cells[y][x]
 
@@ -264,7 +258,7 @@ function clear_blocks (board, block)
         local curr = table.remove(Q, 1)
 
         for i, v in ipairs({ 1, -1 }) do
-            if (cells[curr.cy][curr.cx + v]) then
+            if (cells[curr.cy][curr.cx + v] ~= nil and cells[curr.cy][curr.cx + v] ~= EMPTY) then
                 local adj = cells[curr.cy][curr.cx + v]
 
                 if (not adj.marked and adj.color == block.color) then
@@ -279,7 +273,7 @@ function clear_blocks (board, block)
                 end
             end
 
-            if (cells[curr.cy + v] and cells[curr.cy + v][curr.cx]) then
+            if (cells[curr.cy + v] and cells[curr.cy + v][curr.cx] ~= nil and cells[curr.cy + v][curr.cx] ~= EMPTY) then
                 local adj = cells[curr.cy + v][curr.cx]
 
                 if (not adj.marked and adj.color == block.color) then

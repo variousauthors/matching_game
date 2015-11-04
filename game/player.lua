@@ -19,7 +19,7 @@ function drop_block (block, board)
     local cells = board.cells
 
     -- iterate over the current column from the block
-    while (cy <= #cells and not cells[cy][cx]) do
+    while (cy <= #cells and cells[cy][cx] == EMPTY) do
         block.cy = cy
         cy = cy + 1
     end
@@ -47,7 +47,7 @@ function move_block (block, board, direction)
     if (cx ~= block.cx) then
 
         -- check for collision
-        if (not cells[block.cy][cx]) then
+        if (cells[block.cy][cx] == EMPTY) then
             block.cx = cx
         end
     end
@@ -59,7 +59,7 @@ end
 function step_block (block, board)
     local cells = board.cells
     -- check for a block in the next square
-    if (block.cy + 1 > #cells or cells[block.cy + 1][block.cx]) then
+    if (block.cy + 1 > #cells or cells[block.cy + 1][block.cx] ~= EMPTY) then
         -- remove the block and add to the cells
         game.block = nil
 

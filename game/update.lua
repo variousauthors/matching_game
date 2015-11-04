@@ -8,7 +8,7 @@ function update_game (dt)
     for i = 1, game.width, 1 do
         -- board height - game height - 2 means the game ends
         -- whenever anything is blocking the spawn
-        if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] then
+        if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] ~= EMPTY then
             game.over = true
             return
         end
@@ -29,9 +29,7 @@ function update_game (dt)
         game.input_timer = game.input_timer + dt
 
         -- there should be a block
-        print("here")
         if (game.block == nil and not game.player.disabled) then
-        print("  here")
             game.block = next_block()
         end
 

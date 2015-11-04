@@ -189,7 +189,7 @@ function update_block (block, board)
             block.exploding = block.exploding - 1
         elseif block.exploding == 0 then
             block.exploding = -1
-            cells[cy][cx] = false
+            cells[cy][cx] = EMPTY
 
             -- TODO shadows need to be an entity so that we can draw them
             -- using x and y, rather than cx and cy
@@ -206,7 +206,7 @@ function update_block (block, board)
             if (block.mote) then
                 block.mote.released = true
             end
-            cells[cy][cx] = false
+            cells[cy][cx] = EMPTY
         end
 
         -- adjust the hardening
@@ -268,7 +268,7 @@ function update_block (block, board)
         block.cy = block.cy + 1
         block.ry = 0
 
-        cells[cy][cx] = false
+        cells[cy][cx] = EMPTY
         cells[cy + 1][cx] = block
     end
 
