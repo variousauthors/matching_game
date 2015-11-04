@@ -10,7 +10,6 @@ function build_statemachine()
     state_machine.addState({
         name       = "start",
         init       = function ()
-            print("init start")
             save = JSON.encode(game.board)
 
             game.player.enabled = false
@@ -60,9 +59,7 @@ function build_statemachine()
     state_machine.addState({
         name       = "play",
         init       = function ()
-            print("init play")
             game.board = JSON.decode(save)
-            print(inspect(game.board))
 
             game.player.enabled = true
             -- wind the camera
@@ -269,12 +266,12 @@ function row_matches(row, blocks)
 
         if block == 0 then
             if (cells[row][i] ~= EMPTY) then
-                error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. "false\n" .. "  was: " .. inspect(cells[row][i].color))
+                error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. "false\n" .. "  was: " .. inspect(block_color(cells[row][i])))
             end
         else
             if (cells[row][i] ~= EMPTY) then
-                if (cells[row][i].color ~= game.colors[block]) then
-                    error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(cells[row][i].color))
+                if (block_color(cells[row][i]) ~= game.colors[block]) then
+                    error("x: " .. i .. ", y: " .. row .. " did not match\n  expected: " .. inspect(game.colors[block]) .. "\n" .. "  was: " .. inspect(block_color(cells[row][i])))
                 end
             else
                 print("row: ", inspect(cells[row]))
@@ -363,18 +360,10 @@ function a_row_of_four_is_cleared ()
 
     player_block_is_nil()
 
-    print(inspect(game.board.cells[game.height][1].color))
-    print(inspect(game.board.cells[game.height][2].color))
-    print(inspect(game.board.cells[game.height][3].color))
-    print(inspect(game.board.cells[game.height][4].color))
     row_matches(game.height - 0, { 1, 1, 1, 1 })
 
     run_update(game.animations.exploding + 2)
 
-    print(inspect(game.board.cells[game.height][1].color))
-    print(inspect(game.board.cells[game.height][2].color))
-    print(inspect(game.board.cells[game.height][3].color))
-    print(inspect(game.board.cells[game.height][4].color))
     row_matches(game.height - 0, { 0, 0, 0, 0 })
 end
 
@@ -834,7 +823,7 @@ function love.load()
     require('game/block')
     require('game/mote')
 
-    run_tests()
+--    run_tests()
     -- TODO move_block in player is untested
     -- should have a test that moves a block
     -- and one that moves a block against obstructions

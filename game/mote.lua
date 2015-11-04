@@ -92,9 +92,9 @@ function draw_mote (mote)
 
     if (mote.released) then
         local n = {
-            mote.color[1],
-            mote.color[2],
-            mote.color[3]
+            mote_color(mote)[1],
+            mote_color(mote)[2],
+            mote_color(mote)[3]
         }
 
         -- draw inner halo
@@ -130,5 +130,9 @@ end
 function mote_set_x (mote, board, x)
     -- -1 because cx is a table index
     mote.x = x
+end
+
+function mote_color(mote)
+    return game.colors[mote.color]
 end
 

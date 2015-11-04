@@ -44,13 +44,14 @@ end
 function draw_block_border (block)
     local b = game.block_border -- border size
     local e = 0 -- explosion size
+    local border_color = block_color(block)
 
     love.graphics.push("all")
 
     if (game.flicker and game.draw_seed == 0 and block.grey == false) then
-        love.graphics.setColor({ block.color[1] * 2/3, block.color[2] * 2/3, block.color[3] * 2/3 })
+        love.graphics.setColor({ border_color[1] * 2/3, border_color[2] * 2/3, border_color[3] * 2/3 })
     else
-        love.graphics.setColor(block.color)
+        love.graphics.setColor(border_color)
     end
 
     if block.exploding > -1 then
@@ -131,8 +132,8 @@ function build_block (options)
     local x = options.x or math.ceil(game.width/2)
     local y = options.y or 1
     local primary = math.random(1, 3)
-    local color = game.colors[options.color] or game.colors[primary]
-    local grey = (color == game.colors[GREY])
+    local color = options.color or primary
+    local grey = (color == GREY)
 
     return {
         -- position in the grid
@@ -216,7 +217,7 @@ function update_block (block, board)
             block.hardening = -1
             block.mote = build_mote(block)
             table.insert(game.motes, block.mote)
-            cells[cy][cx].color = game.colors[GREY]
+            cells[cy][cx].color = GREY
             cells[cy][cx].grey = true
             shadows[cy][cx] = 0.0
         end
@@ -285,5 +286,9 @@ end
 
 function block_set_x (block, board, x)
     block.x = x - 1 + board.x
+end
+
+function block_color(block)
+    return game.colors[block.color]
 end
 

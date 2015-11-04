@@ -63,7 +63,7 @@ function draw_board_border (board)
     love.graphics.setLineWidth(4)
 
     if (game.next_block) then
-        local n = game.next_block.color
+        local n = block_color(game.next_block)
         love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
         love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, (#cells) * game.scale + 8)
     end
