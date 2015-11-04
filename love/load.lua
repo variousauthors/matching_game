@@ -4,12 +4,15 @@ function build_statemachine()
     state_machine = FSM()
 
     build_game()
-    game.board = JSON.decode(JSON.encode(game.board))
+    local save
 
     -- the menu/title screen state
     state_machine.addState({
         name       = "start",
         init       = function ()
+            print("init start")
+            save = JSON.encode(game.board)
+
             game.player.enabled = false
             menu.show(function (options)
 
@@ -57,6 +60,10 @@ function build_statemachine()
     state_machine.addState({
         name       = "play",
         init       = function ()
+            print("init play")
+            game.board = JSON.decode(save)
+            print(inspect(game.board))
+
             game.player.enabled = true
             -- wind the camera
             if (game.camera.y < game.shift) then
