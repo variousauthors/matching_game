@@ -101,7 +101,7 @@ function draw_block (block)
         draw_mote(block.mote)
     end
 
-    love.graphics.setColor(game.colors.grey)
+    love.graphics.setColor(game.colors[GREY])
 
     if (block.crumbling < 0) then
         --love.graphics.rectangle('fill', block.x * game.scale + offset, block.y * game.scale + offset, block.dim * game.scale - 2 * offset, block.dim * game.scale - 2 * offset)
@@ -132,7 +132,7 @@ function build_block (options)
     local y = options.y or 1
     local primary = math.random(1, 3)
     local color = game.colors[options.color] or game.colors[primary]
-    local grey = (color == game.colors.grey)
+    local grey = (color == game.colors[GREY])
 
     return {
         -- position in the grid
@@ -216,7 +216,7 @@ function update_block (block, board)
             block.hardening = -1
             block.mote = build_mote(block)
             table.insert(game.motes, block.mote)
-            cells[cy][cx].color = game.colors.grey
+            cells[cy][cx].color = game.colors[GREY]
             cells[cy][cx].grey = true
             shadows[cy][cx] = 0.0
         end

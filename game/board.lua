@@ -10,7 +10,7 @@ function build_board_row (board, y, options)
         if (options.default) then
             cells[y][x] = default
         else
-            cells[y][x] = build_block({ board = board, x = x, y = y, color = "grey" })
+            cells[y][x] = build_block({ board = board, x = x, y = y, color = GREY })
         end
     end
 end
