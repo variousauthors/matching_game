@@ -1,3 +1,24 @@
+    local writeProfile = function (profile)
+        print("writeProfile")
+        local hfile = love.filesystem.newFile("profile.lua", "w")
+        if hfile == nil then return end
+
+        hfile:write(profile)
+
+        hfile:close()
+    end
+
+    local findProfile = function ()
+        print("findProfile")
+        return love.filesystem.isFile("profile.lua")
+    end
+
+    local recoverProfile = function ()
+        local contents, size = love.filesystem.read("profile.lua")
+
+        return contents
+    end
+
 function build_statemachine()
     Menu = require('game/menu')
     menu          = Menu()
@@ -6,11 +27,18 @@ function build_statemachine()
     build_game()
     local save
 
+    if (findProfile() == true) then
+        print("HEY")
+        save = recoverProfile()
+        game.board = JSON.decode(save)
+    end
+
     -- the menu/title screen state
     state_machine.addState({
         name       = "start",
         init       = function ()
             save = JSON.encode(game.board)
+            writeProfile(save)
 
             game.player.enabled = false
             menu.show(function (options)
