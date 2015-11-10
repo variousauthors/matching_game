@@ -80,9 +80,7 @@ NEXTSTEPS
 [x] implement "resume" so that the ESC does not
     clear the game.
     - as part of this, the camera must roll back down to the current position
-[ ] implement save/load so that progress is not lost on restart
-[ ] make the camera movement sigmoidal
-    - should it be constant time to complete?
+[x] implement save/load so that progress is not lost on restart
 [ ] remove the title, leaving just "press space"
 [ ] Add some kind of variation to mark the passage downward
     - make a quick affirmation generator, and show affirmations
@@ -96,6 +94,8 @@ NEXTSTEPS
 
 #### NICE TO HAVE
 
+[ ] make the camera movement sigmoidal
+    - should it be constant time to complete?
 [ ] the motes should shine through damages block hearts
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
@@ -109,19 +109,20 @@ NEXTSTEPS
 
 ## BUGS
 
-[x] finally using "block.color == block.color.grey" has bit me
-    I need to change any object identity comparisons to boolean comparisons
-[ ] when we decode game.board the rows of "false" become rows of "nil"
+[ ] mutable state is in game.state but it should be loaded into a local
+    wherever it will be used frequently, to avoid all this "game.state.camera.x" too many dots
+[ ] the game pauses to save/load; ideally this is done in a thread, but
+    barring that just save/load whenever camera is not moving
 [ ] the camera seems to rewind into a tiny negative value, which results in weirdness
 [ ] the camera never actually settles back to zero, it just approaches zero
     - add a snap-to-zero for some sub pixel EPSILON?
 [ ] the game collects input for arrow keys on the title screen
     these need to be flushed before the next state
 [ ] the game seemed to get stuck on the title screen
-[x] when a fully split live block is damaged, the block heart disappears
-    and then weird behaviour ensues...
 [ ] sometimes the block borders are rendered round, for no apparent reason
     and randomly...
-
-[ ] sometimes blocks don't break after a chain
-
+[x] when a fully split live block is damaged, the block heart disappears
+    and then weird behaviour ensues...
+[x] when we decode game.board the rows of "false" become rows of "nil"
+[x] finally using "block.color == block.color.grey" has bit me
+    I need to change any object identity comparisons to boolean comparisons
