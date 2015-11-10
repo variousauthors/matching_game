@@ -28,16 +28,17 @@ function build_statemachine()
     local save
 
     if (findProfile() == true) then
-        print("HEY")
         save = recoverProfile()
-        game.board = JSON.decode(save)
+        local state = JSON.decode(save)
+        game.board = state.board
+        game.shadows = state.shadows
     end
 
     -- the menu/title screen state
     state_machine.addState({
         name       = "start",
         init       = function ()
-            save = JSON.encode(game.board)
+            save = JSON.encode({ board = game.board, shadows = game.shadows })
             writeProfile(save)
 
             game.player.enabled = false
@@ -87,7 +88,9 @@ function build_statemachine()
     state_machine.addState({
         name       = "play",
         init       = function ()
-            game.board = JSON.decode(save)
+            local state = JSON.decode(save)
+            game.board = state.board
+            game.shadows = state.shadows
 
             game.player.enabled = true
             -- wind the camera
