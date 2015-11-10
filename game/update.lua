@@ -16,13 +16,19 @@ function update_game (dt)
     update_board(board)
     update_camera(game.camera)
 
+    -- the game only ends when everything has settled down
     if (game.state.stable == true) then
-        for i = 1, game.width, 1 do
-            -- board height - game height - 2 means the game ends
-            -- whenever anything is blocking the spawn
-            if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] ~= EMPTY then
-                game.over = true
-                return
+        if (game.state.ending == true) then
+            game.state.over = true
+            return
+        else
+            for i = 1, game.width, 1 do
+                -- board height - game height - 2 means the game ends
+                -- whenever anything is blocking the spawn
+                if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] ~= EMPTY then
+                    game.state.ending = true
+                    game.state.stable = false
+                end
             end
         end
     end

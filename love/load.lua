@@ -142,7 +142,7 @@ function build_statemachine()
         from      = "play",
         to        = "lose",
         condition = function ()
-            return game.over == true
+            return game.state.over == true
         end
     })
 
@@ -265,8 +265,9 @@ function build_game_state ()
     state.motes = {}
     state.shift = 0 -- the game starts with three extra rows
 
-    state.over = false
     state.stable = true
+    state.ending = false
+    state.over = false
 
     state.player = {}
     state.player.has_input = false
