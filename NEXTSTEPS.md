@@ -110,12 +110,26 @@ NEXTSTEPS
 
 ## BUGS
 
+[ ] losing doesn't work anymore
+    - make all the coloured blocks animate to grey
+    - reset saved state
+    - reset the game when the player restarts
+[ ] grossness: game.dt is only updated in certain states, which means
+    states that don't get the game.dt by running update are unable to
+    do things like animate camera properly (since game.dt == 0)
+    - temporary fix is to get the time slice from love but this should
+      really be addressed: game.dt isn't an accumulator so it shouldn't
+      care if the game is paused or not
+[ ] the next block and current block should be saved as well
+[ ] when we quit the game, draw a black screen until the write is finished
 [ ] the game seemed to get stuck on the title screen
-[ ] the camera seems to rewind into a tiny negative value, which results in weirdness
-[ ] the camera never actually settles back to zero, it just approaches zero
-    - add a snap-to-zero for some sub pixel EPSILON?
 [ ] the game collects input for arrow keys on the title screen
     these need to be flushed before the next state
+[x] apparently the game loop updates in the wind state despite everything?
+[x] the next_block comes on in the wrong place after scroll/load
+[x] the camera seems to rewind into a tiny negative value, which results in weirdness
+[x] the camera never actually settles back to zero, it just approaches zero
+    - add a snap-to-zero for some sub pixel EPSILON?
 [x] when a fully split live block is damaged, the block heart disappears
     and then weird behaviour ensues...
 [x] when we decode game.board the rows of "false" become rows of "nil"

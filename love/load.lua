@@ -1,5 +1,4 @@
     local writeProfile = function (profile)
-        print("writeProfile")
         local hfile = love.filesystem.newFile("profile.lua", "w")
         if hfile == nil then return end
 
@@ -9,7 +8,6 @@
     end
 
     local findProfile = function ()
-        print("findProfile")
         return love.filesystem.isFile("profile.lua")
     end
 
@@ -78,6 +76,9 @@ function build_statemachine()
         end,
         draw       = function ()
             draw_game()
+        end,
+        update     = function (dt)
+            update_camera(game.camera)
         end
     })
 
@@ -91,6 +92,9 @@ function build_statemachine()
         end,
         draw       = function ()
             draw_game()
+        end,
+        update     = function (dt)
+            update_camera(game.camera)
         end
     })
 
@@ -110,6 +114,8 @@ function build_statemachine()
 
     state_machine.addState({
         name       = "lose",
+        init = function ()
+        end,
         draw = function ()
             draw_game()
         end
@@ -885,6 +891,7 @@ function love.load()
     W_HEIGHT = love.viewport.getHeight()
     SCORE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 14)
     SPACE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 64)
+    EPSILON = 0.0001
 
     build_statemachine()
 end

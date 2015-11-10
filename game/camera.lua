@@ -19,9 +19,30 @@ end
 function update_camera (camera)
     local vx = camera.tx - camera.cx
     local vy = camera.ty - camera.cy
+    -- TODO this is gross, I'm clearly not using game.dt the right
+    -- way if I need to fetch the timeslice like this...
+    local dt = love.timer.getDelta()
 
-    camera.rx = camera.rx + vx*game.dt
-    camera.ry = camera.ry + vy*game.dt
+    local dx, dy = vx*dt, vy*dt
+
+    if math.abs(dx) < EPSILON then
+        camera.x = camera.tx
+        dx = 0
+    else
+        camera.rx = camera.rx + dx
+    end
+
+    if math.abs(dy) < EPSILON then
+        camera.y = camera.ty
+        dy = 0
+    else
+        camera.ry = camera.ry + dy
+    end
+
+    -- if neither was significant, do nothing
+    if (dx == 0 and dy == 0) then
+        return
+    end
 
     if math.abs(camera.rx) >= 1 then
         if (camera.rx > 0) then
