@@ -38,6 +38,7 @@ function update_game (dt)
                     end
                 end
 
+                -- this adds that extra element of hopelessness
                 game.next_block = nil
                 game.state.ending = true
                 game.state.stable = false
