@@ -24,7 +24,7 @@ function draw_game ()
     draw_background()
 
     love.graphics.translate(-game.camera.x * game.scale, -game.camera.y * game.scale)
-    draw_board(game.board)
+    draw_board(game.state.board)
 
     if (game.block ~= nil) then
         draw_block(game.block)

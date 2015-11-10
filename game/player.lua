@@ -5,7 +5,7 @@ function next_block ()
         local x = math.ceil(math.random() * game.width)
         game.next_block = build_block({ x = x })
     else
-        -- 1 - game.board.y puts the block at the top of the visible
+        -- 1 - game.state.board.y puts the block at the top of the visible
         -- board
         game.next_block = build_block({ y = 1 + game.camera.cy })
     end

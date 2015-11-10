@@ -29,19 +29,17 @@ function build_statemachine()
 
     if (findProfile() == true) then
         save = recoverProfile()
-        local state = JSON.decode(save)
-        game.board = state.board
-        game.shadows = state.shadows
+        game.state = JSON.decode(save)
     end
 
     -- the menu/title screen state
     state_machine.addState({
         name       = "start",
         init       = function ()
-            save = JSON.encode({ board = game.board, shadows = game.shadows })
+            save = JSON.encode(game.state)
             writeProfile(save)
 
-            game.player.enabled = false
+            game.state.player.enabled = false
             menu.show(function (options)
 
                 menu.reset()
@@ -88,14 +86,12 @@ function build_statemachine()
     state_machine.addState({
         name       = "play",
         init       = function ()
-            local state = JSON.decode(save)
-            game.board = state.board
-            game.shadows = state.shadows
+            game.state = JSON.decode(save)
 
-            game.player.enabled = true
+            game.state.player.enabled = true
             -- wind the camera
-            if (game.camera.y < game.shift) then
-                move_camera(game.camera, 0, game.shift)
+            if (game.camera.y < game.state.shift) then
+                move_camera(game.camera, 0, game.state.shift)
             end
         end,
         draw       = function ()
@@ -162,23 +158,12 @@ function build_statemachine()
     state_machine.start()
 end
 
-function build_state ()
+function configure_game ()
     game = {}
     game.title = "DEEPER"
     game.subtitle = "A PUZZLE GAME I MADE"
     game.prompt = "PRESS SPACE"
-    game.over = false
-    game.stable = true
     game.infinity = 100
-    game.player = {}
-    game.player.has_input = false
-    game.player.enabled = true
-    game.player.input = {
-        up = {},
-        down = {},
-        left = {},
-        right = {}
-    }
 
     game.colors = {
         white = { 255, 255, 255 },
@@ -192,15 +177,15 @@ function build_state ()
     game.colors[BLUE] = { 55, 55, 200 }
     game.colors[GREY] = { 155, 155, 155 }
 
+    game.dt = 0
+    game.input_timer = 0
+    game.update_timer = 0
+
     game.scale = 32
     game.height = 10
-    game.shift = 0 -- the game starts with three extra rows
     game.width = 5
     game.gravity = 1
-    game.dt = 0
-    game.update_timer = 0
     game.match_target = 3
-    game.input_timer = 0
     game.rate = 4
     game.step = 0.1 * game.rate
     game.input_rate = 8
@@ -245,26 +230,44 @@ function build_state ()
     game.dark_colors[GREEN] = { 0, 55, 0 }
     game.dark_colors[BLUE] = { 0, 0, 55 }
     game.dark_colors[GREY] = { 77, 77, 77 }
+
+    game.camera = build_camera();
 end
 
-function build_world ()
-    game.camera = build_camera();
+function build_game_state ()
+    local state = {}
 
-    game.motes = {}
+    state.motes = {}
+    state.shift = 0 -- the game starts with three extra rows
 
-    game.board = build_board()
-    build_board_row(game.board, game.height + 1)
-    build_board_row(game.board, game.height + 2)
-    build_board_row(game.board, game.height + 3)
-    game.shadows = build_board({ default = 0.0 })
-    build_board_row(game.shadows, game.height + 1, { default = 0.0 })
-    build_board_row(game.shadows, game.height + 2, { default = 0.0 })
-    build_board_row(game.shadows, game.height + 3, { default = 0.0 })
+    state.over = false
+    state.stable = true
+
+    state.player = {}
+    state.player.has_input = false
+    state.player.enabled = true
+    state.player.input = {
+        up = {},
+        down = {},
+        left = {},
+        right = {}
+    }
+
+    state.board = build_board()
+    build_board_row(state.board, game.height + 1)
+    build_board_row(state.board, game.height + 2)
+    build_board_row(state.board, game.height + 3)
+    state.shadows = build_board({ default = 0.0 })
+    build_board_row(state.shadows, game.height + 1, { default = 0.0 })
+    build_board_row(state.shadows, game.height + 2, { default = 0.0 })
+    build_board_row(state.shadows, game.height + 3, { default = 0.0 })
+
+    return state
 end
 
 function build_game ()
-    build_state()
-    build_world()
+    configure_game()
+    game.state = build_game_state()
 end
 
 -- pass in something like
@@ -274,7 +277,7 @@ end
 -- to create rows: start with the bottom row
 -- 1 = red, 2 = green, 3 = blue, 4 = grey, 0 = nothing
 function build_rows (rows)
-    local cells = game.board.cells
+    local cells = game.state.board.cells
     for i = 1, #rows, 1 do
         local y = game.height - #rows + i
 
@@ -291,7 +294,7 @@ end
 
 function row_matches(row, blocks)
     print("--> assert", "row " .. row .. " matches " .. inspect(blocks))
-    local cells = game.board.cells
+    local cells = game.state.board.cells
     for i = 1, #blocks, 1 do
         local block = blocks[i]
 
@@ -339,7 +342,7 @@ function is_an_integer (x, subject)
 end
 
 function block_is_crumbling (y, x)
-    local cells = game.board.cells
+    local cells = game.state.board.cells
     print("--> assert", "block " .. tostring(cells[y][x]) .. " is crumbling")
 
     if (not cells[y][x]) then
@@ -353,7 +356,7 @@ function block_is_crumbling (y, x)
 end
 
 function block_has_hp (y, x, hp)
-    local cells = game.board.cells
+    local cells = game.state.board.cells
     print("--> assert", "block " .. tostring(cells[y][x]) .. " has " .. hp .. " hp")
     if (not cells[y][x]) then
         error("  there was no block at y: " .. y .. " x: " .. x)

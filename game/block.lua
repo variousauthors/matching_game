@@ -128,7 +128,7 @@ end
 
 function build_block (options)
     local options = options or {}
-    local board = options.board or game.board
+    local board = options.board or game.state.board
     local x = options.x or math.ceil(game.width/2)
     local y = options.y or 1
     local primary = math.random(1, 3)
@@ -174,7 +174,7 @@ function update_block (block, board)
     local cx, cy = block.cx, block.cy
     local below
     local cells = board.cells
-    local shadows = game.shadows.cells
+    local shadows = game.state.shadows.cells
 
     -- do not apply forces to grey blocks
     if (block.grey == true or block.animating) then
@@ -216,7 +216,7 @@ function update_block (block, board)
         elseif block.hardening == 0 then
             block.hardening = -1
             block.mote = build_mote(block)
-            table.insert(game.motes, block.mote)
+            table.insert(game.state.motes, block.mote)
             cells[cy][cx].color = GREY
             cells[cy][cx].grey = true
             shadows[cy][cx] = 0.0

@@ -99,7 +99,7 @@ function draw_board (board)
     love.graphics.push("all")
 
     local i, j
-    local shadows = game.shadows.cells
+    local shadows = game.state.shadows.cells
 
     draw_board_border(board)
     draw_board_background(board)
@@ -134,7 +134,7 @@ function draw_board (board)
         end
     end
 
-    for i, mote in pairs(game.motes) do
+    for i, mote in pairs(game.state.motes) do
         draw_mote(mote)
     end
 
@@ -149,9 +149,9 @@ function update_board(board)
     local block
     local all_blocks_are_still = true
     local cells = board.cells
-    local shadows = game.shadows.cells
+    local shadows = game.state.shadows.cells
 
-    for i, mote in pairs(game.motes) do
+    for i, mote in pairs(game.state.motes) do
         update_mote(mote, dt)
     end
 
@@ -193,11 +193,11 @@ function update_board(board)
     end
 
     if shift_down then
-        game.shift = game.shift + 1
-        move_camera(game.camera, 0, game.shift)
+        game.state.shift = game.state.shift + 1
+        move_camera(game.camera, 0, game.state.shift)
 
         build_board_row(board, #cells + 1)
-        build_board_row(game.shadows, #(shadows) + 1, { default = 0.0 })
+        build_board_row(game.state.shadows, #(shadows) + 1, { default = 0.0 })
     end
 
     -- if no blocks are moving, look for matches otherwise
