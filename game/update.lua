@@ -4,6 +4,8 @@ end
 
 function update_game (dt)
     local cells = game.state.board.cells
+    local player = game.state.player
+    local board = game.state.board
 
     for i = 1, game.width, 1 do
         -- board height - game height - 2 means the game ends
@@ -14,14 +16,13 @@ function update_game (dt)
         end
     end
 
-    local player = game.state.player
     local direction = 0
 
     game.dt = dt
 
     game.block_count = 0
     game.stable = true -- optimism
-    update_board(game.state.board)
+    update_board(board)
     update_camera(game.camera)
 
     if (player.enabled and game.stable) then
@@ -29,18 +30,18 @@ function update_game (dt)
         game.input_timer = game.input_timer + dt
 
         -- there should be a block
-        if (game.block == nil and not game.state.player.disabled) then
+        if (game.block == nil and not player.disabled) then
             game.block = next_block()
         end
 
         -- process one set of inputs then cooldown
         if (game.input_timer < game.step/game.input_rate) then
-            game.state.player.has_input = false
+            player.has_input = false
             player.input.left = {}
             player.input.right = {}
 
-        elseif (game.state.player.has_input) then
-            game.state.player.has_input = false
+        elseif (player.has_input) then
+            player.has_input = false
             game.input_timer = 0
 
             -- consume an input from the buffer
@@ -50,7 +51,7 @@ function update_game (dt)
             if (player.left) then direction = -1 end
             if (player.right) then direction = 1 end
 
-            move_block(game.block, game.state.board, direction)
+            move_block(game.block, board, direction)
 
             player.left = false
             player.right = false
@@ -61,7 +62,7 @@ function update_game (dt)
             if #(player.input.down) > 0 then player.down = table.remove(player.input.down, 1) end
 
             if (player.up or player.down) then
-                drop_block(game.block, game.state.board)
+                drop_block(game.block, board)
                 game.update_timer = 0
             end
 
@@ -75,7 +76,7 @@ function update_game (dt)
         -- move the piece down every step
         if (game.update_timer >= game.step) then
             game.update_timer = 0
-            step_block(game.block, game.state.board)
+            step_block(game.block, board)
         end
     else
         game.update_timer = 0

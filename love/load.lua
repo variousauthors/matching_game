@@ -857,7 +857,7 @@ function love.load()
     require('game/block')
     require('game/mote')
 
---    run_tests()
+    run_tests()
     -- TODO move_block in player is untested
     -- should have a test that moves a block
     -- and one that moves a block against obstructions
