@@ -44,10 +44,6 @@ function build_statemachine()
                 menu.reset()
             end)
 
-            -- rewind the camera
-            if (game.camera.y > 0) then
-                move_camera(game.camera, 0, 0)
-            end
         end,
         draw = function ()
             draw_game()
@@ -73,26 +69,35 @@ function build_statemachine()
     })
 
     state_machine.addState({
-        name       = "ready",
+        name       = "wind",
         init       = function ()
+            -- wind the camera
+            if (game.camera.y < game.state.shift) then
+                move_camera(game.camera, 0, game.state.shift)
+            end
         end,
         draw       = function ()
             draw_game()
+        end
+    })
+
+    state_machine.addState({
+        name       = "unwind",
+        init       = function ()
+            -- rewind the camera
+            if (game.camera.y > 0) then
+                move_camera(game.camera, 0, 0)
+            end
         end,
-        keypressed = love.keypressed,
-        inputpressed = game.inputpressed
+        draw       = function ()
+            draw_game()
+        end
     })
 
     state_machine.addState({
         name       = "play",
         init       = function ()
-            game.state = JSON.decode(save)
-
             game.state.player.enabled = true
-            -- wind the camera
-            if (game.camera.y < game.state.shift) then
-                move_camera(game.camera, 0, game.state.shift)
-            end
         end,
         draw       = function ()
             draw_game()
@@ -113,9 +118,17 @@ function build_statemachine()
     -- start the game when the player chooses a menu option
     state_machine.addTransition({
         from      = "start",
-        to        = "play",
+        to        = "wind",
         condition = function ()
             return not menu.isShowing()
+        end
+    })
+
+    state_machine.addTransition({
+        from      = "wind",
+        to        = "play",
+        condition = function ()
+            return game.camera.y == game.state.shift
         end
     })
 
@@ -138,12 +151,18 @@ function build_statemachine()
     -- return to the menu screen if any player presses escape
     state_machine.addTransition({
         from      = "play",
+        to        = "unwind",
+        condition = function ()
+            return state_machine.isSet("escape")
+        end
+    })
+
+    -- return to the menu screen if any player presses escape
+    state_machine.addTransition({
+        from      = "unwind",
         to        = "start",
         condition = function ()
-            if state_machine.isSet("escape") then
-
-                return true
-            end
+            return game.camera.y == 0
         end
     })
 
