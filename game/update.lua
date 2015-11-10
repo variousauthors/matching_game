@@ -22,13 +22,25 @@ function update_game (dt)
             game.state.over = true
             return
         else
-            for i = 1, game.width, 1 do
-                -- board height - game height - 2 means the game ends
-                -- whenever anything is blocking the spawn
-                if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] ~= EMPTY then
-                    game.state.ending = true
-                    game.state.stable = false
+            -- board height - game height - 2 means the game ends
+            -- whenever anything is blocking the spawn
+            if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] ~= EMPTY then
+                -- every block should be made to harden before the end
+
+                -- mark all cells for hardening
+                for y = #(cells), 1, -1 do
+                    for x = 1, board.width, 1 do
+                        if (cells[y][x] ~= EMPTY) then
+                            local block = cells[y][x]
+                            start_tween(cells[block.cy][block.cx], "hardening")
+                            play_harden = true
+                        end
+                    end
                 end
+
+                game.next_block = nil
+                game.state.ending = true
+                game.state.stable = false
             end
         end
     end
