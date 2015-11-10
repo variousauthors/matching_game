@@ -7,15 +7,6 @@ function update_game (dt)
     local player = game.state.player
     local board = game.state.board
 
-    for i = 1, game.width, 1 do
-        -- board height - game height - 2 means the game ends
-        -- whenever anything is blocking the spawn
-        if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] ~= EMPTY then
-            game.over = true
-            return
-        end
-    end
-
     local direction = 0
 
     game.dt = dt
@@ -24,6 +15,17 @@ function update_game (dt)
     game.stable = true -- optimism
     update_board(board)
     update_camera(game.camera)
+
+    if (game.stable == true) then
+        for i = 1, game.width, 1 do
+            -- board height - game height - 2 means the game ends
+            -- whenever anything is blocking the spawn
+            if cells[#(cells) - game.height - 2][math.ceil(game.width/2)] ~= EMPTY then
+                game.over = true
+                return
+            end
+        end
+    end
 
     if (player.enabled and game.stable) then
         game.update_timer = game.update_timer + dt

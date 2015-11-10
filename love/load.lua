@@ -148,7 +148,7 @@ function build_statemachine()
 
     state_machine.addTransition({
         from      = "lose",
-        to        = "start",
+        to        = "unwind",
         condition = function ()
             return true
         end
