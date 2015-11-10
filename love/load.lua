@@ -160,9 +160,9 @@ end
 
 function configure_game ()
     game = {}
-    game.title = "DEEPER"
-    game.subtitle = "A PUZZLE GAME I MADE"
-    game.prompt = "PRESS SPACE"
+    game.title = ""
+    game.subtitle = ""
+    game.prompt = ""
     game.infinity = 100
 
     game.colors = {
@@ -317,7 +317,7 @@ end
 
 function player_block_exists ()
     print("--> assert", "player block exists")
-    game.player.enabled = true
+    game.state.player.enabled = true
 
     if (game.block == nil) then
         error("FAILED: is nil!")
@@ -326,7 +326,7 @@ end
 
 function player_block_is_nil ()
     print("--> assert", "player block is nil")
-    game.player.enabled = false
+    game.state.player.enabled = false
 
     if (game.block ~= nil) then
         error("FAILED: exists!\n  " .. inspect(game.block))
@@ -765,9 +765,9 @@ end
 function camera_cy_is_always_an_interger ()
     print("camera.cy is always an integer")
     -- context, when the player drops a piece
-    build_state()
+    configure_game()
     game.block_max_hp = 1
-    build_world()
+    game.state = build_game_state()
 
     -- [x][x][ ][x]
     build_rows({

@@ -81,7 +81,8 @@ NEXTSTEPS
     clear the game.
     - as part of this, the camera must roll back down to the current position
 [x] implement save/load so that progress is not lost on restart
-[ ] remove the title, leaving just "press space"
+[x] remove the title, menu, etc...
+[ ] it should be "any key" to start
 [ ] Add some kind of variation to mark the passage downward
     - make a quick affirmation generator, and show affirmations
       as the player descends
