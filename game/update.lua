@@ -12,11 +12,11 @@ function update_game (dt)
     game.dt = dt
 
     game.block_count = 0
-    game.stable = true -- optimism
+    game.state.stable = true -- optimism
     update_board(board)
     update_camera(game.camera)
 
-    if (game.stable == true) then
+    if (game.state.stable == true) then
         for i = 1, game.width, 1 do
             -- board height - game height - 2 means the game ends
             -- whenever anything is blocking the spawn
@@ -27,7 +27,7 @@ function update_game (dt)
         end
     end
 
-    if (player.enabled and game.stable) then
+    if (player.enabled and game.state.stable) then
         game.update_timer = game.update_timer + dt
         game.input_timer = game.input_timer + dt
 

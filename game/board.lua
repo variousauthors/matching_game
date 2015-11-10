@@ -172,7 +172,7 @@ function update_board(board)
                 end
 
                 if block.animating then
-                    game.stable = false
+                    game.state.stable = false
                 end
             end
         end
@@ -207,14 +207,14 @@ function update_board(board)
     if (all_blocks_are_still) then
 
         while (#board.dirty > 0) do
-            game.stable = false
+            game.state.stable = false
             local block = table.remove(board.dirty, 1)
 
             clear_blocks(board, block)
         end
     else
         -- some blocks are moving, presumably falling
-        game.stable = false
+        game.state.stable = false
         board.dirty = {}
     end
 
