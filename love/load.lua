@@ -37,7 +37,6 @@ function build_statemachine()
         name       = "start",
         init       = function ()
             save = JSON.encode(game.state)
-            writeProfile(save)
 
             game.state.player.enabled = false
             menu.show(function (options)
@@ -57,6 +56,7 @@ function build_statemachine()
         end,
         keypressed = function (key)
             if (key == "escape") then
+                writeProfile(save)
                 love.event.quit()
             elseif(key == 'f11') then
                 love.viewport.setFullscreen()
@@ -857,7 +857,7 @@ function love.load()
     require('game/block')
     require('game/mote')
 
-    run_tests()
+--    run_tests()
     -- TODO move_block in player is untested
     -- should have a test that moves a block
     -- and one that moves a block against obstructions

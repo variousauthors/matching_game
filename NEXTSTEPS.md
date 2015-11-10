@@ -110,8 +110,6 @@ NEXTSTEPS
 
 ## BUGS
 
-[ ] the game pauses to save/load; ideally this is done in a thread, but
-    barring that just save/load whenever camera is not moving
 [ ] the camera seems to rewind into a tiny negative value, which results in weirdness
 [ ] the camera never actually settles back to zero, it just approaches zero
     - add a snap-to-zero for some sub pixel EPSILON?
@@ -127,3 +125,5 @@ NEXTSTEPS
     I need to change any object identity comparisons to boolean comparisons
 [x] mutable state is in game.state but it should be loaded into a local
     wherever it will be used frequently, to avoid all this "game.state.camera.x" too many dots
+[x] the game pauses to save/load; ideally this is done in a thread, but
+    barring that just save/load whenever camera is not moving
