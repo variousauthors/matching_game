@@ -83,11 +83,7 @@ NEXTSTEPS
 [x] implement save/load so that progress is not lost on restart
 [x] remove the title, menu, etc...
 [ ] it should be "any key" to start
-[ ] Add some kind of variation to mark the passage downward
-    - make a quick affirmation generator, and show affirmations
-      as the player descends
-    - should they "fade in", triggered by some different action?
-    - maybe add an angelic choir sound effect?
+[ ] maybe the background gets darker the deeper we go?
 [ ] Sound effects and music
     - music should become more panic the more
     full rows there are above "ground level"
@@ -97,31 +93,34 @@ NEXTSTEPS
 
 [ ] make the camera movement sigmoidal
     - should it be constant time to complete?
+[ ] vary the alpha of the shadow tiles randomly? Or maybe based on
+    neighbour sample? So that there is something to look at in the
+    background
+    - or have them fade out completely...
+[ ] when we quit the game, transition to a "saving" state where a black screen with "saving" is drawn for 2 seconds
 [ ] the motes should shine through damages block hearts
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
 [ ] Adjust speed/game feel
-[ ] maybe the background gets darker the deeper we go?
 [ ] some parallaxing background to make it more clear that
     we are moving down
 [ ] instead of having the camera move when a new layer is reached,
     have it move after 'n' new layers are reached or after some delay
     to give it a more organic feel?
-[ ] vary the alpha of the shadow tiles randomly? Or maybe based on
-    neighbour sample? So that there is something to look at in the
-    background
 [ ] the little sprites need a sound effect
 [ ] consider removing the "damage unbroken blocks" rule
     if it is making things to easy (playtest)
-[ ] when we quit the game, transition to a "saving" state where a black screen with "saving" is drawn for 2 seconds
 
 ## BUGS
 
-[ ] the next block and current block should be saved as well
 [ ] the game collects input for arrow keys on the title screen
+    - this is a deeper problem: we are mixing inputpressed and keypressed
+      and the FSM only cares about keypressed
+    - so either add inputpressed to the FSM or make everything use keypressed
+[ ] the next block and current block should be saved as well
+[ ] after the game shifts, the next_block appears off screen
     these need to be flushed before the next state
 [ ] the "pop" sound for breaking should precede the "shatter" sound
-[ ] after the game shifts, the next_block appears off screen
 [x] losing doesn't work anymore
     [x] make all the coloured blocks animate to grey
     [x] reset saved state

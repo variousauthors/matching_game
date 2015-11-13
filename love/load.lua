@@ -124,8 +124,7 @@ function build_statemachine()
             -- score_band.draw()
         end,
         update     = update_game,
-        keypressed = love.keypressed,
-        inputpressed = game.inputpressed
+        keypressed = love.keypressed
     })
 
     state_machine.addState({
