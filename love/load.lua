@@ -34,6 +34,7 @@ function build_statemachine()
     state_machine.addState({
         name       = "start",
         init       = function ()
+            print("in start")
             save = JSON.encode(game.state)
 
             game.state.player.enabled = false
@@ -67,9 +68,15 @@ function build_statemachine()
     })
 
     state_machine.addState({
-        name       = "wind",
+        name       = "setup",
         init       = function ()
-            -- wind the camera
+            print("in setup")
+
+            if (game.state.over == true) then
+                build_game()
+            end
+
+            -- setup the camera
             if (game.camera.y < game.state.shift) then
                 move_camera(game.camera, 0, game.state.shift)
             end
@@ -85,6 +92,7 @@ function build_statemachine()
     state_machine.addState({
         name       = "unwind",
         init       = function ()
+            print("in unwind")
             -- rewind the camera
             if (game.camera.y > 0) then
                 move_camera(game.camera, 0, 0)
@@ -101,6 +109,7 @@ function build_statemachine()
     state_machine.addState({
         name       = "play",
         init       = function ()
+            print("in play")
             game.state.player.enabled = true
         end,
         draw       = function ()
@@ -115,6 +124,7 @@ function build_statemachine()
     state_machine.addState({
         name       = "lose",
         init = function ()
+            print("in lose")
         end,
         draw = function ()
             draw_game()
@@ -124,14 +134,14 @@ function build_statemachine()
     -- start the game when the player chooses a menu option
     state_machine.addTransition({
         from      = "start",
-        to        = "wind",
+        to        = "setup",
         condition = function ()
             return not menu.isShowing()
         end
     })
 
     state_machine.addTransition({
-        from      = "wind",
+        from      = "setup",
         to        = "play",
         condition = function ()
             return game.camera.y == game.state.shift
@@ -236,7 +246,10 @@ function configure_game ()
     game.animations.block_fall = 3
 
     -- visual choices
-    game.all_block_get_damage = true
+    -- all_block_get_damage makes the game easier: blocks are pre-damaged
+    -- so when they turn grey they brake more easily... still not sure
+    -- which I prefer. Design suggestion by Chris Hamilton! ^o^//
+    game.all_block_get_damage = false
     game.mote_ratio = 9
     game.tiny_triangle_ratio = 3
     game.tiny_triangle = false
