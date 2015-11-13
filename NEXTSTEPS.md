@@ -113,19 +113,19 @@ NEXTSTEPS
 [ ] the little sprites need a sound effect
 [ ] consider removing the "damage unbroken blocks" rule
     if it is making things to easy (playtest)
+[ ] when we quit the game, transition to a "saving" state where a black screen with "saving" is drawn for 2 seconds
 
 ## BUGS
 
-[x] losing doesn't work anymore
-    [x] make all the coloured blocks animate to grey
-    [x] reset saved state
-    [x] reset the game when the player restarts
-[ ] when we quit the game, draw a black screen until the write is finished
 [ ] the next block and current block should be saved as well
 [ ] the game collects input for arrow keys on the title screen
     these need to be flushed before the next state
 [ ] the "pop" sound for breaking should precede the "shatter" sound
 [ ] after the game shifts, the next_block appears off screen
+[x] losing doesn't work anymore
+    [x] make all the coloured blocks animate to grey
+    [x] reset saved state
+    [x] reset the game when the player restarts
 [x] the game seemed to get stuck on the title screen
 [x] apparently the game loop updates in the wind state despite everything?
 [x] the next_block comes on in the wrong place after scroll/load

@@ -51,7 +51,14 @@ function build_statemachine()
         end,
         keypressed = function (key)
             if (key == "escape") then
+                -- TODO transition to an "saving" state
+                -- draw a black screen
+                love.graphics.setColor(game.colors.black)
+                love.graphics.rectangle("fill", 0, 0, love.viewport.getWidth(), love.viewport.getHeight())
+                love.graphics.present()
+
                 writeProfile(save)
+                -- could pause for long enough to flash "saving" for 3 seconds
                 love.event.quit()
             elseif(key == 'f11') then
                 love.viewport.setFullscreen()
