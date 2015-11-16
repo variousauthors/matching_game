@@ -39,7 +39,7 @@ function update_game (dt)
                 end
 
                 -- this adds that extra element of hopelessness
-                game.next_block = nil
+                game.state.next_block = nil
                 game.state.ending = true
                 game.state.stable = false
             end
@@ -51,8 +51,8 @@ function update_game (dt)
         game.input_timer = game.input_timer + dt
 
         -- there should be a block
-        if (game.block == nil and not player.disabled) then
-            game.block = next_block()
+        if (game.state.block == nil and not player.disabled) then
+            game.state.block = next_block()
         end
 
         -- process one set of inputs then cooldown
@@ -72,7 +72,7 @@ function update_game (dt)
             if (player.left) then direction = -1 end
             if (player.right) then direction = 1 end
 
-            move_block(game.block, board, direction)
+            move_block(game.state.block, board, direction)
 
             player.left = false
             player.right = false
@@ -83,7 +83,7 @@ function update_game (dt)
             if #(player.input.down) > 0 then player.down = table.remove(player.input.down, 1) end
 
             if (player.up or player.down) then
-                drop_block(game.block, board)
+                drop_block(game.state.block, board)
                 game.update_timer = 0
             end
 
@@ -97,7 +97,7 @@ function update_game (dt)
         -- move the piece down every step
         if (game.update_timer >= game.step) then
             game.update_timer = 0
-            step_block(game.block, board)
+            step_block(game.state.block, board)
         end
     else
         game.update_timer = 0

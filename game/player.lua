@@ -1,14 +1,7 @@
 function next_block ()
-    local block = game.next_block
+    local block = game.state.next_block
 
-    if (game.random_x_starting_position) then
-        local x = math.ceil(math.random() * game.width)
-        game.next_block = build_block({ x = x })
-    else
-        -- 1 - game.state.board.y puts the block at the top of the visible
-        -- board
-        game.next_block = build_block({ y = 1 + game.camera.cy })
-    end
+    game.state.next_block = build_block({ y = 1 + game.camera.cy })
 
     return block
 end
@@ -24,7 +17,7 @@ function drop_block (block, board)
         cy = cy + 1
     end
 
-    game.block = nil
+    game.state.block = nil
 
     -- set the blocks velocity to infinity
     -- to represent that it is moving discretely
@@ -61,7 +54,7 @@ function step_block (block, board)
     -- check for a block in the next square
     if (block.cy + 1 > #cells or cells[block.cy + 1][block.cx] ~= EMPTY) then
         -- remove the block and add to the cells
-        game.block = nil
+        game.state.block = nil
 
         -- set the blocks velocity to infinity
         -- to represent that it is moving discretely

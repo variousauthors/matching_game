@@ -62,8 +62,8 @@ function draw_board_border (board)
     -- a thin line of board color to pad the blocks in
     love.graphics.setLineWidth(4)
 
-    if (game.next_block) then
-        local n = block_color(game.next_block)
+    if (game.state.next_block) then
+        local n = block_color(game.state.next_block)
         love.graphics.setColor({ n[1], n[2], n[3], board.border_alpha })
         love.graphics.rectangle('line', board.x * game.scale - 4, board.y * game.scale - 4, board.width * game.scale + 8, (#cells) * game.scale + 8)
     else
@@ -85,7 +85,7 @@ end
 
 function draw_board_preview_arrow (board)
     love.graphics.push("all")
-    local next_block = game.next_block
+    local next_block = game.state.next_block
     local offset = game.block_gap_width*game.block_border
 
     local x = next_block.x * game.scale + offset

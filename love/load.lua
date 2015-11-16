@@ -82,7 +82,7 @@ function build_statemachine()
             if (game.state.over == true) then
                 build_game()
             end
-
+    
             -- setup the camera
             if (game.camera.y < game.state.shift) then
                 move_camera(game.camera, 0, game.state.shift)
@@ -264,7 +264,6 @@ function configure_game ()
     game.block_gap_width = 2
     game.block_damage_ratio = 2
     game.block_dim = 1
-    game.random_x_starting_position = false
 
     game.colors.background = game.colors.white
 
@@ -287,6 +286,9 @@ function build_game_state ()
     state.stable = true
     state.ending = false
     state.over = false
+
+    state.block = nil
+    state.next_block = nil
 
     state.player = {}
     state.player.has_input = false
@@ -364,7 +366,7 @@ function player_block_exists ()
     print("--> assert", "player block exists")
     game.state.player.enabled = true
 
-    if (game.block == nil) then
+    if (game.state.block == nil) then
         error("FAILED: is nil!")
     end
 end
@@ -373,8 +375,8 @@ function player_block_is_nil ()
     print("--> assert", "player block is nil")
     game.state.player.enabled = false
 
-    if (game.block ~= nil) then
-        error("FAILED: exists!\n  " .. inspect(game.block))
+    if (game.state.block ~= nil) then
+        error("FAILED: exists!\n  " .. inspect(game.state.block))
     end
 end
 
@@ -428,7 +430,7 @@ function a_row_of_four_is_cleared ()
         { 1, 1, 0, 1 }
     })
 
-    game.block = build_block({ x = 3, y = game.height - 1, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 1, color = RED })
     game.step = test.step
 
     love.update(game.step)
@@ -456,7 +458,7 @@ function a_row_of_three_becomes_grey ()
         { 1, 1, 0, 0 }
     })
 
-    game.block = build_block({ x = 3, y = game.height - 1, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 1, color = RED })
     game.step = test.step
 
     love.update(game.step)
@@ -487,7 +489,7 @@ function a_chain_of_two ()
         { 3, 3, 1, 0 }
     })
 
-    game.block = build_block({ x = 3, y = game.height - 3, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 3, color = RED })
     game.step = test.step
 
     love.update(game.step)
@@ -529,7 +531,7 @@ function a_chain_of_two_with_grey_three_in_a_row ()
         { 3, 3, 1, 0 }
     })
 
-    game.block = build_block({ x = 2, y = game.height - 2, color = RED })
+    game.state.block = build_block({ x = 2, y = game.height - 2, color = RED })
     game.step = test.step
 
     love.update(game.step)
@@ -574,7 +576,7 @@ function a_chain_of_two_with_grey_three_in_an_L ()
         { 3, 3, 1, 0 }
     })
 
-    game.block = build_block({ x = 3, y = game.height - 2, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 2, color = RED })
     game.step = test.step
 
     love.update(game.step)
@@ -631,7 +633,7 @@ function a_chain_of_three_with_grey ()
         { 3, 3, 1, 0 }
     })
 
-    game.block = build_block({ x = 3, y = game.height - 3, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 3, color = RED })
     game.step = test.step
 
     love.update(game.step)
@@ -695,7 +697,7 @@ function a_grey_block_is_destroyed ()
         { 8, 8, 1, 1 }
     })
 
-    game.block = build_block({ x = 3, y = game.height - 2, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 2, color = RED })
     game.step = test.step
 
     love.update(game.step)
@@ -755,7 +757,7 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 1, { 0, 3, 0, 0 })
     row_matches(game.height - 0, { 8, 8, 0, 0 })
 
-    game.block = build_block({ x = 3, y = game.height - 1, color = BLUE })
+    game.state.block = build_block({ x = 3, y = game.height - 1, color = BLUE })
     love.update(game.step)
 
     player_block_exists()
@@ -772,7 +774,7 @@ function a_grey_block_is_destroyed ()
     row_matches(game.height - 1, { 0, 3, 0, 0 })
     row_matches(game.height - 0, { 8, 8, 3, 0 })
 
-    game.block = build_block({ x = 3, y = game.height - 2, color = BLUE })
+    game.state.block = build_block({ x = 3, y = game.height - 2, color = BLUE })
     -- we must update once between disabling and enabling the player
     -- so that the update timer gets reset
     love.update(game.step)
@@ -819,7 +821,7 @@ function camera_cy_is_always_an_interger ()
         { 1, 1, 0, 1 }
     })
 
-    game.block = build_block({ x = 3, y = game.height - 3, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 3, color = RED })
     game.step = test.step
 
     run_update(3)
@@ -837,7 +839,7 @@ function camera_cy_is_always_an_interger ()
     row_matches(game.height - 0, { 0, 0, 0, 0 })
     row_matches(game.height + 1, { 0, 0, 0, 0 })
 
-    game.block = build_block({ x = 3, y = game.height - 0, color = RED })
+    game.state.block = build_block({ x = 3, y = game.height - 0, color = RED })
 
     player_block_exists()
 
@@ -902,16 +904,16 @@ function love.load()
     require('game/block')
     require('game/mote')
 
---    run_tests()
-    -- TODO move_block in player is untested
-    -- should have a test that moves a block
-    -- and one that moves a block against obstructions
-
     -- global variables for integration with dp menus
     W_HEIGHT = love.viewport.getHeight()
     SCORE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 14)
     SPACE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 64)
     EPSILON = 0.0001
+
+--    run_tests()
+    -- TODO move_block in player is untested
+    -- should have a test that moves a block
+    -- and one that moves a block against obstructions
 
     build_statemachine()
 end

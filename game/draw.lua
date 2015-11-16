@@ -26,8 +26,8 @@ function draw_game ()
     love.graphics.translate(-game.camera.x * game.scale, -game.camera.y * game.scale)
     draw_board(game.state.board)
 
-    if (game.block ~= nil) then
-        draw_block(game.block)
+    if (game.state.block ~= nil) then
+        draw_block(game.state.block)
     end
 
     love.graphics.pop()
