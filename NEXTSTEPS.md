@@ -113,13 +113,13 @@ NEXTSTEPS
 
 ## BUGS
 
-[ ] after the game shifts, the next_block appears off screen
-    these need to be flushed before the next state
 [ ] the "pop" sound for breaking should precede the "shatter" sound
 [ ] the game collects input for arrow keys on the title screen
     - this is a deeper problem: we are mixing inputpressed and keypressed
       and the FSM only cares about keypressed
     - so either add inputpressed to the FSM or make everything use keypressed
+[x] after the game shifts, the next_block appears off screen
+    these need to be flushed before the next state
 [x] the next block and current block should be saved as well
 [x] losing doesn't work anymore
     [x] make all the coloured blocks animate to grey

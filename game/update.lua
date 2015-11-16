@@ -14,7 +14,7 @@ function update_game (dt)
     game.block_count = 0
     game.state.stable = true -- optimism
     update_board(board)
-    update_camera(game.camera)
+    update_camera(game.camera) -- while the camera is moving unstable is true
 
     -- the game only ends when everything has settled down
     if (game.state.stable == true) then
