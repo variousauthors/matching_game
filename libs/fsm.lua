@@ -12,12 +12,14 @@
     --      draw       = function () end,
     --      update     = function () end,
     --      keypressed = function () end
+    --      inputpressed = function () end
     --  }, {
     --      name       = "stop",
     --      init       = function () end,
     --      draw       = function () end,
     --      update     = function () end,
     --      keypressed = function () end
+    --      inputpressed = function () end
     --  }
 --  })
 
@@ -80,6 +82,12 @@ FSM = function ()
         if current_state.keypressed then current_state.keypressed(key) end
     end
 
+    local inputpressed = function (input)
+        state_machine.set(input)
+
+        if current_state.inputpressed then current_state.inputpressed(input) end
+    end
+
     local keyreleased = function (key)
         if current_state.keyreleased then current_state.keyreleased(key) end
     end
@@ -106,6 +114,7 @@ FSM = function ()
             draw        = state.draw,
             keypressed  = state.keypressed,
             keyreleased  = state.keyreleased,
+            inputpressed  = state.inputpressed,
             mousepressed  = state.mousepressed,
             mousereleased  = state.mousereleased,
             textinput   = state.textinput,
@@ -146,6 +155,7 @@ FSM = function ()
         update        = update,
         keypressed    = keypressed,
         keyreleased    = keyreleased,
+        inputpressed    = inputpressed,
         mousepressed    = mousepressed,
         mousereleased    = mousereleased,
         textinput     = textinput,

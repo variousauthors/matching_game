@@ -44,8 +44,6 @@ function update_camera (camera)
         return
     end
 
-    game.state.stable = false
-
     if math.abs(camera.rx) >= 1 then
         if (camera.rx > 0) then
             sign = 1

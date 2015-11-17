@@ -124,7 +124,14 @@ function build_statemachine()
             -- score_band.draw()
         end,
         update     = update_game,
-        keypressed = love.keypressed
+        keypressed = love.keypressed,
+        inputpressed = function (state)
+            print(state)
+            if game.state.player.input[state] ~= nil then
+                game.state.player.has_input = true
+                table.insert(game.state.player.input[state], true)
+            end
+        end
     })
 
     state_machine.addState({
@@ -191,6 +198,7 @@ function build_statemachine()
     love.update     = state_machine.update
     love.keypressed = state_machine.keypressed
     love.keyreleased = state_machine.keyreleased
+    love.inputpressed = state_machine.inputpressed
     love.mousepressed = state_machine.mousepressed
     love.mousereleased = state_machine.mousereleased
     love.textinput  = state_machine.textinput

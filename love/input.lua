@@ -6,11 +6,6 @@ love.inputman = require('libs/inputman').newSingleton()
 --
 function love.inputpressed(state)
 
-    if game.state.player.input[state] ~= nil then
-        game.state.player.has_input = true
-        table.insert(game.state.player.input[state], true)
-    end
-
     -- An example of input/sound
     -- if(state == 'select') then love.soundman.run('select') end
 end
