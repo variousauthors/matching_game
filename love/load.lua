@@ -38,16 +38,10 @@ function build_statemachine()
             save = JSON.encode(game.state)
 
             game.state.player.enabled = false
-            menu.show(function (options)
-
-                menu.reset()
-            end)
 
         end,
         draw = function ()
             draw_game()
-            -- draw an alpha layer
-            menu.draw()
         end,
         keypressed = function (key)
             if (key == "escape") then
@@ -65,12 +59,12 @@ function build_statemachine()
                 love.viewport.setupScreen()
             end
 
-            menu.keypressed(key)
+            if key == "return" or key == " " then
+                state_machine.set("setup")
+            end
         end,
-        mousepressed = menu.mousepressed,
         update     = function (dt)
             update_camera(game.camera)
-            menu.update(dt)
         end
     })
 
@@ -82,7 +76,7 @@ function build_statemachine()
             if (game.state.over == true) then
                 build_game()
             end
-    
+
             -- setup the camera
             if (game.camera.y < game.state.shift) then
                 move_camera(game.camera, 0, game.state.shift)
@@ -149,7 +143,7 @@ function build_statemachine()
         from      = "start",
         to        = "setup",
         condition = function ()
-            return not menu.isShowing()
+            return state_machine.isSet("setup")
         end
     })
 
@@ -217,7 +211,7 @@ function configure_game ()
     game.colors = {
         white = { 255, 255, 255 },
         pale = { 200, 200, 200 },
-        black = { 29, 29, 29 },
+        black = { 255, 255, 255, 29 },
         damage = { 29, 29, 29 }
     }
 

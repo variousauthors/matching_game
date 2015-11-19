@@ -82,7 +82,6 @@ NEXTSTEPS
     - as part of this, the camera must roll back down to the current position
 [x] implement save/load so that progress is not lost on restart
 [x] remove the title, menu, etc...
-[ ] it should be "any key" to start
 [ ] maybe the background gets darker the deeper we go?
 [ ] Sound effects and music
     - music should become more panic the more
@@ -91,6 +90,7 @@ NEXTSTEPS
 
 #### NICE TO HAVE
 
+[ ] it should be _almost_ "any key" to start
 [ ] make the camera movement sigmoidal
     - should it be constant time to complete?
 [ ] vary the alpha of the shadow tiles randomly? Or maybe based on

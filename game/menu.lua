@@ -109,8 +109,21 @@ return function ()
         hide()
     end
 
-    -- any key quits the menu
-    local keypressed = hide
+    local keypressed = function (key)
+        if key == "return" or key == " " then
+            hide()
+        end
+
+        if key == "up" then
+            menu_index = (menu_index - 1)%(#inputs)
+        elseif key == "down" then
+            menu_index = (menu_index + 1)%(#inputs)
+        end
+
+        if inputs[menu_index + 1].keypressed then
+            inputs[menu_index + 1].keypressed(key)
+        end
+    end
 
     local textinput = function (key)
         if inputs[menu_index + 1].textinput then

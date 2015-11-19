@@ -48,6 +48,11 @@ function draw_board_background (board)
     local cells = board.cells
 
     -- TODO again, what is up with that 4
+    -- this double drawing is so that I can express the background color as alpha channel
+    -- so that when the board fades to black it fades to background color
+    love.graphics.setColor({ 0, 0, 0 })
+    love.graphics.rectangle('fill', board.x * game.scale - 2, board.y * game.scale - 2, board.width * game.scale + 4, (#cells) * game.scale + 4)
+
     love.graphics.setColor(board.color)
     love.graphics.rectangle('fill', board.x * game.scale - 2, board.y * game.scale - 2, board.width * game.scale + 4, (#cells) * game.scale + 4)
 
@@ -75,6 +80,11 @@ function draw_board_border (board)
     love.graphics.setLineWidth(2)
 
     -- TODO I've just added a flat 3 to the board height to make it run off the bottom
+    -- this double drawing is so that I can express the background color as alpha channel
+    -- so that when the board fades to black it fades to background color
+    love.graphics.setColor({ 0, 0, 0 })
+    love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, (#cells) * game.scale + 12)
+
     love.graphics.setColor(board.color)
     love.graphics.rectangle('line', board.x * game.scale - 6, board.y * game.scale - 6, board.width * game.scale + 12, (#cells) * game.scale + 12)
 
