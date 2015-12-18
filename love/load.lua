@@ -30,15 +30,30 @@ function build_statemachine()
         game.state = JSON.decode(save)
     end
 
-    -- the menu/title screen state
     state_machine.addState({
-        name       = "start",
+        name = "start",
         init       = function ()
             save = JSON.encode(game.state)
 
             game.state.player.enabled = false
 
         end,
+        draw = function ()
+            draw_game()
+
+            -- draw a curtain of white over the world
+            draw_curtain()
+        end,
+        update = function (dt)
+            if game.curtain.alpha > 0 then
+                game.curtain.alpha = math.max(0, game.curtain.alpha - game.curtain.fade_rate * dt)
+            end
+        end
+    })
+
+    -- the menu/title screen state
+    state_machine.addState({
+        name       = "title",
         draw = function ()
             draw_game()
         end,
@@ -135,6 +150,15 @@ function build_statemachine()
     -- start the game when the player chooses a menu option
     state_machine.addTransition({
         from      = "start",
+        to        = "title",
+        condition = function ()
+            return game.curtain.alpha == 0
+        end
+    })
+
+    -- start the game when the player chooses a menu option
+    state_machine.addTransition({
+        from      = "title",
         to        = "setup",
         condition = function ()
             return state_machine.isSet("setup")
@@ -177,7 +201,7 @@ function build_statemachine()
     -- return to the menu screen if any player presses escape
     state_machine.addTransition({
         from      = "unwind",
-        to        = "start",
+        to        = "title",
         condition = function ()
             return game.camera.y == 0
         end
@@ -202,12 +226,18 @@ function configure_game ()
     game.prompt = ""
     game.infinity = 100
 
+
     game.colors = {
         white = { 255, 255, 255 },
         pale = { 200, 200, 200 },
-        black = { 255, 255, 255, 29 },
+        black = { 255, 255, 255, 29 }, -- black is with with low alpha so that we can fade into it
         damage = { 29, 29, 29 }
     }
+
+    game.curtain = {}
+    game.curtain.alpha = 255
+    game.curtain.color = game.colors.white
+    game.curtain.fade_rate = 100
 
     game.colors[RED] = { 200, 55, 55 }
     game.colors[GREEN] = { 55, 200, 55 }

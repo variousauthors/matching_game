@@ -21,6 +21,19 @@ function draw_background ()
     love.graphics.pop()
 end
 
+function draw_curtain ()
+    love.graphics.push("all")
+
+    -- fade to black, but bottom out at board color
+    local r, g, b = unpack(game.curtain.color)
+    local a = game.curtain.alpha
+
+    love.graphics.setColor({ r, g, b, a })
+    love.graphics.rectangle("fill", 0, 0, love.viewport.getWidth(), love.viewport.getHeight())
+
+    love.graphics.pop()
+end
+
 function draw_game ()
     love.graphics.push("all")
     game.draw_seed = math.random(0, 2)
