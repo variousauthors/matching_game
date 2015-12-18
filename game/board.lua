@@ -212,6 +212,8 @@ function update_board(board)
         state.shift = state.shift + 1
         move_camera(game.camera, 0, state.shift)
 
+        print("shift: " .. state.shift)
+
         build_board_row(board, #cells + 1)
         build_board_row(state.shadows, #(shadows) + 1, { default = 0.0 })
     end

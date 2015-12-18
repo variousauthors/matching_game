@@ -34,7 +34,6 @@ function build_statemachine()
     state_machine.addState({
         name       = "start",
         init       = function ()
-            print("in start")
             save = JSON.encode(game.state)
 
             game.state.player.enabled = false
@@ -71,7 +70,6 @@ function build_statemachine()
     state_machine.addState({
         name       = "setup",
         init       = function ()
-            print("in setup")
 
             if (game.state.over == true) then
                 build_game()
@@ -93,7 +91,6 @@ function build_statemachine()
     state_machine.addState({
         name       = "unwind",
         init       = function ()
-            print("in unwind")
             -- rewind the camera
             if (game.camera.y > 0) then
                 move_camera(game.camera, 0, 0)
@@ -110,7 +107,6 @@ function build_statemachine()
     state_machine.addState({
         name       = "play",
         init       = function ()
-            print("in play")
             game.state.player.enabled = true
         end,
         draw       = function ()
@@ -120,7 +116,6 @@ function build_statemachine()
         update     = update_game,
         keypressed = love.keypressed,
         inputpressed = function (state)
-            print(state)
             if game.state.player.input[state] ~= nil then
                 game.state.player.has_input = true
                 table.insert(game.state.player.input[state], true)
@@ -131,7 +126,6 @@ function build_statemachine()
     state_machine.addState({
         name       = "lose",
         init = function ()
-            print("in lose")
         end,
         draw = function ()
             draw_game()

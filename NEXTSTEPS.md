@@ -71,6 +71,12 @@ NEXTSTEPS
 [x] ESC to quit to menu, and to quit game
 [x] when the game ends, the camera should roll back up across
     the board
+[ ] when we start, the screen is white and we hear the wind blow
+    then the board fade in against a white background
+[ ] when the background has faded all the way to black, the forground
+    starts to fade to black with every keypress, pulling
+    a "these robotic hearts of mine"
+[ ] once the screen is black we hear the whistling wind
 
 #### LOVELY
 [x] make it so that colored blocks can get "pre-damaged" by blocks
@@ -82,23 +88,29 @@ NEXTSTEPS
     - as part of this, the camera must roll back down to the current position
 [x] implement save/load so that progress is not lost on restart
 [x] remove the title, menu, etc...
-[ ] maybe the background gets darker the deeper we go?
+[x] maybe the background gets darker the deeper we go?
 [ ] Sound effects and music
     - music should become more panic the more
     full rows there are above "ground level"
     stack higher?
+
 
 #### NICE TO HAVE
 
 [ ] it should be _almost_ "any key" to start
 [ ] make the camera movement sigmoidal
     - should it be constant time to complete?
+    - make it physicsy? ie it "falls" down
+      and "pushes" up, as though climbing by
+      an engine?
 [ ] vary the alpha of the shadow tiles randomly? Or maybe based on
     neighbour sample? So that there is something to look at in the
     background
     - or have them fade out completely...
 [ ] when we quit the game, transition to a "saving" state where a black screen with "saving" is drawn for 2 seconds
-[ ] the motes should shine through damages block hearts
+    - an actual state in the state machine that takes a fixed time,
+      like one second
+[ ] the motes should shine through damaged block hearts
 [ ] when coloured blocks break, the explosion should chain out
     from the block that tripped it
 [ ] Adjust speed/game feel
