@@ -71,12 +71,12 @@ NEXTSTEPS
 [x] ESC to quit to menu, and to quit game
 [x] when the game ends, the camera should roll back up across
     the board
-[ ] when we start, the screen is white and we hear the wind blow
-    then the board fade in against a white background
-[ ] when the background has faded all the way to black, the forground
+[x] when we start, the screen is white and the board fades in
+[ ] when the background has faded all the way to black, the foreground
     starts to fade to black with every keypress, pulling
     a "these robotic hearts of mine"
-[ ] once the screen is black we hear the whistling wind
+    - at some point the game should wipe the save
+[ ] in the start and end states, we should hear the whistling wind
 
 #### LOVELY
 [x] make it so that colored blocks can get "pre-damaged" by blocks

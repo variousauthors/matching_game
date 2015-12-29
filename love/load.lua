@@ -33,6 +33,7 @@ function build_statemachine()
     state_machine.addState({
         name = "start",
         init       = function ()
+            -- we have to load the save here to show the board on start
             save = JSON.encode(game.state)
 
             game.state.player.enabled = false
@@ -54,6 +55,15 @@ function build_statemachine()
     -- the menu/title screen state
     state_machine.addState({
         name       = "title",
+        init       = function ()
+            -- we have to load the save again here whenever we've transitioned back
+            -- to the title. TODO this is happening because we have an "init"
+            -- function for each state, but no exit function. These should just
+            -- be called "enter" and "exit", non?
+            save = JSON.encode(game.state)
+
+            game.state.player.enabled = false
+        end,
         draw = function ()
             draw_game()
         end,
@@ -76,9 +86,6 @@ function build_statemachine()
             if key == "return" or key == " " then
                 state_machine.set("setup")
             end
-        end,
-        update     = function (dt)
-            update_camera(game.camera)
         end
     })
 
@@ -100,6 +107,7 @@ function build_statemachine()
         end,
         update     = function (dt)
             update_camera(game.camera)
+            game.depth = 10*game.camera.y
         end
     })
 
@@ -116,6 +124,7 @@ function build_statemachine()
         end,
         update     = function (dt)
             update_camera(game.camera)
+            game.depth = 10*game.camera.y
         end
     })
 
@@ -257,6 +266,9 @@ function configure_game ()
     game.step = 0.1 * game.rate
     game.input_rate = 8
     game.block_max_hp = 3
+
+    game.depth = 0 -- how far down the camera has gone in pixels
+    game.depth_rate = game.scale -- in chunks
 
     -- defaults for the board
     game.board_defaults = {

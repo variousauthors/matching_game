@@ -13,7 +13,7 @@ function draw_background ()
 
     -- fade to black, but bottom out at board color
     local r, g, b = unpack(game.colors.background)
-    local a = math.max(game.colors.black[4], 255 - 10*game.camera.y)
+    local a = math.max(game.colors.black[4], 255 - game.depth)
 
     love.graphics.setColor({ r, g, b, a })
     love.graphics.rectangle("fill", 0, 0, love.viewport.getWidth(), love.viewport.getHeight())
