@@ -72,7 +72,7 @@ NEXTSTEPS
 [x] when the game ends, the camera should roll back up across
     the board
 [x] when we start, the screen is white and the board fades in
-[ ] when the background has faded all the way to black, the foreground
+[x] when the background has faded all the way to black, the foreground
     starts to fade to black with every keypress, pulling
     a "these robotic hearts of mine"
     - at some point the game should wipe the save
@@ -107,7 +107,7 @@ NEXTSTEPS
     neighbour sample? So that there is something to look at in the
     background
     - or have them fade out completely...
-[ ] when we quit the game, transition to a "saving" state where a black screen with "saving" is drawn for 2 seconds
+[x] when we quit the game, transition to a "saving" state where a black screen with "saving" is drawn for 2 seconds
     - an actual state in the state machine that takes a fixed time,
       like one second
 [ ] the motes should shine through damaged block hearts
@@ -126,7 +126,7 @@ NEXTSTEPS
 ## BUGS
 
 [ ] the "pop" sound for breaking should precede the "shatter" sound
-[ ] the game collects input for arrow keys on the title screen
+[x] the game collects input for arrow keys on the title screen
     - this is a deeper problem: we are mixing inputpressed and keypressed
       and the FSM only cares about keypressed
     - so either add inputpressed to the FSM or make everything use keypressed

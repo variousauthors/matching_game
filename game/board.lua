@@ -149,9 +149,10 @@ function draw_board (board)
         end
     end
 
-    for i, mote in pairs(state.motes) do
-        draw_mote(mote)
-    end
+    -- removed motes from the final game
+    --for i, mote in pairs(state.motes) do
+        --draw_mote(mote)
+    --end
 
     if (game.tiny_triangle == true) then
         draw_board_preview_arrow(board)
@@ -167,9 +168,10 @@ function update_board(board)
     local state = game.state
     local shadows = state.shadows.cells
 
-    for i, mote in pairs(state.motes) do
-        update_mote(mote, dt)
-    end
+    -- removed motes from the final game
+--    for i, mote in pairs(state.motes) do
+ --       update_mote(mote, dt)
+  --  end
 
     -- check each cell from bottom to top
     for y = #(cells), 1, -1 do
