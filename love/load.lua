@@ -194,6 +194,7 @@ function build_statemachine()
             game.curtain.color = { 0, 0, 0 }
             game.curtain.alpha = 255
             draw_curtain()
+            draw_credits()
         end,
         keypressed = function (key)
             if (key == "escape") then
