@@ -136,23 +136,9 @@ function build_statemachine()
         end,
         draw       = function ()
             draw_game()
-
-            if game.depth >= game.max_depth then
-                draw_curtain()
-            end
         end,
         update     = function (dt)
             update_game(dt)
-
-            if game.depth >= game.max_depth then
-                game.curtain.color = { 0, 0, 0 }
-
-                if game.did_step_block == true then
-                    if game.curtain.alpha < 255 then
-                        game.curtain.alpha = math.min(255, game.curtain.alpha + game.curtain.fade_rate * dt)
-                    end
-                end
-            end
         end,
         keypressed = love.keypressed,
         inputpressed = function (state)
@@ -168,7 +154,7 @@ function build_statemachine()
         init       = function ()
             game.state.player.enabled = true
             game.curtain.color = { 0, 0, 0 }
-            game.curtain.fade_rate = game.curtain.fade_rate / 10
+            game.curtain.fade_rate = game.curtain.fade_rate / 20
         end,
         draw       = function ()
             draw_game()
@@ -335,10 +321,12 @@ function configure_game ()
     game.curtain.color = game.colors.white
     game.curtain.fade_rate = 100
 
-    game.colors[RED] = { 200, 55, 55 }
-    game.colors[GREEN] = { 55, 200, 55 }
-    game.colors[BLUE] = { 55, 55, 200 }
-    game.colors[GREY] = { 155, 155, 155 }
+    -- current color palette
+    -- http://paletton.com/#uid=3000G0kotpMeNzijUsDrxl0vTg5
+    game.colors[RED] = { 205, 48, 48 }
+    game.colors[GREEN] = { 101, 123, 0 }
+    game.colors[BLUE] = { 37, 94, 131 }
+    game.colors[GREY] = { 200, 200, 200 }
 
     game.dt = 0
     game.input_timer = 0
