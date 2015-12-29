@@ -30,6 +30,7 @@ function build_statemachine()
         game.state = JSON.decode(save)
     end
 
+    -- fade in from white
     state_machine.addState({
         name = "start",
         init       = function ()
@@ -107,7 +108,7 @@ function build_statemachine()
         end,
         update     = function (dt)
             update_camera(game.camera)
-            game.depth = 10*game.camera.y
+            game.depth = game.depth_rate*game.camera.y
         end
     })
 
@@ -124,7 +125,7 @@ function build_statemachine()
         end,
         update     = function (dt)
             update_camera(game.camera)
-            game.depth = 10*game.camera.y
+            game.depth = game.depth_rate*game.camera.y
         end
     })
 
@@ -135,10 +136,51 @@ function build_statemachine()
         end,
         draw       = function ()
             draw_game()
-            -- score_band.draw()
+
+            if game.depth >= game.max_depth then
+                draw_curtain()
+            end
         end,
-        update     = update_game,
+        update     = function (dt)
+            update_game(dt)
+
+            if game.depth >= game.max_depth then
+                game.curtain.color = { 0, 0, 0 }
+
+                if game.did_step_block == true then
+                    if game.curtain.alpha < 255 then
+                        game.curtain.alpha = math.min(255, game.curtain.alpha + game.curtain.fade_rate * dt)
+                    end
+                end
+            end
+        end,
         keypressed = love.keypressed,
+        inputpressed = function (state)
+            if game.state.player.input[state] ~= nil then
+                game.state.player.has_input = true
+                table.insert(game.state.player.input[state], true)
+            end
+        end
+    })
+
+    state_machine.addState({
+        name       = "ending",
+        init       = function ()
+            game.state.player.enabled = true
+            game.curtain.color = { 0, 0, 0 }
+            game.curtain.fade_rate = game.curtain.fade_rate / 10
+        end,
+        draw       = function ()
+            draw_game()
+            draw_curtain()
+        end,
+        update     = function (dt)
+            update_game(dt)
+
+            if game.curtain.alpha < 255 then
+                game.curtain.alpha = math.min(255, game.curtain.alpha + game.curtain.fade_rate * dt)
+            end
+        end,
         inputpressed = function (state)
             if game.state.player.input[state] ~= nil then
                 game.state.player.has_input = true
@@ -153,6 +195,35 @@ function build_statemachine()
         end,
         draw = function ()
             draw_game()
+        end
+    })
+
+    state_machine.addState({
+        name = "end",
+        init = function ()
+            build_game()
+            save = JSON.encode(game.state)
+        end,
+        draw = function ()
+            game.curtain.color = { 0, 0, 0 }
+            game.curtain.alpha = 255
+            draw_curtain()
+        end,
+        keypressed = function (key)
+            if (key == "escape") then
+                -- TODO transition to an "saving" state
+                -- draw a black screen
+                love.graphics.setColor(game.colors.black)
+                love.graphics.rectangle("fill", 0, 0, love.viewport.getWidth(), love.viewport.getHeight())
+                love.graphics.present()
+
+                writeProfile(save)
+                -- could pause for long enough to flash "saving" for 3 seconds
+                love.event.quit()
+            elseif(key == 'f11') then
+                love.viewport.setFullscreen()
+                love.viewport.setupScreen()
+            end
         end
     })
 
@@ -216,6 +287,22 @@ function build_statemachine()
         end
     })
 
+    state_machine.addTransition({
+        from      = "play",
+        to        = "ending",
+        condition = function ()
+            return game.depth >= game.max_depth
+        end
+    })
+
+    state_machine.addTransition({
+        from      = "ending",
+        to        = "end",
+        condition = function ()
+            return game.curtain.alpha == 255
+        end
+    })
+
     love.update     = state_machine.update
     love.keypressed = state_machine.keypressed
     love.keyreleased = state_machine.keyreleased
@@ -256,6 +343,7 @@ function configure_game ()
     game.dt = 0
     game.input_timer = 0
     game.update_timer = 0
+    game.did_step_block = false
 
     game.scale = 32
     game.height = 10
@@ -268,7 +356,8 @@ function configure_game ()
     game.block_max_hp = 3
 
     game.depth = 0 -- how far down the camera has gone in pixels
-    game.depth_rate = game.scale -- in chunks
+    game.depth_rate = 4*game.scale -- in chunks
+    game.max_depth = 255 -- depth is applied as an alpha
 
     -- defaults for the board
     game.board_defaults = {
@@ -384,7 +473,7 @@ function love.load()
     SPACE_FONT     = love.graphics.newFont("assets/Audiowide-Regular.ttf", 64)
     EPSILON = 0.0001
 
-    run_tests()
+--    run_tests()
     -- TODO move_block in player is untested
     -- should have a test that moves a block
     -- and one that moves a block against obstructions

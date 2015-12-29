@@ -15,7 +15,8 @@ function update_game (dt)
     game.state.stable = true -- optimism
     update_board(board)
     update_camera(game.camera) -- while the camera is moving unstable is true
-    game.depth = 10*game.camera.y
+    game.depth = game.depth_rate * game.camera.y
+    game.did_step_block = false
 
     -- the game only ends when everything has settled down
     if (game.state.stable == true) then
@@ -41,6 +42,7 @@ function update_game (dt)
 
                 -- this adds that extra element of hopelessness
                 game.state.next_block = nil
+
                 game.state.ending = true
                 game.state.stable = false
             end
@@ -99,6 +101,7 @@ function update_game (dt)
         if (game.update_timer >= game.step) then
             game.update_timer = 0
             step_block(game.state.block, board)
+            game.did_step_block = true
         end
     else
         game.update_timer = 0
