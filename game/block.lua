@@ -194,7 +194,7 @@ function update_block (block, board)
 
             -- TODO shadows need to be an entity so that we can draw them
             -- using x and y, rather than cx and cy
-            shadows[cy][cx] = shadows[cy][cx] + 0.33
+            shadows[cy][cx] = shadows[cy][cx] + 0.5
         end
 
         -- adjust the crumbling

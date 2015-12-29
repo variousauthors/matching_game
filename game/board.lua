@@ -239,7 +239,8 @@ function update_board(board)
     for y = 1, #(cells) do
         for x = 1, #(cells[y]) do
 
-            if (shadows[y][x] > 0.1) then
+            -- shadows fade completely out
+            if (shadows[y][x] > 0) then
                 shadows[y][x] = shadows[y][x] - game.dt / 1
             end
         end
