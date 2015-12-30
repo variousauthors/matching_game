@@ -37,14 +37,14 @@ end
 function draw_credits ()
     -- draw three grey squares
 
-    local dim = love.viewport.getWidth() / 7
+    local dim = love.viewport.getWidth() / 8
     local y = love.viewport.getHeight() / 2 - dim / 2
     local x = dim * 2
 
     love.graphics.setColor(game.colors[GREY])
     love.graphics.rectangle("fill", x - game.scale, y, dim, dim)
     love.graphics.rectangle("fill", x + dim, y, dim, dim)
-    love.graphics.rectangle("fill", x + 2*dim + game.scale, y, dim, dim)
+    love.graphics.rectangle("fill", x + 3*dim + game.scale, y, dim, dim)
 end
 
 function draw_game ()

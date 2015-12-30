@@ -78,6 +78,10 @@ NEXTSTEPS
     - at some point the game should wipe the save
 [ ] in the start and end states, we should hear the whistling wind
 
+#### WILFIX
+
+[ ] the "pop" sound for breaking should precede the "shatter" sound
+
 #### LOVELY
 [x] make it so that colored blocks can get "pre-damaged" by blocks
     exploding nearby
@@ -90,10 +94,6 @@ NEXTSTEPS
 [x] remove the title, menu, etc...
 [x] maybe the background gets darker the deeper we go?
 [ ] Sound effects and music
-    - music should become more panic the more
-    full rows there are above "ground level"
-    stack higher?
-
 
 #### NICE TO HAVE
 
@@ -125,7 +125,6 @@ NEXTSTEPS
 
 ## BUGS
 
-[ ] the "pop" sound for breaking should precede the "shatter" sound
 [x] the game collects input for arrow keys on the title screen
     - this is a deeper problem: we are mixing inputpressed and keypressed
       and the FSM only cares about keypressed
