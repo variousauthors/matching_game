@@ -34,22 +34,24 @@ function build_statemachine()
     state_machine.addState({
         name = "start",
         init       = function ()
+            game.wind_timer = 0
             -- we have to load the save here to show the board on start
             save = JSON.encode(game.state)
 
             game.state.player.enabled = false
 
+            love.soundman.run('wind')
+            love.soundman.fadeOut(game.wind_max)
+
+        end,
+        update = function (dt)
+            game.wind_timer = game.wind_timer + dt
         end,
         draw = function ()
             draw_game()
 
             -- draw a curtain of white over the world
             draw_curtain()
-        end,
-        update = function (dt)
-            if game.curtain.alpha > 0 then
-                game.curtain.alpha = math.max(0, game.curtain.alpha - game.curtain.fade_rate * dt)
-            end
         end
     })
 
@@ -136,8 +138,14 @@ function build_statemachine()
         end,
         draw       = function ()
             draw_game()
+            draw_curtain()
         end,
         update     = function (dt)
+            -- pull back the curtain, if there is one
+            if game.curtain.alpha > 0 then
+                game.curtain.alpha = math.max(0, game.curtain.alpha - game.curtain.fade_rate * dt)
+            end
+
             update_game(dt)
         end,
         keypressed = love.keypressed,
@@ -217,9 +225,9 @@ function build_statemachine()
     -- start the game when the player chooses a menu option
     state_machine.addTransition({
         from      = "start",
-        to        = "title",
+        to        = "play",
         condition = function ()
-            return game.curtain.alpha == 0
+            return game.wind_timer > game.wind_max / 3
         end
     })
 
@@ -320,7 +328,7 @@ function configure_game ()
     game.curtain = {}
     game.curtain.alpha = 255
     game.curtain.color = game.colors.white
-    game.curtain.fade_rate = 100
+    game.curtain.fade_rate = 50
 
     -- current color palette
     -- http://paletton.com/#uid=3000G0kotpMeNzijUsDrxl0vTg5
@@ -380,6 +388,8 @@ function configure_game ()
     game.block_gap_width = 2
     game.block_damage_ratio = 2
     game.block_dim = 1
+    game.wind_timer = 0
+    game.wind_max = 20
 
     game.colors.background = game.colors.white
 
