@@ -317,10 +317,12 @@ function clear_blocks (board, block)
         v.marked = false
 
         if (#(marked) == game.match_target) then
+            game.state.has_hardened = true
             start_tween(cells[v.cy][v.cx], "hardening")
             play_harden = true
 
         elseif (#(marked) > game.match_target) then
+            game.state.has_exploded = true
             start_tween(cells[v.cy][v.cx], "exploding")
             play_explode = true
         end
@@ -346,12 +348,12 @@ function clear_blocks (board, block)
     if (play_chip) then
     end
 
-    if (play_shatter) then
-        love.soundman.run('shatter')
-    end
-
     if (play_explode) then
         love.soundman.run('pop')
+    end
+
+    if (play_shatter) then
+        love.soundman.run('shatter')
     end
 
     if (play_harden) then

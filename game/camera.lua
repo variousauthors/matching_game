@@ -16,12 +16,9 @@ function move_camera (camera, x, y)
     camera.ty = y
 end
 
-function update_camera (camera)
+function update_camera (camera, dt)
     local vx = camera.tx - camera.cx
     local vy = camera.ty - camera.cy
-    -- TODO this is gross, I'm clearly not using game.dt the right
-    -- way if I need to fetch the timeslice like this...
-    local dt = love.timer.getDelta()
 
     local dx, dy = vx*dt, vy*dt
 

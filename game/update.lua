@@ -14,7 +14,14 @@ function update_game (dt)
     game.block_count = 0
     game.state.stable = true -- optimism
     update_board(board)
-    update_camera(game.camera) -- while the camera is moving unstable is true
+
+    -- if the player hardens a block before having exploded a block
+    -- then they have committed an atrocity and we must abort
+    if game.state.has_hardened == true and game.state.has_exploded == false then
+        game.state.aborting = true
+    end
+
+    update_camera(game.camera, dt) -- while the camera is moving unstable is true
     game.depth = game.depth_rate * game.camera.y
     game.did_step_block = false
 

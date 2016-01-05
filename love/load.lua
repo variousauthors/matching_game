@@ -28,6 +28,7 @@ function build_statemachine()
     if (findProfile() == true) then
         save = recoverProfile()
         game.state = JSON.decode(save)
+        game.loaded = true
     end
 
     -- fade in from white
@@ -57,10 +58,10 @@ function build_statemachine()
 
     -- the menu/title screen state
     state_machine.addState({
-        name       = "title",
+        name       = "pause",
         init       = function ()
             -- we have to load the save again here whenever we've transitioned back
-            -- to the title. TODO this is happening because we have an "init"
+            -- to the pause. TODO this is happening because we have an "init"
             -- function for each state, but no exit function. These should just
             -- be called "enter" and "exit", non?
             save = JSON.encode(game.state)
@@ -69,6 +70,7 @@ function build_statemachine()
         end,
         draw = function ()
             draw_game()
+            draw_curtain()
         end,
         keypressed = function (key)
             if (key == "escape") then
@@ -95,6 +97,8 @@ function build_statemachine()
     state_machine.addState({
         name       = "setup",
         init       = function ()
+            -- the player is initially disabled while we scroll into position
+            game.state.player.enabled = false
 
             if (game.state.over == true) then
                 build_game()
@@ -107,9 +111,10 @@ function build_statemachine()
         end,
         draw       = function ()
             draw_game()
+            draw_curtain()
         end,
         update     = function (dt)
-            update_camera(game.camera)
+            update_camera(game.camera, dt)
             game.depth = game.depth_rate*game.camera.y
         end
     })
@@ -124,9 +129,10 @@ function build_statemachine()
         end,
         draw       = function ()
             draw_game()
+            draw_curtain()
         end,
         update     = function (dt)
-            update_camera(game.camera)
+            update_camera(game.camera, dt)
             game.depth = game.depth_rate*game.camera.y
         end
     })
@@ -163,6 +169,26 @@ function build_statemachine()
         end,
         draw = function ()
             draw_game()
+            draw_curtain()
+        end
+    })
+
+    state_machine.addState({
+        name       = "aborting",
+        init       = function ()
+            game.state.player.enabled = false
+            game.state.over = true
+        end,
+        draw       = function ()
+            draw_game()
+            draw_curtain()
+        end,
+        update     = function (dt)
+            update_game(dt)
+
+            if game.curtain.alpha < 255 then
+                game.curtain.alpha = math.min(255, game.curtain.alpha + game.curtain.fade_rate * dt)
+            end
         end
     })
 
@@ -224,18 +250,28 @@ function build_statemachine()
         end
     })
 
-    -- start the game when the player chooses a menu option
+    -- if this is a new game, transition from start to play
     state_machine.addTransition({
         from      = "start",
         to        = "play",
         condition = function ()
-            return game.wind_timer > game.wind_max / 3
+            return game.loaded == false and game.wind_timer > game.wind_max / 3
+        end
+    })
+
+    -- if this is a saved game, transition from start to setup
+    state_machine.addTransition({
+        from      = "start",
+        to        = "setup",
+        condition = function ()
+            -- we won't wait for the wind to die down on loaded games
+            return game.loaded == true -- and game.wind_timer > game.wind_max / 3
         end
     })
 
     -- start the game when the player chooses a menu option
     state_machine.addTransition({
-        from      = "title",
+        from      = "pause",
         to        = "setup",
         condition = function ()
             return state_machine.isSet("setup")
@@ -278,9 +314,34 @@ function build_statemachine()
     -- return to the menu screen if any player presses escape
     state_machine.addTransition({
         from      = "unwind",
-        to        = "title",
+        to        = "pause",
         condition = function ()
-            return game.camera.y == 0
+            return game.state.over == false and game.camera.y == 0
+        end
+    })
+
+    -- return to the menu screen if any player presses escape
+    state_machine.addTransition({
+        from      = "unwind",
+        to        = "aborting",
+        condition = function ()
+            return game.state.over == true and game.camera.y == 0
+        end
+    })
+
+    state_machine.addTransition({
+        from      = "play",
+        to        = "aborting",
+        condition = function ()
+            return game.state.aborting == true
+        end
+    })
+
+    state_machine.addTransition({
+        from      = "aborting",
+        to        = "setup",
+        condition = function ()
+            return game.curtain.alpha >= 255
         end
     })
 
@@ -296,7 +357,7 @@ function build_statemachine()
         from      = "ending",
         to        = "end",
         condition = function ()
-            return game.curtain.alpha == 255
+            return game.curtain.alpha >= 255
         end
     })
 
@@ -319,6 +380,8 @@ function configure_game ()
     game.prompt = ""
     game.infinity = 100
 
+    -- the game state was not loaded
+    game.loaded = false
 
     game.colors = {
         white = { 255, 255, 255 },
@@ -414,6 +477,10 @@ function build_game_state ()
     state.stable = true
     state.ending = false
     state.over = false
+
+    state.has_hardened = false
+    state.has_exploded = false
+    state.aborting = false
 
     state.block = nil
     state.next_block = nil
