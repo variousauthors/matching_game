@@ -77,6 +77,28 @@ NEXTSTEPS
     a "these robotic hearts of mine"
     - at some point the game should wipe the save
 [ ] in the start and end states, we should hear the whistling wind
+[ ] make hardening more clearly negative
+    - a harsher sound effect?
+    - maybe cloud up the curtain a bit, like a flash of white
+      along with a sound effect
+      - the idea here is that when the player hardens blocks
+        we tell them that they did something, and then we take
+        away feedback. We show them that if they choose to play
+        this way, they will not be allowed to continue.
+      - so the screen should go white and stay white longer
+        if they are hardening more blocks
+    - perhaps if they harden a block before breaking a block, just
+      fade back to white and start over
+      - a little heavy handed...
+      - an aborting state, with a fade in of the curtain and then just
+        transition to start again?
+      - then maybe add a flash of white whenever the player hardens,
+        to remind them later in the game
+
+[ ] find a longer wind sound effect
+    - the fade out should be from a strong wind
+    - the fade in should build from nothing
+[ ] add an undertale style gong to the title
 
 #### WILFIX
 
