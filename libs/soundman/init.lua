@@ -83,6 +83,18 @@ function SoundMan:fadeOut(time, ...)
     self:sendCommand({'fadeOut', time, tags})
 end
 
+function SoundMan:fadeIn(name, time, ...)
+    local tags = {...}
+    if #tags > 0 then tags = table.concat(tags, ';') else tags = nil end
+    
+    msg = self.shortcuts[name]
+    msg[4] = 0 -- set volume to 0
+
+    -- start the sound with 0 volume
+    self:sendCommand(msg)
+    self:sendCommand({'fadeIn', time, tags})
+end
+
 --
 --
 --

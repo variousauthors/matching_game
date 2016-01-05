@@ -115,6 +115,13 @@ callbacks['fadeOut'] = function(time, tags)
     end
 end
 
+callbacks['fadeIn'] = function(time, tags)
+    tags = parseTagString(tags) or 'all'
+    for i, sound in ipairs(SoundObjects) do
+        if (tags == "all" or sound:hasTag(tags)) then sound:fadeIn(time) end
+    end
+end
+
 callbacks['pause'] = function(tags)
     tags = parseTagString(tags) or 'all'
     for i, sound in ipairs(SoundObjects) do

@@ -158,11 +158,22 @@ function build_statemachine()
     })
 
     state_machine.addState({
+        name       = "lose",
+        init = function ()
+        end,
+        draw = function ()
+            draw_game()
+        end
+    })
+
+    state_machine.addState({
         name       = "ending",
         init       = function ()
             game.state.player.enabled = true
             game.curtain.color = { 0, 0, 0 }
             game.curtain.fade_rate = game.curtain.fade_rate / 20
+
+            love.soundman.fadeIn('wind', game.wind_max)
         end,
         draw       = function ()
             draw_game()
@@ -180,15 +191,6 @@ function build_statemachine()
                 game.state.player.has_input = true
                 table.insert(game.state.player.input[state], true)
             end
-        end
-    })
-
-    state_machine.addState({
-        name       = "lose",
-        init = function ()
-        end,
-        draw = function ()
-            draw_game()
         end
     })
 

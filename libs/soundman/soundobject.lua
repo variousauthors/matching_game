@@ -102,6 +102,22 @@ function SoundObject:fadeOut(time)
     end
 end
 
+function SoundObject:fadeIn(time)
+    time = time or 5
+    self.source:setLooping(false)
+
+    self.callbacks["_onTick"] = self.callbacks["onTick"] or (function() return end)
+    self.callbacks["onTick"] = function(self, dt)
+        self.callbacks["_onTick"](self, dt)
+        local volume = self.source:getVolume()
+        if (volume >= 1) then
+            self.callbacks = {}
+        else
+            self.source:setVolume(volume + (dt / time))
+        end
+    end
+end
+
 --
 
 return {SoundObject, SoundObjects, SoundResources}
