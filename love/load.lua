@@ -92,9 +92,7 @@ function build_statemachine()
             elseif(key == 'f11') then
                 love.viewport.setFullscreen()
                 love.viewport.setupScreen()
-            end
-
-            if key == "return" or key == " " then
+            else
                 state_machine.set("setup")
             end
         end

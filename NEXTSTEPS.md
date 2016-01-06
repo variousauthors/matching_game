@@ -119,7 +119,7 @@ NEXTSTEPS
 
 #### NICE TO HAVE
 
-[ ] it should be _almost_ "any key" to start
+[x] it should be _almost_ "any key" to start
 [ ] make the camera movement sigmoidal
     - should it be constant time to complete?
     - make it physicsy? ie it "falls" down
