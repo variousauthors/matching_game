@@ -21,13 +21,17 @@ function update_game (dt)
         game.state.aborting = true
     end
 
+    if game.depth >= game.max_depth then
+        game.state.deep = true
+    end
+
     update_camera(game.camera, dt) -- while the camera is moving unstable is true
     game.depth = game.depth_rate * game.camera.y
     game.did_step_block = false
 
     -- the game only ends when everything has settled down
     if (game.state.stable == true) then
-        if (game.state.ending == true) then
+        if (game.state.flood == true) then
             game.state.over = true
             return
         else
@@ -50,7 +54,7 @@ function update_game (dt)
                 -- this adds that extra element of hopelessness
                 game.state.next_block = nil
 
-                game.state.ending = true
+                game.state.flood = true
                 game.state.stable = false
             end
         end

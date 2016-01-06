@@ -76,9 +76,8 @@ NEXTSTEPS
     starts to fade to black with every keypress, pulling
     a "these robotic hearts of mine"
     - at some point the game should wipe the save
-[ ] in the start and end states, we should hear the whistling wind
-[ ] make hardening more clearly negative
-    - a harsher sound effect?
+[x] in the start and end states, we should hear the whistling wind
+[x] make hardening more clearly negative
     x perhaps if they harden a block before breaking a block, just
       fade back to white and start over
       x a little heavy handed...
@@ -86,18 +85,24 @@ NEXTSTEPS
         transition to start again?
       x then maybe add a flash of white whenever the player hardens,
         to remind them later in the game
+[x] starting from a loaded save should start you in title screen,
+     fade into it and press space to play
 
 [ ] find a longer wind sound effect
     - the fade out should be from a strong wind
     - the fade in should build from nothing
 [ ] add an undertale style gong to the title
+[ ] choose a more angry sound effect for hardening
+
 [ ] change the way the game handles a loss during the winddown
     - currently if you lose while the screen is fading, you just have to watch
       it fade to black... probably better if it just ends like a lose state?
+    - maybe just having the wind fade in will help people understand...?
 
 #### WILFIX
 
 [ ] the "pop" sound for breaking should precede the "shatter" sound
+[ ] fullscreen doesn't work on my laptop OSX
 
 #### LOVELY
 [x] make it so that colored blocks can get "pre-damaged" by blocks
@@ -110,7 +115,7 @@ NEXTSTEPS
 [x] implement save/load so that progress is not lost on restart
 [x] remove the title, menu, etc...
 [x] maybe the background gets darker the deeper we go?
-[ ] Sound effects and music
+[x] Sound effects and music
 
 #### NICE TO HAVE
 

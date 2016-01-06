@@ -68,6 +68,12 @@ function build_statemachine()
 
             game.state.player.enabled = false
         end,
+        update = function (dt)
+            -- pull back the curtain, if there is one
+            if game.curtain.alpha > 0 then
+                game.curtain.alpha = math.max(0, game.curtain.alpha - game.curtain.fade_rate * dt)
+            end
+        end,
         draw = function ()
             draw_game()
             draw_curtain()
@@ -114,6 +120,11 @@ function build_statemachine()
             draw_curtain()
         end,
         update     = function (dt)
+            -- pull back the curtain, if there is one
+            if game.curtain.alpha > 0 then
+                game.curtain.alpha = math.max(0, game.curtain.alpha - game.curtain.fade_rate * dt)
+            end
+
             update_camera(game.camera, dt)
             game.depth = game.depth_rate*game.camera.y
         end
@@ -262,7 +273,7 @@ function build_statemachine()
     -- if this is a saved game, transition from start to setup
     state_machine.addTransition({
         from      = "start",
-        to        = "setup",
+        to        = "pause",
         condition = function ()
             -- we won't wait for the wind to die down on loaded games
             return game.loaded == true -- and game.wind_timer > game.wind_max / 3
@@ -286,11 +297,12 @@ function build_statemachine()
         end
     })
 
+    -- if the game is over but you didn't win, then you lose
     state_machine.addTransition({
         from      = "play",
         to        = "lose",
         condition = function ()
-            return game.state.over == true
+            return game.state.over == true and game.state.flood == true
         end
     })
 
@@ -349,7 +361,7 @@ function build_statemachine()
         from      = "play",
         to        = "ending",
         condition = function ()
-            return game.depth >= game.max_depth
+            return game.state.deep == true
         end
     })
 
@@ -475,12 +487,14 @@ function build_game_state ()
     state.shift = 0 -- the game starts with three extra rows
 
     state.stable = true
-    state.ending = false
+    state.flood = false
     state.over = false
 
     state.has_hardened = false
     state.has_exploded = false
     state.aborting = false
+
+    state.deep = false
 
     state.block = nil
     state.next_block = nil
